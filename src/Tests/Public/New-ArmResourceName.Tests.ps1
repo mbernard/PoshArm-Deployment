@@ -1,8 +1,8 @@
-Import-Module "../PoshArmDeployment" -Force
+Import-Module "../../PoshArmDeployment" -Force
 
 Describe "New-ArmResourceName" {
     It "Given a '<Name>', it returns '<Expected>'" -TestCases @(
-        @{ Name = "name1"; Expected = "name1" }
+        @{ Name = "name1"; Expected = "concat('name10', uniqueString(name1))" }
     ){
         param($Name, $Expected)
 

@@ -27,26 +27,31 @@ function New-ArmResourceName {
         $ResourceProvider = Get-SupportedResourceProviders | Where-Object resourceType -eq $PSBoundParameters['ResourceType']
     }
     Process {
-        $nameParts = @(
-            $ProjectName
-            $EnvironmentCode
-            $Context
-            $resourceProvider.shortName
-            $ResourceName
-        ) | where {$_}
+        # $nameParts = @(
+        #     $ProjectName
+        #     $EnvironmentCode
+        #     $Context
+        #     $resourceProvider.shortName
+        #     $ResourceName
+        # ) | where {$_}
 
-        $name = switch ($ResourceProvider.resourceType) {
+        $delimiter = switch ($ResourceProvider.resourceType) {
             'Microsoft.Storage/storageAccounts' {
-                $delimiter = '0'
-                $nameParts -join $delimiter
+                '0'
             }
             default {
-                $delimiter = '-'
-                $nameParts -join $delimiter
+                '-'
             }
         }
 
-        $hashParts = @($name, $Location)
+        $hashParts = @(
+            $ProjectName
+            $EnvironmentCode
+            $Context
+            $Location
+            $ResourceProvider.shortName
+            $ResourceName
+            )
         if ((-not $IgnoreVersionInHash) -and $Version) {
             # If a version number is forced and IngnoreVersionInHash is not set
             # include it in hash
@@ -54,9 +59,9 @@ function New-ArmResourceName {
         }
 
         # Remove any empty values
-        $hashParts = $hashParts | Where-Object {$_}
+        $hashParts = $hashParts | Where-Object {$_} 
+        $hashParts = [string]::Join(',', $hashParts)
 
-        $hash = New-UniqueString -InputObject $hashParts
-        "$name$delimiter$hash".ToLowerInvariant()
+        "concat('$ResourceName$delimiter', uniqueString($hashParts))"
     }
 }
