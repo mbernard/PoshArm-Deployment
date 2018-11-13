@@ -1,4 +1,5 @@
-Import-Module "../../PoshArmDeployment" -Force
+$ScriptDir = Split-Path -parent $MyInvocation.MyCommand.Path
+Import-Module "$ScriptDir/../../PoshArmDeployment" -Force
 
 InModuleScope PoshArmDeployment {
     Describe "Remove-InternalProperty" {
