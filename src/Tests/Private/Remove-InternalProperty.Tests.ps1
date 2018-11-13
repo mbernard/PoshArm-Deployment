@@ -35,7 +35,7 @@ InModuleScope PoshArmDeployment {
             }
         ) {
             param($InputObject, $Expected)
-        
+
             $actual = $InputObject | Remove-InternalProperty
 
             ($actual | ConvertTo-Json -Compress) | Should -Be ($Expected | ConvertTo-Json -Compress)

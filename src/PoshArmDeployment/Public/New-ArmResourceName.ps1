@@ -1,7 +1,8 @@
 #Requires -Version 5.0
 
 function New-ArmResourceName {
-    [CmdletBinding(DefaultParameterSetName = 'ForceVersion')]
+    [CmdletBinding(DefaultParameterSetName = 'ForceVersion', SupportsShouldProcess = $True)]
+    [OutputType([String])]
     param(
         [string]
         $ProjectName = $script:projectName,
@@ -24,17 +25,9 @@ function New-ArmResourceName {
         Add-ResourceTypeDynamicParameter
     }
     Begin {
-        $ResourceProvider = Get-SupportedResourceProviders | Where-Object resourceType -eq $PSBoundParameters['ResourceType']
+        $ResourceProvider = Get-SupportedResourceProvider | Where-Object resourceType -eq $PSBoundParameters['ResourceType']
     }
     Process {
-        # $nameParts = @(
-        #     $ProjectName
-        #     $EnvironmentCode
-        #     $Context
-        #     $resourceProvider.shortName
-        #     $ResourceName
-        # ) | where {$_}
-
         $delimiter = switch ($ResourceProvider.resourceType) {
             'Microsoft.Storage/storageAccounts' {
                 '0'
@@ -51,7 +44,7 @@ function New-ArmResourceName {
             $Location
             $ResourceProvider.shortName
             $ResourceName
-            )
+        )
         if ((-not $IgnoreVersionInHash) -and $Version) {
             # If a version number is forced and IngnoreVersionInHash is not set
             # include it in hash
@@ -59,9 +52,11 @@ function New-ArmResourceName {
         }
 
         # Remove any empty values
-        $hashParts = $hashParts | Where-Object {$_} 
+        $hashParts = $hashParts | Where-Object {$_}
         $hashParts = [string]::Join(',', $hashParts)
 
-        "concat('$ResourceName$delimiter', uniqueString($hashParts))"
+        If ($PSCmdlet.ShouldProcess("Generating arm expression representig the resource name")) {
+            return "concat('$ResourceName$delimiter', uniqueString($hashParts))"
+        }
     }
 }

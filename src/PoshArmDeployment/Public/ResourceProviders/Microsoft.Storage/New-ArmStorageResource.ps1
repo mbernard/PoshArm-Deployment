@@ -1,7 +1,7 @@
 #Requires -Version 3.0
 
 function New-ArmStorageResource {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $True)]
     [OutputType([hashtable])]
     Param(
         [Parameter(Mandatory, ValueFromPipeline)]
@@ -16,23 +16,24 @@ function New-ArmStorageResource {
         [ValidateSet('Standard_LRS', 'Standard_GRS', 'Standard_RAGRS')]
         $Sku = 'Standard_LRS',
         [String]
-        [ValidateSet('Storage','StorageV2')]
+        [ValidateSet('Storage', 'StorageV2')]
         $Kind = 'StorageV2'
 
     )
-
-    return [PSCustomObject][ordered]@{
-        PSTypeName = "ARMresource"
-        type = 'Microsoft.Storage/storageAccounts'
-        name = $Name
-        apiVersion = $ApiVersion
-        location = $Location
-        sku = @{
-            name = $Sku
+    If ($PSCmdlet.ShouldProcess("Creates a new ArmStorageAccount object")) {
+        return [PSCustomObject][ordered]@{
+            PSTypeName = "ARMresource"
+            type       = 'Microsoft.Storage/storageAccounts'
+            name       = $Name
+            apiVersion = $ApiVersion
+            location   = $Location
+            sku        = @{
+                name = $Sku
+            }
+            kind       = $Kind
+            properties = @{}
+            resources  = @()
+            dependsOn  = @()
         }
-        kind = $Kind
-        properties = @{}
-        resources = @()
-        dependsOn = @()
     }
 }

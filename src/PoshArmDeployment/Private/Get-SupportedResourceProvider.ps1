@@ -1,6 +1,6 @@
 #Requires -Version 5.0
 
-function Get-SupportedResourceProviders {
+function Get-SupportedResourceProvider {
     [cmdletbinding()]
     param()
     Begin {

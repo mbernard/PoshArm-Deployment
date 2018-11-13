@@ -2,6 +2,7 @@
 
 function Add-ResourceTypeDynamicParameter {
     [CmdletBinding()]
+    [OutputType([System.Management.Automation.RuntimeDefinedParameterDictionary])]
     Param(
         [Parameter()]
         [System.Management.Automation.RuntimeDefinedParameterDictionary]
@@ -16,7 +17,7 @@ function Add-ResourceTypeDynamicParameter {
     $ParamAttribute.Position = 0
     $AttributeCollection.Add($ParamAttribute)
 
-    $arrSet = Get-SupportedResourceProviders | Select-Object -ExpandProperty resourceType
+    $arrSet = Get-SupportedResourceProvider | Select-Object -ExpandProperty resourceType
 
     $ValidateSetParamAttribute = New-Object System.Management.Automation.ValidateSetAttribute($arrSet)
     $ValidateSetParamAttribute.IgnoreCase = $true
