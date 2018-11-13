@@ -1,32 +1,32 @@
-[CmdletBinding]
-function Invoke-ArmResourceGroupDeployment {
+function Publish-ArmResourceGroup {
+    [CmdletBinding()]
     param(
         [ValidatePattern('^[a-z0-9-]*$')]
         [string]
         $EnvironmentCode = "dev",
+        [parameter(Position = 0, Mandatory = $true)]
         [ScriptBlock]
-        $CreateArmResourcesScriptBlock,
+        $ArmResourcesScriptBlock,
         [hashtable]
         $ArmTemplateParams = @{},
         [string]
         $ResourceGroupName,
         [switch]
-        $TestMode,
-        [switch]
-        $DebugDeployment,
+        $Test,
         [string]
-        $ConfigPath
+        $ConfigurationPath = $ScriptDir
     )
 
+    Begin {
+        $ScriptDir = Split-Path -Parent $script:MyInvocation.MyCommand.Path
+    }
+
     Process {
-        if ($DebugDeployment) {
-            Write-Output ('Loaded Configuration: {0}' -f ($script:EnvConfig | ConvertTo-Json -Depth 100))
-        }
-        # TODO Validate mandatory values with schema?
+        $Configuration = Initialize-Configuration -Environment $EnvironmentCode -ConfigurationPath $ScriptDir
 
         # 1. Generate ARM Template
         New-ArmTemplate
-        Invoke-Command $CreateArmResourcesScriptBlock -ArgumentList $script:EnvConfig
+        Invoke-Command $ArmResourcesScriptBlock -ArgumentList $Configuration
 
         # 2. Create/Update deployment template file
         if (!$ResourceGroupName) {
@@ -46,7 +46,7 @@ function Invoke-ArmResourceGroupDeployment {
         $null = New-AzureRmResourceGroup -Name $resourceGroupName -Location $script:Location -Force
 
         # 3. Deploy or test to resource group with template file
-        if ($TestMode) {
+        if ($Test) {
             $deployment = [PSCustomObject]@{
                 ResourceGroupName       = $resourceGroupName
                 TemplateFile            = $templateFilePath
@@ -67,20 +67,20 @@ function Invoke-ArmResourceGroupDeployment {
                 TemplateFile            = $templateFilePath
                 TemplateParameterObject = $ArmTemplateParams
                 Verbose                 = $true
-                DeploymentDebugLogLevel = $(if ($DebugDeployment) {'All'} else {'None'})
+                DeploymentDebugLogLevel = $(if ($PSCmdlet.MyInvocation.BoundParameters["Debug"]) {'All'} else {'None'})
             } `
                 | ConvertTo-Hash
 
             $deploymentResult = New-AzureRmResourceGroupDeployment @deployment
             $deploymentResult
 
-            if ($deploymentResult -and $DebugDeployment) {
-                Write-Output 'Fetching deployment operations...'
+            if ($deploymentResult -and $PSCmdlet.MyInvocation.BoundParameters["Debug"]) {
+                Write-Debug 'Fetching deployment operations...'
                 $operations = Get-AzureRmResourceGroupDeploymentOperation `
                     -ResourceGroupName $resourceGroupName `
                     -DeploymentName $deploymentName
 
-                Write-Output 'Formatted operations:'
+                Write-Debug 'Formatted operations:'
                 if ($operations) {
                     Format-AzureRmDeploymentOperation -Operations $operations
                 }
