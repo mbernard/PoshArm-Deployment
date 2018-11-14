@@ -1,7 +1,10 @@
 [
     {
-        "_comment": "storage account have very limited name length, an empty string for the shortName will help us to have more meaningful names",
         "resourceType": "Microsoft.Storage/storageAccounts",
-        "shortName": ""
+        "shortName": "sa"
+    },
+    {
+        "resourceType": "Microsoft.KeyVault/vaults",
+        "shortName": "kv"
     }
 ]
