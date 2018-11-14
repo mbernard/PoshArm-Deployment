@@ -1,9 +1,9 @@
 function New-ArmKeyVaultResource {
     [CmdletBinding()]
-    [OutputType([hashtable])]
+    [OutputType("KeyVault")]
     Param(
         [Parameter(Mandatory, ValueFromPipeline)]
-        [ValidatePattern('^[a-zA-Z0-9-]*$')]
+        [ValidatePattern('^(\[.*\]|[a-zA-Z0-9-]*)$')]
         [string]
         $Name,
         [string]
@@ -25,8 +25,9 @@ function New-ArmKeyVaultResource {
         $EnabledForDiskEncryption
     )
 
-    return [PSCustomObject][ordered]@{
-        _ResourceId = $Name | Get-ArmFunctionResourceId -ResourceType 'Microsoft.KeyVault/vaults'
+    $keyVault = [PSCustomObject][ordered]@{
+        _ResourceId = $Name | New-ArmFunctionResourceId -ResourceType 'Microsoft.KeyVault/vaults'
+        PSTypeName = "KeyVault"
         type = 'Microsoft.KeyVault/vaults'
         name = $Name
         apiVersion = $ApiVersion
@@ -45,4 +46,7 @@ function New-ArmKeyVaultResource {
         resources = @()
         dependsOn = @()
     }
+
+    $keyVault.PSTypeNames.Add("ArmResource")
+    return $keyVault
 }

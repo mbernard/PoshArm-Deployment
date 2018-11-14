@@ -1,4 +1,4 @@
-function Get-ArmFunctionResourceId {
+function New-ArmFunctionResourceId {
     [cmdletbinding(DefaultParameterSetName = 'Resource')]
     [OutputType([string])]
     Param(

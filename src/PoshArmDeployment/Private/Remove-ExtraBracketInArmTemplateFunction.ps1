@@ -11,10 +11,12 @@ function Remove-ExtraBracketInArmTemplateFunction {
         foreach ($property in $properties) {
             $propertyName = $property.Name
             $propertyValue = $InputObject.$propertyName
-            if ($InputObject.$propertyName.GetType().Name -eq "PSCustomObject") {
+            $propertyType = $InputObject.$propertyName.GetType().Name
+            if ($propertyType -eq "PSCustomObject") {
                 # Recurse
                 $InputObject.$propertyName = $InputObject.$propertyName | Remove-ExtraBracketInArmTemplateFunction
-            } elseif (($propertyValue.ToCharArray() | Where-Object {$_ -eq '['} | Measure-Object).Count -gt 1) {
+            } elseif ($propertyType -eq "String" -And
+                ($propertyValue.ToCharArray() | Where-Object {$_ -eq '['} | Measure-Object).Count -gt 1) {
                 # Keep the first '[' and the last ']'
                 $i = $propertyValue.IndexOf('[')
                 $propertyValue = $propertyValue.Replace('[', '')

@@ -4,7 +4,7 @@ function Publish-ArmResourceGroup {
         [ValidatePattern('^[a-z0-9-]*$')]
         [string]
         $EnvironmentCode = "dev",
-        [parameter(Position = 0, Mandatory = $true)]
+        [parameter(Mandatory = $true)]
         [ScriptBlock]
         $ArmResourcesScriptBlock,
         [hashtable]
@@ -36,7 +36,7 @@ function Publish-ArmResourceGroup {
             $resourceGroupName = $resourceGroupName.ToLowerInvariant()
         }
 
-        $templateFilePath = Join-Path $ConfigPath "$resourceGroupName-ArmTemplate.GENERATED.json"
+        $templateFilePath = Join-Path $ConfigurationPath "$resourceGroupName-ArmTemplate.GENERATED.json"
 
         # Sanitize the arm template object by removing internal properties and extra [] in template function
         $script:ArmTemplate `

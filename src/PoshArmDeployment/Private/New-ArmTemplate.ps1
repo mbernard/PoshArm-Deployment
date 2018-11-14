@@ -1,9 +1,9 @@
 function New-ArmTemplate {
     [cmdletbinding(SupportsShouldProcess = $True)]
     Param(
-        $schema = "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#"
-        ,
-        [switch]$Passthru
+        $schema = "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+        [switch]
+        $Passthru
     )
 
     If ($PSCmdlet.ShouldProcess("Creating new ArmTempate and affecting $$script:ArmTemplate variable")) {
