@@ -10,13 +10,14 @@ function Test-ConfigurationParameter {
         $DefaultValue
     )
 
-    if ($Configuration.ConfigurationParameterName) {
-        return $Configuration.ConfigurationParameterName
+    if ($Configuration."$ConfigurationParameterName") {
+        return $Configuration."$ConfigurationParameterName"
     }
     elseif ($DefaultValue) {
         return $DefaultValue
     }
     else {
-        Write-Error "$ConfigurationParameterName is not defined in the configuration file\n$Configuration"
+        $jsonConfiguration = ConvertTo-Json $Configuration -Depth 99
+        Write-Error "$ConfigurationParameterName is not defined in the configuration file $jsonConfiguration"
     }
 }

@@ -5,7 +5,7 @@ function Get-EnvironmentConfiguration {
         [string]
         $EnvironmentCode = "dev",
         [string]
-        $ConfigurationPath = '.\',
+        $ConfigurationPath = $MyInvocation.PSScriptRoot,
         [string]
         $ConfigurationFileName = "ScriptConfiguration.json"
     )
@@ -16,8 +16,8 @@ function Get-EnvironmentConfiguration {
         $fileNameWithoutExtension = [io.path]::GetFileNameWithoutExtension($ConfigurationFileName)
         $extension = [io.path]::GetExtension($ConfigurationFileName)
 
-        $configuration = Get-Setting Join-Path $ConfigurationPath "$fileNameWithoutExtension.$extension" `
-            | Get-Setting Join-Path $ConfigurationPath "$fileNameWithoutExtension.$EnvironmentCode.$extension"
+        $configuration = Get-Configuration (Join-Path $ConfigurationPath "$fileNameWithoutExtension$extension") `
+            | Get-Configuration (Join-Path $ConfigurationPath "$fileNameWithoutExtension.$EnvironmentCode$extension")
 
         Write-Debug ('Loaded Configuration: {0}' -f ($configuration | ConvertTo-Json -Depth 100))
 

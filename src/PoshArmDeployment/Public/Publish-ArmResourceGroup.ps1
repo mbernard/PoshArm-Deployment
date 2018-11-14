@@ -14,15 +14,11 @@ function Publish-ArmResourceGroup {
         [switch]
         $Test,
         [string]
-        $ConfigurationPath = $ScriptDir
+        $ConfigurationPath = $MyInvocation.PSScriptRoot
     )
 
-    Begin {
-        $ScriptDir = Split-Path -Parent $script:MyInvocation.MyCommand.Path
-    }
-
     Process {
-        $Configuration = Initialize-Configuration -Environment $EnvironmentCode -ConfigurationPath $ScriptDir
+        $Configuration = Initialize-Configuration -Environment $EnvironmentCode -ConfigurationPath $ConfigurationPath
 
         # 1. Generate ARM Template
         New-ArmTemplate

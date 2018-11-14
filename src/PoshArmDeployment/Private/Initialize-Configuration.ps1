@@ -7,7 +7,7 @@ function Initialize-Configuration {
         [string]
         $ConfigurationFileName = "ScriptConfiguration.json",
         [string]
-        $ConfigurationPath = '.'
+        $ConfigurationPath = $MyInvocation.PSScriptRoot
     )
 
     Process{
@@ -18,7 +18,7 @@ function Initialize-Configuration {
             -ConfigurationPath $ConfigurationPath `
             -ConfigurationFileName $ConfigurationFileName
 
-        # 2. Load settings values in script scope
+        # 2. Load configuration values in script scope
         $script:ProjectName = Test-ConfigurationParameter $configuration projectName
         $script:Location = Test-ConfigurationParameter $configuration location
         $script:EnvironmentCode = Test-ConfigurationParameter $configuration environmentCode

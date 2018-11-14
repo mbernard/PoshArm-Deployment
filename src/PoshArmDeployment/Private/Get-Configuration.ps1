@@ -1,6 +1,7 @@
 function Get-Configuration {
     [cmdletbinding()]
     param(
+        [Parameter(Mandatory = $True)]
         [string]
         $ConfigurationFilePath,
         [Parameter(ValueFromPipeline)]
@@ -9,6 +10,7 @@ function Get-Configuration {
     )
 
     process{
+        Write-Debug "Loading configuration file '$ConfigurationFilePath'"
         if(Test-Path $ConfigurationFilePath)
         {
             return Get-Content $ConfigurationFilePath | ConvertFrom-Json | Merge-Object $BaseConfiguration
