@@ -25,7 +25,7 @@ function Get-ArmFunctionResourceId {
         Add-ResourceTypeDynamicParameter
     }
     Begin {
-        $ResourceProvider = Get-SupportedResourceProviders | Where-Object resourceType -eq $PSBoundParameters['ResourceType']
+        $ResourceProvider = Get-SupportedResourceProvider | Where-Object resourceType -eq $PSBoundParameters['ResourceType']
     }
     Process {
 

@@ -3,7 +3,7 @@ Import-Module "$ScriptDir/../../PoshArmDeployment" -Force
 
 InModuleScope PoshArmDeployment {
     Describe "Remove-ExtraBracketInArmTemplateFunction" {
-        It "Given an object with properties containing nested Arm Template function then cleans up the extra brackets" -TestCases @(
+        It "Given <InputObject> when removing extra [] then <Expected>" -TestCases @(
             @{ InputObject = [PSCustomObject]@{
                     NotAnArmTemplateFunction = "value"
                 }; Expected= [PSCustomObject]@{

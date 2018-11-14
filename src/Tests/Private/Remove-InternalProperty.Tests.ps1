@@ -3,7 +3,7 @@ Import-Module "$ScriptDir/../../PoshArmDeployment" -Force
 
 InModuleScope PoshArmDeployment {
     Describe "Remove-InternalProperty" {
-        It "Given an object with internal properties, it returns the object without the internal properties" -TestCases @(
+        It "Given <InputObject>, it returns <Expected>" -TestCases @(
             @{ InputObject = [PSCustomObject]@{
                     Name = "myName"
                     _Id  = 0

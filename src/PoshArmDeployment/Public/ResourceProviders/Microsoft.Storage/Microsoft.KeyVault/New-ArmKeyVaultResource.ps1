@@ -26,7 +26,7 @@ function New-ArmKeyVaultResource {
     )
 
     return [PSCustomObject][ordered]@{
-        _ResourceId = New-ArmFunctionResourceId -ResourceType 'Microsoft.KeyVault/vaults' $Name
+        _ResourceId = $Name | Get-ArmFunctionResourceId -ResourceType 'Microsoft.KeyVault/vaults'
         type = 'Microsoft.KeyVault/vaults'
         name = $Name
         apiVersion = $ApiVersion
