@@ -29,7 +29,8 @@ InModuleScope PoshArmDeployment {
             param($Name, $Expected)
 
             $actual = $Name | New-ArmKeyVaultResource
-            ($actual | ConvertTo-Json -Compress| ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) | Should -Be ($Expected | ConvertTo-Json -Compress| % { [System.Text.RegularExpressions.Regex]::Unescape($_) })
+            ($actual | ConvertTo-Json -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
+                | Should -Be ($Expected | ConvertTo-Json -Compress| ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
         }
     }
 }

@@ -39,7 +39,12 @@ function Publish-ArmResourceGroup {
         $templateFilePath = Join-Path $ConfigPath "$resourceGroupName-ArmTemplate.GENERATED.json"
 
         # Sanitize the arm template object by removing internal properties and extra [] in template function
-        $script:ArmTemplate | Remove-InternalProperty | Remove-ExtraBracketInArmTemplateFunction | Out-File -FilePath $TemplateFilePath
+        $script:ArmTemplate `
+            | Remove-InternalProperty `
+            | Remove-ExtraBracketInArmTemplateFunction `
+            | ConvertTo-Json -Depth 99 `
+            | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) } `
+            | Out-File -FilePath $TemplateFilePath
 
         $null = New-AzureRmResourceGroup -Name $resourceGroupName -Location $script:Location -Force
 
