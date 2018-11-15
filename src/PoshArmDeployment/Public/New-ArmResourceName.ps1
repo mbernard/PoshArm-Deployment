@@ -53,10 +53,10 @@ function New-ArmResourceName {
 
         # Remove any empty values
         $hashParts = $hashParts | Where-Object {$_}
-        $hashParts = [string]::Join(',', $hashParts)
+        $hashParts = [string]::Join(''',''', $hashParts)
 
         If ($PSCmdlet.ShouldProcess("Generating arm expression representig the resource name")) {
-            return "[concat('$ResourceName$delimiter', uniqueString($hashParts))]"
+            return "[concat('$ResourceName$delimiter', uniqueString('$hashParts'))]"
         }
     }
 }
