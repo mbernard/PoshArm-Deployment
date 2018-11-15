@@ -1,9 +1,9 @@
 function New-ArmVirtualNetworkResource {
     [CmdletBinding(SupportsShouldProcess = $True)]
-    [OutputType([VirtualNetwork])]
+    [OutputType("VirtualNetwork")]
     Param(
         [Parameter(Mandatory, ValueFromPipeline)]
-        [ValidatePattern('^[a-zA-Z0-9-]*$')]
+        [ValidatePattern('^(\[.*\]|[a-zA-Z0-9-]*)$')]
         [string]
         $Name,
         [string]

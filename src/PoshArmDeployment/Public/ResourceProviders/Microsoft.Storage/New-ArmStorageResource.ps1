@@ -2,7 +2,7 @@
 
 function New-ArmStorageResource {
     [CmdletBinding(SupportsShouldProcess = $True)]
-    [OutputType([StorageAccount])]
+    [OutputType("StorageAccount")]
     Param(
         [Parameter(Mandatory, ValueFromPipeline)]
         [ValidatePattern('^[a-zA-Z0-9]*$')]
