@@ -2,7 +2,7 @@
 
 function New-ArmStorageResource {
     [CmdletBinding(SupportsShouldProcess = $True)]
-    [OutputType([hashtable])]
+    [OutputType([StorageAccount])]
     Param(
         [Parameter(Mandatory, ValueFromPipeline)]
         [ValidatePattern('^[a-zA-Z0-9]*$')]
@@ -21,8 +21,8 @@ function New-ArmStorageResource {
 
     )
     If ($PSCmdlet.ShouldProcess("Creates a new ArmStorageAccount object")) {
-        return [PSCustomObject][ordered]@{
-            PSTypeName = "ARMresource"
+        $storageAccount = [PSCustomObject][ordered]@{
+            PSTypeName = "StorageAccount"
             type       = 'Microsoft.Storage/storageAccounts'
             name       = $Name
             apiVersion = $ApiVersion
@@ -35,5 +35,8 @@ function New-ArmStorageResource {
             resources  = @()
             dependsOn  = @()
         }
+
+        $storageAccount.PSTypeNames.Add("ArmResource")
+        return $storageAccount
     }
 }

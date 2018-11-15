@@ -1,5 +1,5 @@
 function New-ArmFunctionResourceId {
-    [cmdletbinding(DefaultParameterSetName = 'Resource')]
+    [cmdletbinding(DefaultParameterSetName = 'Resource', SupportsShouldProcess = $true)]
     [OutputType([string])]
     Param(
         [Parameter(Mandatory, ParameterSetName = "TypeAndName", ValueFromPipeline)]
@@ -58,7 +58,9 @@ function New-ArmFunctionResourceId {
             $arguments = $arguments + @($ResourceName2)
         }
 
-        $resourceIdParams = ([string]::Join(',', ($arguments | ForEach-Object {"'$_'"})))
-        "[resourceId($resourceIdParams)]"
+        If ($PSCmdlet.ShouldProcess("Creating the resourceId Arm template function")) {
+            $resourceIdParams = ([string]::Join(',', ($arguments | ForEach-Object {"'$_'"})))
+            "[resourceId($resourceIdParams)]"
+        }
     }
 }

@@ -46,7 +46,7 @@ function Publish-ArmResourceGroup {
             | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) } `
             | Out-File -FilePath $TemplateFilePath
 
-        Write-Host "Template created successfully `n $TemplateFilePath"  -ForegroundColor Green
+        Write-Output "Template created successfully `n $TemplateFilePath"
 
         $null = New-AzureRmResourceGroup -Name $resourceGroupName -Location $script:Location -Force
 

@@ -11,7 +11,6 @@ function Remove-ExtraBracketInArmTemplateFunction {
         foreach ($property in $properties) {
             $propertyName = $property.Name
             $propertyValue = $InputObject.$propertyName
-            $propertyType = $InputObject.$propertyName.GetType()
 
             if ($propertyValue -is [array]) {
                 $InputObject.$propertyName = @($propertyValue | ForEach-Object { [PSCustomObject]$_ | Remove-ExtraBracketInArmTemplateFunction })
