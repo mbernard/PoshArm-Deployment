@@ -11,11 +11,16 @@ function Remove-ExtraBracketInArmTemplateFunction {
         foreach ($property in $properties) {
             $propertyName = $property.Name
             $propertyValue = $InputObject.$propertyName
-            $propertyType = $InputObject.$propertyName.GetType().Name
-            if ($propertyType -eq "PSCustomObject") {
+            $propertyType = $InputObject.$propertyName.GetType()
+
+            if ($propertyValue -is [array]) {
+                $InputObject.$propertyName = @($propertyValue | ForEach-Object { [PSCustomObject]$_ | Remove-ExtraBracketInArmTemplateFunction })
+            }
+            elseif ($propertyValue -is [PSCustomObject]) {
                 # Recurse
                 $InputObject.$propertyName = $InputObject.$propertyName | Remove-ExtraBracketInArmTemplateFunction
-            } elseif ($propertyType -eq "String" -And
+            }
+            elseif ($propertyValue -is [String] -And
                 ($propertyValue.ToCharArray() | Where-Object {$_ -eq '['} | Measure-Object).Count -gt 1) {
                 # Keep the first '[' and the last ']'
                 $i = $propertyValue.IndexOf('[')
@@ -24,10 +29,10 @@ function Remove-ExtraBracketInArmTemplateFunction {
 
                 $li = $propertyValue.LastIndexOf(']')
                 $propertyValue = $propertyValue.Replace(']', '')
-                if($li -gt $propertyValue.Length)
-                {
+                if ($li -gt $propertyValue.Length) {
                     $propertyValue = $propertyValue + ']'
-                } else {
+                }
+                else {
                     $propertyValue = $propertyValue.Insert($li, ']')
                 }
 

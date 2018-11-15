@@ -33,6 +33,15 @@ InModuleScope PoshArmDeployment {
                     InnerObject = [PSCustomObject]@{}
                 };
             }
+            @{
+                InputObject = [PSCustomObject]@{
+                    InnerObject = @([PSCustomObject]@{
+                        _innerName = "innerName"
+                    })
+                }; Expected= [PSCustomObject]@{
+                    InnerObject = @([PSCustomObject]@{})
+                };
+            }
         ) {
             param($InputObject, $Expected)
 

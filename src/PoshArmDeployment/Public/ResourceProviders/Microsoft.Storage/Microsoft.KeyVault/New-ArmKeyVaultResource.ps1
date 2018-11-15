@@ -10,9 +10,9 @@ function New-ArmKeyVaultResource {
         $ApiVersion = '2016-10-01',
         [string]
         $Location = $script:Location,
-        [ValidateSet('Standard', 'Premium')]
+        [ValidateSet('standard', 'premium')]
         [string]
-        $SkuName = 'Standard',
+        $SkuName = 'standard',
         [string]
         $SkuFamily = 'A',
         [string]

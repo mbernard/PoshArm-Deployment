@@ -18,7 +18,7 @@ InModuleScope PoshArmDeployment {
             }
             @{ InputObject = [PSCustomObject]@{
                     ArmTemplateFunction = "[concat(value, [anotherFunction()])]"
-                }; Expected= [PSCustomObject]@{
+                }; Expected = [PSCustomObject]@{
                     ArmTemplateFunction = "[concat(value, anotherFunction())]"
                 };
             }
@@ -26,11 +26,23 @@ InModuleScope PoshArmDeployment {
                     innerObect = [PSCustomObject]@{
                         ArmTemplateFunction = "[concat(value, [anotherFunction()])]"
                     }
-                }; Expected= [PSCustomObject]@{
+                }; Expected = [PSCustomObject]@{
                     innerObect = [PSCustomObject]@{
                         ArmTemplateFunction = "[concat(value, anotherFunction())]"
                     }
                 };
+            }
+            @{ InputObject = [PSCustomObject]@{
+                    arrayProp = @(
+                        @{
+                            ArmTemplateFunction = "[concat(value, [anotherFunction()])]"
+                        })
+                }; Expected = [PSCustomObject]@{
+                    arrayProp = @(
+                        @{
+                            ArmTemplateFunction = "[concat(value, anotherFunction())]"
+                        })
+                    }
             }
         ) {
             param($InputObject, $Expected)
