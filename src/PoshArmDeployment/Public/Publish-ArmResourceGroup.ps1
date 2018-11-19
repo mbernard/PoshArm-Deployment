@@ -42,7 +42,8 @@ function Publish-ArmResourceGroup {
         $script:ArmTemplate `
             | Remove-InternalProperty `
             | Remove-ExtraBracketInArmTemplateFunction `
-            | ConvertTo-Json -Depth 99 `
+            | ConvertTo-Json -Depth 8 `
+            | Format-Json `
             | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) } `
             | Out-File -FilePath $TemplateFilePath
 

@@ -7,7 +7,7 @@ function Remove-InternalProperty {
     )
 
     If ($PSCmdlet.ShouldProcess("Removing all properties starting with an underscore on target object")) {
-        $propertyNames = $($inputObject | Get-Member -MemberType *Property).Name
+        $propertyNames = $([PSCustomObject]$inputObject | Get-Member -MemberType *Property).Name
         foreach ($propertyName in $propertyNames) {
             $propertyValue = $InputObject.$propertyName
 
@@ -17,9 +17,9 @@ function Remove-InternalProperty {
             elseif($propertyValue -is [array]){
                 $InputObject.$propertyName = @($propertyValue | ForEach-Object { [PSCustomObject]$_ | Remove-InternalProperty })
             }
-            elseif ($propertyValue -is [PSCustomObject]) {
+            elseif ($propertyValue -is [PSCustomObject] -Or $propertyValue -is [hashtable] ) {
                 # Recurse
-                $InputObject.$propertyName = $propertyValue | Remove-InternalProperty
+                $InputObject.$propertyName = [PSCustomObject]$propertyValue | Remove-InternalProperty
             }
         }
 
