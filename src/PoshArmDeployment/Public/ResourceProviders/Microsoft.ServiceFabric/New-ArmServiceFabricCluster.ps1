@@ -5,7 +5,7 @@ function New-ArmServiceFabricCluster {
         [Parameter(Mandatory, ValueFromPipeline)]
         [ValidatePattern('^(\[.*\]|[a-zA-Z0-9-]*)$')]
         [string]
-        $Name = "default",
+        $Name,
         [string]
         $ApiVersion = '2016-09-01',
         [string]

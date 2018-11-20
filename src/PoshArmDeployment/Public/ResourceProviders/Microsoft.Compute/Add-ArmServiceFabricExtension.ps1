@@ -22,7 +22,7 @@ function Add-ArmServiceFabricExtension {
                     settings                = @{
                         clusterEndpoint = "[reference($sfClusterId).clusterEndpoint]"
                         nodeTypeRef     = $VirtualMachineScaleSet.Name
-                        dataPath        = "D:\\SvcFab"
+                        dataPath        = "D:\\\\SvcFab"
                         durabilityLevel = $DurabilityLevel
                         certificate     = @{
                             certificateThumbprint = $CertificateThumbprint

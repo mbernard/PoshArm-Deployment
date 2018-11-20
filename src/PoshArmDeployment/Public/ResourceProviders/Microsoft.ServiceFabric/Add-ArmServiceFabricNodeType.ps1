@@ -17,12 +17,14 @@ function Add-ArmServiceFabricNodeType {
         [string]
         [Parameter(Mandatory)]
         $AdminUserName,
-        [string]
+        [SecureString]
         [Parameter(Mandatory)]
         $AdminPassword,
         [PSTypeName("Subnet")]
         [Parameter(Mandatory)]
-        $Subnet
+        $Subnet,
+        [int]
+        $InstanceCount = 5
     )
     If ($PSCmdlet.ShouldProcess("Creates a new service fabric node type object")) {
         $nodeType = [PSCustomObject][ordered]@{
@@ -40,14 +42,14 @@ function Add-ArmServiceFabricNodeType {
             }
             httpGatewayEndpointPort      = 19080
             isPrimary                    = $true
-            vmInstanceCount              = 5
+            vmInstanceCount              = $InstanceCount
             _ServiceFabricCluster        = $ServiceFabricCluster
         }
 
         $ServiceFabricCluster.properties.nodeTypes += $nodeType
 
         New-ArmResourceName Microsoft.Compute/virtualMachineScaleSets -ResourceName $Name `
-            | New-ArmVirtualMachineScaleSetResource `
+            | New-ArmVirtualMachineScaleSetResource -Capacity $InstanceCount `
             | Add-ArmStorageProfile `
             | Add-ArmOsProfile -AdminUserName $AdminUserName -AdminPassword $AdminPassword `
             | Add-ArmNetworkProfile -Subnet $subnet `
