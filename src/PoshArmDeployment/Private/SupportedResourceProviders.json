@@ -10,5 +10,17 @@
     {
         "resourceType": "Microsoft.Network/virtualNetworks",
         "shortName": "vnet"
+    },
+    {
+        "resourceType": "Microsoft.Compute/virtualMachineScaleSets",
+        "shortName": "vmss"
+    },
+    {
+        "resourceType": "Microsoft.Network/virtualNetworks/subnets",
+        "shortName": "snet"
+    },
+    {
+        "resourceType": "Microsoft.ServiceFabric/clusters",
+        "shortName": "sfc"
     }
 ]

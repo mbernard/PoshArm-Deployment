@@ -3,42 +3,47 @@ function Remove-ExtraBracketInArmTemplateFunction {
     [OutputType([PSCustomObject])]
     Param(
         [Parameter(ValueFromPipeline)]
-        [PSCustomObject]
         $InputObject
     )
     If ($PSCmdlet.ShouldProcess("Removing all extra '[]' in property value that are nested Arm template function")) {
-        $properties = $InputObject | Get-Member -MemberType *Property
-        foreach ($property in $properties) {
-            $propertyName = $property.Name
-            $propertyValue = $InputObject.$propertyName
-
-            if ($propertyValue -is [array]) {
-                $InputObject.$propertyName = @($propertyValue | ForEach-Object { [PSCustomObject]$_ | Remove-ExtraBracketInArmTemplateFunction })
-            }
-            elseif ($propertyValue -is [PSCustomObject]) {
-                # Recurse
-                $InputObject.$propertyName = $InputObject.$propertyName | Remove-ExtraBracketInArmTemplateFunction
-            }
-            elseif ($propertyValue -is [String] -And
-                ($propertyValue.ToCharArray() | Where-Object {$_ -eq '['} | Measure-Object).Count -gt 1) {
+        if ($InputObject -is [string]) {
+            if (($InputObject.ToCharArray() | Where-Object {$_ -eq '['} | Measure-Object).Count -gt 1) {
                 # Keep the first '[' and the last ']'
-                $i = $propertyValue.IndexOf('[')
-                $propertyValue = $propertyValue.Replace('[', '')
-                $propertyValue = $propertyValue.Insert($i, '[')
+                $i = $InputObject.IndexOf('[')
+                $InputObject = $InputObject.Replace('[', '')
+                $InputObject = $InputObject.Insert($i, '[')
 
-                $li = $propertyValue.LastIndexOf(']')
-                $propertyValue = $propertyValue.Replace(']', '')
-                if ($li -gt $propertyValue.Length) {
-                    $propertyValue = $propertyValue + ']'
+                $li = $InputObject.LastIndexOf(']')
+                $InputObject = $InputObject.Replace(']', '')
+                if ($li -gt $InputObject.Length) {
+                    $InputObject = $InputObject + ']'
                 }
                 else {
-                    $propertyValue = $propertyValue.Insert($li, ']')
+                    $InputObject = $InputObject.Insert($li, ']')
                 }
 
-                $InputObject.$propertyName = $propertyValue
+                return $InputObject
+            }
+            else {
+                return $InputObject
             }
         }
+        else {
+            $properties = [PSCustomObject]$InputObject | Get-Member -MemberType *Property
+            foreach ($property in $properties) {
+                $propertyName = $property.Name
+                $propertyValue = $InputObject.$propertyName
 
-        return $InputObject
+                if ($propertyValue -is [array]) {
+                    $InputObject.$propertyName = @($propertyValue | ForEach-Object { $_ | Remove-ExtraBracketInArmTemplateFunction })
+                }
+                else {
+                    # Recurse
+                    $InputObject.$propertyName = $InputObject.$propertyName | Remove-ExtraBracketInArmTemplateFunction
+                }
+            }
+
+            return $InputObject
+        }
     }
 }

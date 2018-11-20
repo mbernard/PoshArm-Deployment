@@ -1,6 +1,6 @@
 function New-ArmVirtualNetworkSubnet {
     [CmdletBinding(SupportsShouldProcess = $True)]
-    [OutputType("VirtualNetworkSubnet")]
+    [OutputType("Subnet")]
     Param(
         [Parameter(ValueFromPipeline)]
         [ValidatePattern('^(\[.*\]|[a-zA-Z0-9-]*)$')]
@@ -12,9 +12,9 @@ function New-ArmVirtualNetworkSubnet {
     )
     If ($PSCmdlet.ShouldProcess("Creates a new Arm Virtual Network subnet object")) {
         return [PSCustomObject][ordered]@{
-            _ResourceId = $Name | New-ArmFunctionResourceId -ResourceType Microsoft.Network/virtualNetworks
+            _ResourceId = ""
             _VirtualNetwork = $null
-            PSTypeName  = "VirtualNetworkSubnet"
+            PSTypeName  = "Subnet"
             name        = $Name
             properties  = @{
                 addressPrefix = $AddressPrefix

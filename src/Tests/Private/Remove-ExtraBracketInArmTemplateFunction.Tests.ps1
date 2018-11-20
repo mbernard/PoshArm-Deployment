@@ -44,6 +44,15 @@ InModuleScope PoshArmDeployment {
                         })
                     }
             }
+            @{ InputObject = [PSCustomObject]@{
+                arrayProp = @(
+                    "[concat(value, [anotherFunction()])]"
+                   )
+            }; Expected = [PSCustomObject]@{
+                arrayProp = @(
+                    "[concat(value, anotherFunction())]")
+                }
+        }
         ) {
             param($InputObject, $Expected)
 

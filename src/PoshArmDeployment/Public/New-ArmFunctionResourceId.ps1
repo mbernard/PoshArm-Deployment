@@ -59,7 +59,7 @@ function New-ArmFunctionResourceId {
         }
 
         If ($PSCmdlet.ShouldProcess("Creating the resourceId Arm template function")) {
-            $resourceIdParams = ([string]::Join(',', ($arguments | ForEach-Object {"'$_'"})))
+            $resourceIdParams = ([string]::Join(',', ($arguments | ForEach-Object { if ("$_".StartsWith("[")) { "$_" } else { "'$_'"}})))
             "[resourceId($resourceIdParams)]"
         }
     }

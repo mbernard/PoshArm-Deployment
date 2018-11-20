@@ -6,7 +6,7 @@ function Add-ArmVirtualNetworkSubnet {
         [Parameter(Mandatory, ValueFromPipeline)]
         $VirtualNetwork,
         [Parameter(Mandatory)]
-        [PSTypeName("VirtualNetworkSubnet")]
+        [PSTypeName("Subnet")]
         $Subnet
     )
 
@@ -18,6 +18,7 @@ function Add-ArmVirtualNetworkSubnet {
         }
         else {
             $Subnet._VirtualNetwork = $VirtualNetwork
+            $Subnet._ResourceId = New-ArmFunctionResourceId -ResourceType Microsoft.Network/virtualNetworks/subnets -ResourceName1 $VirtualNetwork.Name -ResourceName2 $Subnet.Name
             $VirtualNetwork.properties.subnets += $Subnet
         }
 
