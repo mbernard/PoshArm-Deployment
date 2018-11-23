@@ -1,5 +1,7 @@
 function Add-ArmOsProfile {
     [CmdletBinding(SupportsShouldProcess = $true, DefaultParameterSetName = "vm")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", "")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingUserNameAndPassWordParams", "")]
     Param(
         [PSTypeName("VirtualMachine")]
         [Parameter(Mandatory, ValueFromPipeline, ParameterSetName = "vm")]

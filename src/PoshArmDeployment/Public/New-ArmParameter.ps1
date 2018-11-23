@@ -1,5 +1,5 @@
 function New-ArmParameter {
-    [cmdletbinding(DefaultParameterSetName = "default")]
+    [CmdletBinding(SupportsShouldProcess = $True, DefaultParameterSetName = "default")]
     Param(
         [Parameter(ParameterSetName = "keyVault")]
         [Parameter(Mandatory, ParameterSetName = "default")]
@@ -18,30 +18,31 @@ function New-ArmParameter {
         [string]
         $SecretName
     )
-
-    if ($PSCmdlet.ParameterSetName -eq "default") {
-        $propHash = [ordered]@{
-            type  = $Type
-            value = $Value
+    If ($PSCmdlet.ShouldProcess("Creates a new Arm parameter")) {
+        if ($PSCmdlet.ParameterSetName -eq "default") {
+            $propHash = [ordered]@{
+                type  = $Type
+                value = $Value
+            }
         }
-    }
-    else {
-        if (!$Name) {
-            $Name = $SecretName
-        }
+        else {
+            if (!$Name) {
+                $Name = $SecretName
+            }
 
-        $propHash = [ordered]@{
-            type = "securestring"
-        }
+            $propHash = [ordered]@{
+                type = "securestring"
+            }
 
-        $script:ArmParameters.Add($Name, @{
-                reference = @{
-                    keyVault   = @{
-                        id = $KeyVaultResourceId
+            $script:ArmParameters.Add($Name, @{
+                    reference = @{
+                        keyVault   = @{
+                            id = $KeyVaultResourceId
+                        }
+                        secretName = $SecretName
                     }
-                    secretName = $SecretName
-                }
-            })
+                })
+        }
     }
 
     $out = [PSCustomobject]@{

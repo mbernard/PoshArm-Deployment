@@ -1,4 +1,6 @@
 function Add-ArmServiceFabricNodeType {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", "")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingUserNameAndPassWordParams", "")]
     [CmdletBinding(SupportsShouldProcess = $True)]
     [OutputType("ServiceFabricCluster")]
     Param(
