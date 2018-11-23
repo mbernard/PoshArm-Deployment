@@ -1,4 +1,5 @@
 $script:ArmTemplate = [PSCustomObject]@{}
+$script:ArmParameters = @{}
 $script:ProjectName = [PSCustomObject]@{}
 $script:Location = [PSCustomObject]@{}
 $script:EnvironmentCode = [PSCustomObject]@{}

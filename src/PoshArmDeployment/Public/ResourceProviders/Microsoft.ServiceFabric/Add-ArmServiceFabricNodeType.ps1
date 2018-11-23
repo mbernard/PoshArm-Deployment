@@ -17,7 +17,7 @@ function Add-ArmServiceFabricNodeType {
         [string]
         [Parameter(Mandatory)]
         $AdminUserName,
-        [SecureString]
+        [string]
         [Parameter(Mandatory)]
         $AdminPassword,
         [PSTypeName("Subnet")]
@@ -54,7 +54,7 @@ function Add-ArmServiceFabricNodeType {
             | Add-ArmOsProfile -AdminUserName $AdminUserName -AdminPassword $AdminPassword `
             | Add-ArmNetworkProfile -Subnet $subnet `
             | Add-ArmServiceFabricExtension -NodeType $nodeType `
-            | Add-ArmResourceToTemplate
+            | Add-ArmResource
 
         return $ServiceFabricCluster
     }

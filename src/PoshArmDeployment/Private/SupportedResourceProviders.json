@@ -22,5 +22,9 @@
     {
         "resourceType": "Microsoft.ServiceFabric/clusters",
         "shortName": "sfc"
+    },
+    {
+        "resourceType": "Microsoft.KeyVault/vaults/secrets",
+        "shortName": "kvs"
     }
 ]

@@ -1,10 +1,10 @@
-function Add-ArmResourceToTemplate {
+function Add-ArmParameter {
     [cmdletbinding()]
     Param(
+        [PSTypeName("ArmParameter")]
         [Parameter(Mandatory, ValueFromPipeline)]
-        [PSTypeName('ArmResource')]
         $InputObject,
-        [PSTypeName('Armtemplate')]
+        [PSTypeName('ArmTemplate')]
         $Template,
         [switch]
         $PassThru
@@ -22,7 +22,10 @@ function Add-ArmResourceToTemplate {
         }
 
         if ($Template) {
-            $Template.resources += $InputObject
+            foreach ($prop in $InputObject.PSobject.Properties) {
+                $value = $prop.Value
+                $Template.parameters | Add-Member -MemberType NoteProperty -Name $prop.Name -Value $value
+            }
         }
 
         if ($PassThru.IsPresent) {

@@ -1,5 +1,6 @@
 function Publish-ArmResourceGroup {
     [CmdletBinding()]
+    [OutputType([HashTable])]
     param(
         [ValidatePattern('^[a-z0-9-]*$')]
         [string]
@@ -36,28 +37,21 @@ function Publish-ArmResourceGroup {
             $resourceGroupName = $resourceGroupName.ToLowerInvariant()
         }
 
-        $templateFilePath = Join-Path $ConfigurationPath "$resourceGroupName-ArmTemplate.GENERATED.json"
+        $templateFilePath = Join-Path $ConfigurationPath "GENERATED-ArmTemplate-$resourceGroupName.json"
+        $templateParameterFilePath = Join-Path $ConfigurationPath "GENERATED-ArmTemplate-$resourceGroupName.parameters.json"
 
-        # Sanitize the arm template object by removing internal properties and extra [] in template function
-        $script:ArmTemplate `
-            | Remove-InternalProperty `
-            | Remove-ExtraBracketInArmTemplateFunction `
-            | ConvertTo-Json -Depth 99 `
-            | Format-Json `
-            | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) } `
-            | Out-File -FilePath $TemplateFilePath
-
-        Write-Output "Template created successfully `n $TemplateFilePath"
+        New-ArmTemplateFile -TemplateFilePath $templateFilePath
+        New-ArmTemplateParameterFile -TemplateParameterFilePath $templateParameterFilePath -ArmTemplateParams $ArmTemplateParams
 
         $null = New-AzureRmResourceGroup -Name $resourceGroupName -Location $script:Location -Force
 
         # 3. Deploy or test to resource group with template file
         if ($Test) {
             $deployment = [PSCustomObject]@{
-                ResourceGroupName       = $resourceGroupName
-                TemplateFile            = $templateFilePath
-                TemplateParameterObject = $ArmTemplateParams
-                Verbose                 = $true
+                ResourceGroupName     = $resourceGroupName
+                TemplateFile          = $templateFilePath
+                TemplateParameterFile = $templateParameterFilePath
+                Verbose               = $true
             } `
                 | ConvertTo-Hash
 
@@ -71,14 +65,13 @@ function Publish-ArmResourceGroup {
                 Name                    = $deploymentName
                 ResourceGroupName       = $resourceGroupName
                 TemplateFile            = $templateFilePath
-                TemplateParameterObject = $ArmTemplateParams
+                TemplateParameterFile   = $templateParameterFilePath
                 Verbose                 = $true
                 DeploymentDebugLogLevel = $(if ($PSCmdlet.MyInvocation.BoundParameters["Debug"]) {'All'} else {'None'})
             } `
                 | ConvertTo-Hash
 
             $deploymentResult = New-AzureRmResourceGroupDeployment @deployment
-            $deploymentResult
 
             if ($deploymentResult -and $PSCmdlet.MyInvocation.BoundParameters["Debug"]) {
                 Write-Debug 'Fetching deployment operations...'
@@ -93,6 +86,8 @@ function Publish-ArmResourceGroup {
 
                 Write-Warning "Please STRONGLY consider manually deleting deployment '$deploymentName' to avoid sensitive information leaks."
             }
+
+            return $deploymentResult.Outputs
         }
     }
 }

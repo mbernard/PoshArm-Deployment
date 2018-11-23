@@ -12,7 +12,7 @@ function Add-ArmOsProfile {
         [String]
         [Parameter(Mandatory)]
         $AdminUserName,
-        [SecureString]
+        [string]
         [Parameter(Mandatory)]
         $AdminPassword
     )
@@ -22,7 +22,7 @@ function Add-ArmOsProfile {
             $OsProfile = @{
                 computerNamePrefix   = $Name
                 adminUserName        = $AdminUserName
-                adminPassword        = ConvertFrom-SecureString $AdminPassword
+                adminPassword        = $AdminPassword
                 windowsConfiguration = @{
                     provisionVMAgent = $true
                     enableAutomaticUpdates = $true
