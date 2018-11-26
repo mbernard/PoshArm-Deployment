@@ -13,6 +13,7 @@ function New-ArmServiceFabricCluster {
         [string]
         $CertificateThumbprint,
         [string]
+        [ValidateSet("Bronze", "Silver", "Gold")]
         $ReliabilityLevel = "Silver"
     )
 
