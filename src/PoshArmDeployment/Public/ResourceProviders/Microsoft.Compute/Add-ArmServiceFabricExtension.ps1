@@ -6,7 +6,10 @@ function Add-ArmServiceFabricExtension {
         $VirtualMachineScaleSet,
         [PSTypeName("ServiceFabricNodeType")]
         [Parameter(Mandatory)]
-        $NodeType
+        $NodeType,
+        [string]
+        [Parameter(Mandatory)]
+        $CertificateThumbprint
     )
 
     Process {

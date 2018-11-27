@@ -10,6 +10,7 @@ function New-ArmServiceFabricCluster {
         $ApiVersion = '2016-09-01',
         [string]
         $Location = $script:location,
+        [Parameter(Mandatory)]
         [string]
         $CertificateThumbprint,
         [string]
@@ -26,6 +27,9 @@ function New-ArmServiceFabricCluster {
             apiVersion = $ApiVersion
             location   = $Location
             properties = @{
+                addonFeatures = @(
+                    "DnsService"
+                )
                 certificate = @{
                     thumbprint = $CertificateThumbprint
                     x509StoreName = "My"

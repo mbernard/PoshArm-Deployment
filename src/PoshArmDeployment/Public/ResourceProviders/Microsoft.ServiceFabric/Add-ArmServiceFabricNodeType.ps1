@@ -55,7 +55,7 @@ function Add-ArmServiceFabricNodeType {
             | Add-ArmStorageProfile `
             | Add-ArmOsProfile -AdminUserName $AdminUserName -AdminPassword $AdminPassword `
             | Add-ArmNetworkProfile -Subnet $subnet `
-            | Add-ArmServiceFabricExtension -NodeType $nodeType `
+            | Add-ArmServiceFabricExtension -NodeType $nodeType -CertificateThumbprint $CertificateThumbprint `
             | Add-ArmResource
 
         return $ServiceFabricCluster
