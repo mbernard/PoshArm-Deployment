@@ -6,11 +6,7 @@ function Add-ArmLoadBalancerBackendAddressPool {
         [Parameter(Mandatory, ValueFromPipeline)]
         $LoadBalancer,
         [string]
-        [Parameter(Mandatory)]
-        $Name,
-        [Parameter(Mandatory)]
-        [PSTypeName("NetworkInterfaceConfiguration")]
-        $Nic
+        $Name = "default"
     )
 
     If ($PSCmdlet.ShouldProcess("Adding backend pool")) {
@@ -21,9 +17,6 @@ function Add-ArmLoadBalancerBackendAddressPool {
         }
 
         $LoadBalancer.properties.backendAddressPools += $backendPool
-        $Nic.properties.ipConfigurations[0].properties.loadBalancerBackendAddressPools += @{
-            id = $backendPool._ResourceId
-        }
 
         return $LoadBalancer
     }

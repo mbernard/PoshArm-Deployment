@@ -1,4 +1,4 @@
-function Add-ArmNetworkInterfaceConfiguration {
+function Add-ArmNic {
     [CmdletBinding(SupportsShouldProcess = $true, DefaultParameterSetName = "vm")]
     Param(
         [PSTypeName("VirtualMachine")]
@@ -7,7 +7,7 @@ function Add-ArmNetworkInterfaceConfiguration {
         [PSTypeName("VirtualMachineScaleSet")]
         [Parameter(Mandatory, ValueFromPipeline, ParameterSetName = "vmss")]
         $VirtualMachineScaleSet,
-        [PSTypeName("NetworkInterfaceConfiguration")]
+        [PSTypeName("Nic")]
         [Parameter(Mandatory)]
         $Nic,
         [string]

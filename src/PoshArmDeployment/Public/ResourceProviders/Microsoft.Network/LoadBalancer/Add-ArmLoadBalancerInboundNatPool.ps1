@@ -18,24 +18,29 @@ function Add-ArmLoadBalancerInboundNatPool {
         [Parameter(Mandatory)]
         $FrontendPortRangeEnd,
         [string]
-        [ValidateSet("tcp", "http")]
-        $Protocol = "tcp",
-        [Parameter(Mandatory)]
-        [PSTypeName("LoadBalancerFrontEndIpConfiguration")]
-        $FrontEndIpConfiguration
+        [ValidateSet("Tcp", "Udp", "All")]
+        $Protocol = "Tcp",
+        [string]
+        $FrontEndIpConfigurationName
     )
 
+    if (!$FrontendIpConfigurationName) {
+        $FrontendIpConfigurationName = $LoadBalancer.properties.frontendIPConfigurations[0].Name
+    }
+
     If ($PSCmdlet.ShouldProcess("Adding inbound nat pool")) {
+        $LoadBalancerResourceId = $LoadBalancer._ResourceId
+
         $InboundNatPool = @{
-            name        = $Name
+            name       = $Name
             properties = @{
-                backendPort = $BackendPort
+                backendPort             = $BackendPort
                 frontendIPConfiguration = @{
-                    id = $FrontEndIpConfiguration._ResourceId
+                    id = "[concat($LoadBalancerResourceId, '/frontendIPConfigurations/', '$FrontendIpConfigurationName')]"
                 }
-                frontendPortRangeEnd = $FrontendPortRangeEnd
-                frontendPortRangeStart = $FrontendPortRangeStart
-                protocol = $Protocol
+                frontendPortRangeEnd    = $FrontendPortRangeEnd
+                frontendPortRangeStart  = $FrontendPortRangeStart
+                protocol                = $Protocol
             }
         }
 
