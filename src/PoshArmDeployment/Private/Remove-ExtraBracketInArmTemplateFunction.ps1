@@ -6,6 +6,9 @@ function Remove-ExtraBracketInArmTemplateFunction {
         $InputObject
     )
     If ($PSCmdlet.ShouldProcess("Removing all extra '[]' in property value that are nested Arm template function")) {
+        if (!$InputObject) {
+            return $InputObject
+        }
         if ($InputObject -is [string]) {
             if (($InputObject.ToCharArray() | Where-Object {$_ -eq '['} | Measure-Object).Count -gt 1) {
                 # Keep the first '[' and the last ']'

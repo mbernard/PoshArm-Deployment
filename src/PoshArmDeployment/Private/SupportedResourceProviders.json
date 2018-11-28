@@ -26,5 +26,13 @@
     {
         "resourceType": "Microsoft.KeyVault/vaults/secrets",
         "shortName": "kvs"
+    },
+    {
+        "resourceType": "Microsoft.Network/publicIPAddresses",
+        "shortName": "ip"
+    },
+    {
+        "resourceType": "Microsoft.Network/loadBalancers",
+        "shortName": "lb"
     }
 ]

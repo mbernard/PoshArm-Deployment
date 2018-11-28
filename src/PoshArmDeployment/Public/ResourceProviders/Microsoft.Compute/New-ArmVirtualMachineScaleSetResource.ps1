@@ -11,7 +11,9 @@ function New-ArmVirtualMachineScaleSetResource {
         [string]
         $Location = $script:Location,
         $Sku = "Standard_D1_v2",
+        [int]
         $Capacity = 5,
+        [string]
         [ValidateSet("Automatic", "Manual")]
         $UpgradeMode = "Automatic"
     )
@@ -38,7 +40,9 @@ function New-ArmVirtualMachineScaleSetResource {
                 virtualMachineProfile = @{
                     storageProfile     = @{}
                     osProfile          = @{}
-                    networkProfile     = @{}
+                    networkProfile     = @{
+                        networkInterfaceConfigurations = @()
+                    }
                     diagnosticsProfile = @{}
                     extensionProfile   = @{
                         extensions = @()

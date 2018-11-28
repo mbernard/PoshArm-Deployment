@@ -1,6 +1,4 @@
 function Add-ArmServiceFabricNodeType {
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", "")]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingUserNameAndPassWordParams", "")]
     [CmdletBinding(SupportsShouldProcess = $True)]
     [OutputType("ServiceFabricCluster")]
     Param(
@@ -13,20 +11,14 @@ function Add-ArmServiceFabricNodeType {
         [string]
         $Location = $script:location,
         [string]
-        $CertificateThumbprint,
-        [string]
         $DurabilityLevel = "Bronze",
-        [string]
-        [Parameter(Mandatory)]
-        $AdminUserName,
-        [string]
-        [Parameter(Mandatory)]
-        $AdminPassword,
-        [PSTypeName("Subnet")]
-        [Parameter(Mandatory)]
-        $Subnet,
         [int]
-        $InstanceCount = 5
+        $InstanceCount = 5,
+        [Parameter(Mandatory)]
+        [PsTypeName("VirtualMachineScaleSet")]
+        $Vmss,
+        [Switch]
+        $IsPrimary
     )
     If ($PSCmdlet.ShouldProcess("Creates a new service fabric node type object")) {
         $nodeType = [PSCustomObject][ordered]@{
@@ -43,20 +35,14 @@ function Add-ArmServiceFabricNodeType {
                 startPort = 49152
             }
             httpGatewayEndpointPort      = 19080
-            isPrimary                    = $true
+            isPrimary                    = $IsPrimary.ToBool()
             vmInstanceCount              = $InstanceCount
             _ServiceFabricCluster        = $ServiceFabricCluster
+            _vmss                        = $vmss
         }
 
+        $vmss = $vmss | Add-ArmServiceFabricExtension -NodeType $nodeType -CertificateThumbprint $ServiceFabricCluster.properties.certificate.thumbprint
         $ServiceFabricCluster.properties.nodeTypes += $nodeType
-
-        New-ArmResourceName Microsoft.Compute/virtualMachineScaleSets -ResourceName $Name `
-            | New-ArmVirtualMachineScaleSetResource -Capacity $InstanceCount `
-            | Add-ArmStorageProfile `
-            | Add-ArmOsProfile -AdminUserName $AdminUserName -AdminPassword $AdminPassword `
-            | Add-ArmNetworkProfile -Subnet $subnet `
-            | Add-ArmServiceFabricExtension -NodeType $nodeType -CertificateThumbprint $CertificateThumbprint `
-            | Add-ArmResource
 
         return $ServiceFabricCluster
     }
