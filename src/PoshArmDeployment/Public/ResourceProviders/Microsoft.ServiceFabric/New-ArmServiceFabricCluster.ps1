@@ -15,7 +15,10 @@ function New-ArmServiceFabricCluster {
         $CertificateThumbprint,
         [string]
         [ValidateSet("Bronze", "Silver", "Gold")]
-        $ReliabilityLevel = "Silver"
+        $ReliabilityLevel = "Silver",
+        [Parameter(Mandatory)]
+        [string]
+        $ManagementEndpointUrl
     )
 
     If ($PSCmdlet.ShouldProcess("Creates a new service fabric cluster object")) {
@@ -48,12 +51,13 @@ function New-ArmServiceFabricCluster {
                         name = "Security"
                     }
                 )
-                managementEndpoint = "https://google.com" #"[concat('https://',reference(variables('lbIPName')).dnsSettings.fqdn,':',19080))]"
+                managementEndpoint = $ManagementEndpointUrl
                 nodeTypes = @()
                 provisioningState = "Default"
                 reliabilityLevel = $ReliabilityLevel
                 upgradeMode = "Automatic"
                 vmImage = "Windows"
+                azureActiveDirectory = @{}
             }
             resources  = @()
             dependsOn  = @()

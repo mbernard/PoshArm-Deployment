@@ -9,7 +9,9 @@ function New-ArmPublicIpResource {
         [string]
         $ApiVersion = "2017-06-01",
         [string]
-        $Location = $script:Location
+        $Location = $script:Location,
+        [string]
+        $DomainNameLabel
     )
     If ($PSCmdlet.ShouldProcess("Creates a new Arm public ip resource")) {
         $PublicIp = [PSCustomObject][ordered]@{
@@ -21,6 +23,9 @@ function New-ArmPublicIpResource {
             location    = $Location
             properties  = @{
                 publicIPAllocationMethod = "Dynamic"
+                dnsSettings = @{
+                    domainNameLabel = $DomainNameLabel
+                }
             }
             resources   = @()
             dependsOn   = @()

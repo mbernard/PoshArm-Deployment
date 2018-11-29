@@ -27,8 +27,10 @@ function Add-ArmServiceFabricExtension {
                         nodeTypeRef     = $VirtualMachineScaleSet.Name
                         dataPath        = "D:\\\\SvcFab"
                         durabilityLevel = $DurabilityLevel
+                        enableParallelJobs = $true
+                        nicPrefixOverride = "10.0.0.0/24"
                         certificate     = @{
-                            certificateThumbprint = $CertificateThumbprint
+                            thumbprint = $CertificateThumbprint
                             x509StoreName         = "My"
                         }
                     }

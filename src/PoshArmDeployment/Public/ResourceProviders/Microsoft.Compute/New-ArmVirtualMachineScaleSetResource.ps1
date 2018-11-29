@@ -34,6 +34,7 @@ function New-ArmVirtualMachineScaleSetResource {
                 type = "SystemAssigned"
             }
             properties  = @{
+                overprovision = $false
                 upgradePolicy         = @{
                     mode = $UpgradeMode
                 }

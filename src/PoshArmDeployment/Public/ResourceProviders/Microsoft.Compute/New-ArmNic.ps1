@@ -16,6 +16,7 @@ function New-ArmNic {
             PSTypeName = "Nic"
             name       = $Name
             properties = @{
+                enableIPForwarding = $false
                 primary          = $IsPrimary.ToBool()
                 ipConfigurations = @(
                     @{

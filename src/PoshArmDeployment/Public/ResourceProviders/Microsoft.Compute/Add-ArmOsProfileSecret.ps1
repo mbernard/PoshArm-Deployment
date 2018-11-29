@@ -7,8 +7,9 @@ function Add-ArmOsProfileSecret {
         [PSTypeName("VirtualMachineScaleSet")]
         [Parameter(Mandatory, ValueFromPipeline, ParameterSetName = "vmss")]
         $VirtualMachineScaleSet,
-        [PSTypeName("KeyVault")]
-        $KeyVault,
+        [string]
+        [Parameter(Mandatory)]
+        $KeyVaultResourceId,
         [String]
         $CertificateUrl
     )
@@ -17,7 +18,7 @@ function Add-ArmOsProfileSecret {
         If ($PSCmdlet.ShouldProcess("Adding os profile secret to a virtual machine")) {
             $secret = @{
                 sourceVault       = @{
-                    id = $KeyVault._ResourceId
+                    id = $KeyVaultResourceId
                 }
                 vaultCertificates = @(
                     @{
@@ -29,12 +30,12 @@ function Add-ArmOsProfileSecret {
 
             if ($PSCmdlet.ParameterSetName -eq "vm") {
                 $VirtualMachine.properties.osProfile.secrets += $secret
-                $VirtualMachine.dependsOn += $KeyVault._ResourceId
+                $VirtualMachine.dependsOn += $KeyVaultResourceId
                 return $VirtualMachine
             }
             else {
                 $VirtualMachineScaleSet.properties.virtualMachineProfile.osProfile.secrets += $secret
-                $VirtualMachineScaleSet.dependsOn += $KeyVault._ResourceId
+                $VirtualMachineScaleSet.dependsOn += $KeyVaultResourceId
                 return $VirtualMachineScaleSet
             }
         }
