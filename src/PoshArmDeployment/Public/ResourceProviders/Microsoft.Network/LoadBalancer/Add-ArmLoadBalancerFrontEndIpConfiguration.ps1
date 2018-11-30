@@ -11,8 +11,6 @@ function Add-ArmLoadBalancerFrontEndIpConfiguration {
     )
 
     If ($PSCmdlet.ShouldProcess("Adding front end ip configuration")) {
-        $PublicIpResourceId = $FrontEndIpconfiguration._PublicIp._ResourceId
-
         $LoadBalancerResourceId = $LoadBalancer._ResourceId
         $FrontEndIpConfigurationName = $FrontEndIpconfiguration.Name
         $FrontEndIpconfiguration._ResourceId = "[concat($LoadBalancerResourceId, '/frontendIPConfigurations/', '$FrontEndIpConfigurationName')]"
