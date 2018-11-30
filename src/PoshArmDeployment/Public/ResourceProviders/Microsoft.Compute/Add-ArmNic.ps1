@@ -19,12 +19,10 @@ function Add-ArmNic {
 
             if ($PSCmdlet.ParameterSetName -eq "vm") {
                 $VirtualMachine.properties.networkProfile.networkInterfaceConfigurations += $Nic
-                $VirtualMachine.dependsOn += $Nic._Subnet._VirtualNetwork._ResourceId
                 return $VirtualMachine
             }
             else {
                 $VirtualMachineScaleSet.properties.virtualMachineProfile.networkProfile.networkInterfaceConfigurations += $Nic
-                $VirtualMachineScaleSet.dependsOn += $Nic._Subnet._VirtualNetwork._ResourceId
                 return $VirtualMachineScaleSet
             }
         }

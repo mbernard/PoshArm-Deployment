@@ -30,12 +30,10 @@ function Add-ArmOsProfileSecret {
 
             if ($PSCmdlet.ParameterSetName -eq "vm") {
                 $VirtualMachine.properties.osProfile.secrets += $secret
-                $VirtualMachine.dependsOn += $KeyVaultResourceId
                 return $VirtualMachine
             }
             else {
                 $VirtualMachineScaleSet.properties.virtualMachineProfile.osProfile.secrets += $secret
-                $VirtualMachineScaleSet.dependsOn += $KeyVaultResourceId
                 return $VirtualMachineScaleSet
             }
         }

@@ -18,7 +18,6 @@ function Add-ArmLoadBalancerFrontEndIpConfiguration {
         $FrontEndIpconfiguration._ResourceId = "[concat($LoadBalancerResourceId, '/frontendIPConfigurations/', '$FrontEndIpConfigurationName')]"
 
         $LoadBalancer.properties.frontEndIpconfigurations += $FrontEndIpconfiguration
-        $LoadBalancer.dependsOn += "$PublicIpResourceId"
 
         return $LoadBalancer
     }
