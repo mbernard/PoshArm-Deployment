@@ -12,4 +12,5 @@ function Add-ArmDependencyOn {
     $DependencyResourceId = $Dependency._ResourceId
     $Resource.dependsOn += "$DependencyResourceId"
 
+    $Resource
 }
