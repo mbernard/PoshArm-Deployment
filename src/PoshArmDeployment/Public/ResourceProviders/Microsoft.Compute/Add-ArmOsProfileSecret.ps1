@@ -10,22 +10,24 @@ function Add-ArmOsProfileSecret {
         [string]
         [Parameter(Mandatory)]
         $KeyVaultResourceId,
-        [String]
-        $CertificateUrl
+        $CertificateUrls = @()
     )
 
     Process {
         If ($PSCmdlet.ShouldProcess("Adding os profile secret to a virtual machine")) {
-            $secret = @{
+            $secret = [PSCustomObject][ordered]@{
+                PSTypeName        = "Secret"
                 sourceVault       = @{
                     id = $KeyVaultResourceId
                 }
-                vaultCertificates = @(
-                    @{
-                        certificateUrl   = $CertificateUrl
-                        certificateStore = "My"
-                    }
-                )
+                vaultCertificates = @()
+            }
+
+            foreach ($Url in $CertificateUrls) {
+                $secret.vaultCertificates += @{
+                    certificateUrl   = $Url
+                    certificateStore = "My"
+                }
             }
 
             if ($PSCmdlet.ParameterSetName -eq "vm") {
