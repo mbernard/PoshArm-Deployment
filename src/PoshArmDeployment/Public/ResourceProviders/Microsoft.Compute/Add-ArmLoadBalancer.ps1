@@ -1,9 +1,12 @@
-function Add-ArmNicLoadBalancer {
-    [CmdletBinding(SupportsShouldProcess = $true, DefaultParameterSetName = "vm")]
+function Add-ArmLoadBalancer {
+    [CmdletBinding(SupportsShouldProcess = $true)]
+    [OutputType("VirtualMachineScaleSet")]
     Param(
-        [PSTypeName("Nic")]
+        [PSTypeName("VirtualMachineScaleSet")]
         [Parameter(Mandatory, ValueFromPipeline)]
-        $Nic,
+        $VirtualMachineScaleSet,
+        [string]
+        $NicName,
         [PSTypeName("LoadBalancer")]
         [Parameter(Mandatory)]
         $LoadBalancer,
@@ -21,6 +24,13 @@ function Add-ArmNicLoadBalancer {
         $InboundNatPoolName = $LoadBalancer.properties.inboundNatPools[0].Name
     }
 
+    if (!$NicName) {
+        $NicName = $VirtualMachineScaleSet.properties.virtualMachineProfile.networkProfile.networkInterfaceConfigurations[0].Name
+    }
+
+    $Nic = $VirtualMachineScaleSet.properties.virtualMachineProfile.networkProfile.networkInterfaceConfigurations | Where-Object { $_.Name -eq $NicName}
+
+
     If ($PSCmdlet.ShouldProcess("Adding Nic to load balancer")) {
         $LoadBalancerResourceId = $LoadBalancer._ResourceId
 
@@ -33,5 +43,5 @@ function Add-ArmNicLoadBalancer {
         }
     }
 
-    return $Nic
+    return $VirtualMachineScaleSet | Add-ArmDependencyOn -Dependency $LoadBalancer
 }

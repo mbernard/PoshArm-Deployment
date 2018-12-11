@@ -12,7 +12,7 @@ function New-ArmLoadBalancerResource {
         $Location = $script:location,
         [string]
         [ValidateSet("Basic", "Standard")]
-        $Sku = "Basic"
+        $Sku = "Standard"
     )
 
     If ($PSCmdlet.ShouldProcess("Creates a new Arm load balancer resource")) {
