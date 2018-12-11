@@ -23,7 +23,8 @@ function Add-ArmParameter {
             }
 
             if ($Template) {
-                foreach ($prop in $InputObject.PSobject.Properties) {
+                $props = $InputObject.PSobject.Properties | Where-Object { !$_.Name.StartsWith("_") }
+                foreach ($prop in  $props) {
                     $value = $prop.Value
                     $Template.parameters | Add-Member -MemberType NoteProperty -Name $prop.Name -Value $value
                 }

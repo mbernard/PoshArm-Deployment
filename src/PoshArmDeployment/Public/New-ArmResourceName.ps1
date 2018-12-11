@@ -13,7 +13,7 @@ function New-ArmResourceName {
         [string]
         $Location = $script:location,
         [string]
-        $ResourceName = 'default',
+        $ResourceName,
         [Parameter(ParameterSetName = "ForceVersion")]
         [string]
         $Version = $script:version,
@@ -35,6 +35,10 @@ function New-ArmResourceName {
             default {
                 '-'
             }
+        }
+
+        if(!$ResourceName){
+            $ResourceName = $ResourceProvider.shortName
         }
 
         $hashParts = @(

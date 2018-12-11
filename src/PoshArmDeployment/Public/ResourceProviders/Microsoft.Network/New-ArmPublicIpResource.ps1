@@ -7,11 +7,17 @@ function New-ArmPublicIpResource {
         [string]
         $Name,
         [string]
-        $ApiVersion = "2017-06-01",
+        $ApiVersion = "2017-08-01",
         [string]
         $Location = $script:Location,
         [string]
-        $DomainNameLabel
+        $DomainNameLabel = $Name,
+        [string]
+        [ValidateSet("Basic", "Standard")]
+        $Sku = "Standard",
+        [string]
+        [ValidateSet("Dynamic", "Static")]
+        $PublicIPAllocationMethod = "Static"
     )
     If ($PSCmdlet.ShouldProcess("Creates a new Arm public ip resource")) {
         $PublicIp = [PSCustomObject][ordered]@{
@@ -21,9 +27,13 @@ function New-ArmPublicIpResource {
             name        = $Name
             apiVersion  = $ApiVersion
             location    = $Location
+            sku         = @{
+                name = $Sku
+                tier = "Regional"
+            }
             properties  = @{
-                publicIPAllocationMethod = "Dynamic"
-                dnsSettings = @{
+                publicIPAllocationMethod = "Static"
+                dnsSettings              = @{
                     domainNameLabel = $DomainNameLabel
                 }
             }

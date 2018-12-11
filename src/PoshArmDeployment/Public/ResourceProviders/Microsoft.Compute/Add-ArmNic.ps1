@@ -1,30 +1,43 @@
 function Add-ArmNic {
-    [CmdletBinding(SupportsShouldProcess = $true, DefaultParameterSetName = "vm")]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     Param(
-        [PSTypeName("VirtualMachine")]
-        [Parameter(Mandatory, ValueFromPipeline, ParameterSetName = "vm")]
-        $VirtualMachine,
         [PSTypeName("VirtualMachineScaleSet")]
-        [Parameter(Mandatory, ValueFromPipeline, ParameterSetName = "vmss")]
+        [Parameter(Mandatory, ValueFromPipeline)]
         $VirtualMachineScaleSet,
-        [PSTypeName("Nic")]
+        [PSTypeName("Subnet")]
         [Parameter(Mandatory)]
-        $Nic,
+        $Subnet,
         [string]
-        $Name = "default"
+        $Name = "default",
+        [Switch]
+        $IsPrimary
     )
 
-    Process {
-        If ($PSCmdlet.ShouldProcess("Adding network interface configuration to a virtual machine")) {
-
-            if ($PSCmdlet.ParameterSetName -eq "vm") {
-                $VirtualMachine.properties.networkProfile.networkInterfaceConfigurations += $Nic
-                return $VirtualMachine
+    If ($PSCmdlet.ShouldProcess("Adding network interface configuration to a virtual machine scale set")) {
+        $Nic = [PSCustomObject][ordered]@{
+            PSTypeName = "Nic"
+            name       = $Name
+            properties = @{
+                enableIPForwarding = $false
+                primary          = $IsPrimary.ToBool()
+                ipConfigurations = @(
+                    @{
+                        name       = $Name
+                        properties = @{
+                            subnet                                = @{
+                                id = $Subnet._ResourceId
+                            }
+                            loadBalancerBackendAddressPools       = @()
+                            loadBalancerInboundNatPools           = @()
+                            applicationGatewayBackendAddressPools = @()
+                        }
+                    }
+                )
             }
-            else {
-                $VirtualMachineScaleSet.properties.virtualMachineProfile.networkProfile.networkInterfaceConfigurations += $Nic
-                return $VirtualMachineScaleSet
-            }
+            _Subnet    = $Subnet
         }
+
+        $VirtualMachineScaleSet.properties.virtualMachineProfile.networkProfile.networkInterfaceConfigurations += $Nic
+        return $VirtualMachineScaleSet
     }
 }

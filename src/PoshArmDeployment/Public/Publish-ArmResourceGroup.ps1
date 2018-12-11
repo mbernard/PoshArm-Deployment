@@ -60,7 +60,7 @@ function Publish-ArmResourceGroup {
         else {
             # 3. Ensure resource group exist
             $date = (Get-Date -Format "s").Replace(":", "-")
-            $deploymentName = "$resourceGroupName-deployment-$date"
+            $deploymentName = "$date"
             $deployment = @{
                 Name                    = $deploymentName
                 ResourceGroupName       = $resourceGroupName
