@@ -11,7 +11,7 @@ function New-ArmPublicIpResource {
         [string]
         $Location = $script:Location,
         [string]
-        $DomainNameLabel = $Name,
+        $DomainNameLabel,
         [string]
         [ValidateSet("Basic", "Standard")]
         $Sku = "Standard",
@@ -20,6 +20,10 @@ function New-ArmPublicIpResource {
         $PublicIPAllocationMethod = "Static"
     )
     If ($PSCmdlet.ShouldProcess("Creates a new Arm public ip resource")) {
+        if (!$DomainNameLabel) {
+            $DomainNameLabel = $Name
+        }
+
         $PublicIp = [PSCustomObject][ordered]@{
             _ResourceId = $Name | New-ArmFunctionResourceId -ResourceType Microsoft.Network/publicIPAddresses
             PSTypeName  = "PublicIp"
