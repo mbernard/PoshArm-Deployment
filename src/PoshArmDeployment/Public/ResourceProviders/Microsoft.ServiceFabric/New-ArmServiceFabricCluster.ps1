@@ -57,7 +57,6 @@ function New-ArmServiceFabricCluster {
                 reliabilityLevel = $ReliabilityLevel
                 upgradeMode = "Automatic"
                 vmImage = "Windows"
-                azureActiveDirectory = @{}
             }
             resources  = @()
             dependsOn  = @()

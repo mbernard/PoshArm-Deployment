@@ -22,7 +22,9 @@ function New-ArmKeyVaultResource {
         [Switch]
         $EnabledForTemplateDeployment,
         [Switch]
-        $EnabledForDiskEncryption
+        $EnabledForDiskEncryption,
+        [Switch]
+        $EnableSoftDelete
     )
 
     If ($PSCmdlet.ShouldProcess("Creates a new Arm KeyVault object")) {
@@ -43,6 +45,7 @@ function New-ArmKeyVaultResource {
                 enabledForDeployment         = $EnabledForDeployment.ToBool()
                 enabledForTemplateDeployment = $EnabledForTemplateDeployment.ToBool()
                 enabledForDiskEncryption     = $EnabledForDiskEncryption.ToBool()
+                enableSoftDelete             = $EnableSoftDelete.ToBool()
             }
             resources   = @()
             dependsOn   = @()
