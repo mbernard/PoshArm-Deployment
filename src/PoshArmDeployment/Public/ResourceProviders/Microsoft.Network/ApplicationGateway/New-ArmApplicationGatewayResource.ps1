@@ -26,12 +26,6 @@ function New-ArmApplicationGatewayResource {
             name        = $Name
             apiVersion  = $ApiVersion
             location    = $Location
-            identity = @{
-                type = "UserAssigned"
-                identityIds = @(
-                    "/subscriptions/48c13282-832b-4617-a1b1-6a2ce820921e/resourceGroups/connect-dev-security-eastus2/providers/Microsoft.ManagedIdentity/userAssignedIdentities/testmig"
-                )
-            }
             properties  = @{
                 sku                                 = @{
                     name = $Sku
