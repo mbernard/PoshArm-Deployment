@@ -47,4 +47,9 @@
         "resourceType": "Microsoft.ManagedIdentity/userAssignedIdentities",
         "shortName": "uaid"
     }
+    ,
+    {
+        "resourceType": "microsoft.insights/components",
+        "shortName": "ai"
+    }
 ]
