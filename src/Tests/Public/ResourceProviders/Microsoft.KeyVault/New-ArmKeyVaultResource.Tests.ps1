@@ -16,6 +16,7 @@ InModuleScope PoshArmDeployment {
                             family = "A"
                         }
                         tenantId                     = "[subscription().tenantId]"
+                        enableSoftDelete             = $false
                         accessPolicies               = @()
                         enabledForDeployment         = $false
                         enabledForTemplateDeployment = $false
