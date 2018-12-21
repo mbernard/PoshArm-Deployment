@@ -20,6 +20,7 @@ function Publish-ArmResourceGroup {
 
     Process {
         $Configuration = Initialize-Configuration -Environment $EnvironmentCode -ConfigurationPath $ConfigurationPath
+        $script:ArmParameters= @{}
 
         # 1. Generate ARM Template
         New-ArmTemplate
