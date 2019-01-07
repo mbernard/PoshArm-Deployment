@@ -13,7 +13,10 @@ function New-ArmApplicationGatewayResource {
         [string]
         $Sku = "WAF_v2",
         [PsTypeName("Subnet")]
-        $Subnet
+        $Subnet,
+        [ValidateSet("Prevention", "Detection")]
+        [string]
+        $FirewallMode = "Prevention"
     )
 
     If ($PSCmdlet.ShouldProcess("Creates a new Arm application gateway resource")) {
@@ -55,7 +58,7 @@ function New-ArmApplicationGatewayResource {
                 redirectConfigurations              = @()
                 webApplicationFirewallConfiguration = @{
                     enabled            = $true
-                    firewallMode       = "Detection"
+                    firewallMode       = $FirewallMode
                     ruleSetType        = "OWASP"
                     ruleSetVersion     = "3.0"
                     disabledRuleGroups = @()
