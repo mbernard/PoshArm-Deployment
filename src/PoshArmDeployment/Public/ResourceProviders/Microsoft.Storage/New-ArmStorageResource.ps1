@@ -9,15 +9,18 @@ function New-ArmStorageResource {
         [string]
         $Name,
         [string]
-        $ApiVersion = '2017-10-01',
+        $ApiVersion = '2018-07-01',
         [string]
-        $Location = $script:location,
+        $Location = $script:Location,
         [string]
         [ValidateSet('Standard_LRS', 'Standard_GRS', 'Standard_RAGRS')]
         $Sku = 'Standard_LRS',
         [String]
         [ValidateSet('Storage', 'StorageV2')]
-        $Kind = 'StorageV2'
+        $Kind = 'StorageV2',
+        [string]
+        [ValidateSet("Hot", "Cool")]
+        $AccessTier = "Hot"
 
     )
     If ($PSCmdlet.ShouldProcess("Creates a new ArmStorageAccount object")) {
@@ -29,9 +32,24 @@ function New-ArmStorageResource {
             location   = $Location
             sku        = @{
                 name = $Sku
+                tier = "Standard"
             }
             kind       = $Kind
-            properties = @{}
+            properties = @{
+                supportsHttpsTrafficOnly = $true
+                encryption               = @{
+                    services  = @{
+                        file = @{
+                            enabled = $true
+                        }
+                        blob = @{
+                            enabled = $true
+                        }
+                    }
+                    keySource = "Microsoft.Storage"
+                }
+                accessTier               = $AccessTier
+            }
             resources  = @()
             dependsOn  = @()
         }
