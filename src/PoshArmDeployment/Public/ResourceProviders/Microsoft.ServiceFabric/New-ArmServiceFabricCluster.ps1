@@ -14,7 +14,7 @@ function New-ArmServiceFabricCluster {
         [string]
         $CertificateThumbprint,
         [string]
-        [ValidateSet("Bronze", "Silver", "Gold")]
+        [ValidateSet("None", "Bronze", "Silver", "Gold")]
         $ReliabilityLevel = "Silver",
         [Parameter(Mandatory)]
         [string]
@@ -57,7 +57,6 @@ function New-ArmServiceFabricCluster {
                 reliabilityLevel = $ReliabilityLevel
                 upgradeMode = "Automatic"
                 vmImage = "Windows"
-                azureActiveDirectory = @{}
             }
             resources  = @()
             dependsOn  = @()

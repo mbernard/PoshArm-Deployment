@@ -22,7 +22,7 @@ function Add-ArmServiceFabricAAD {
 
     Process {
         If ($PSCmdlet.ShouldProcess("Adding AAD auth to service fabric cluster")) {
-            $ServiceFabricCluster.properties.azureActiveDirectory = @{
+            $ServiceFabricCluster.properties["azureActiveDirectory"] = @{
                 tenantId           = $TenantId
                 clusterApplication = $ClusterApplicationId
                 clientApplication  = $ClientApplicationId

@@ -38,5 +38,18 @@
     {
         "resourceType": "Microsoft.Network/applicationGateways",
         "shortName": "ag"
+    },
+    {
+        "resourceType": "Microsoft.Network/networkSecurityGroups",
+        "shortName": "nsg"
+    },
+    {
+        "resourceType": "Microsoft.ManagedIdentity/userAssignedIdentities",
+        "shortName": "uaid"
+    }
+    ,
+    {
+        "resourceType": "microsoft.insights/components",
+        "shortName": "ai"
     }
 ]

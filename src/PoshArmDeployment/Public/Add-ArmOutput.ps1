@@ -6,10 +6,9 @@ function Add-ArmOutput {
         [Parameter(Mandatory)]
         [string]
         $Name,
-        [Parameter(Mandatory)]
         [ValidateSet("string", "securestring", "int", "bool", "object", "secureObject", "array")]
         [string]
-        $Type,
+        $Type = "string",
         [Parameter(Mandatory)]
         $Value
     )

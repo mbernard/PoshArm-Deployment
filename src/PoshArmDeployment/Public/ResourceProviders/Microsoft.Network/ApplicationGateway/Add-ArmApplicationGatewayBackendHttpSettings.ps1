@@ -21,23 +21,38 @@ function Add-ArmApplicationGatewayBackendHttpSettings {
         [string]
         $Path,
         [int]
-        $RequestTimeoutInSec = 30
+        $RequestTimeoutInSec = 30,
+        [string]
+        $TrustedRootCertificateName
     )
 
+    if (!$TrustedRootCertificateName) {
+        $TrustedRootCertificateName = $ApplicationGateway.properties.trustedRootCertificates[0].Name
+    }
+
     If ($PSCmdlet.ShouldProcess("Adding backend http settings")) {
-        $BackendHttpSettings =  [PSCustomObject][ordered]@{
-            type        = 'Microsoft.Network/applicationGateways/backendHttpSettingsCollection'
-            name        = $Name
-            properties  = @{
+        $ApplicationGatewayResourceId = $ApplicationGateway._ResourceId
+
+        $BackendHttpSettings = [PSCustomObject][ordered]@{
+            type       = 'Microsoft.Network/applicationGateways/backendHttpSettingsCollection'
+            name       = $Name
+            properties = @{
                 port                           = $Port
                 protocol                       = $Protocol
                 cookieBasedAffinity            = if ($CookieBasedAffinity) { "Enabled"} else {"Disabled"}
                 pickHostNameFromBackendAddress = $PickHostNameFromBackendAddress.ToBool()
                 path                           = $Path
                 requestTimeout                 = $RequestTimeoutInSec
+                trustedRootCertificates        = @()
             }
         }
-        # $BackendHttpSettings._ResourceId = "[concat($ApplicationGatewayResourceId, '/backendHttpSettingsCollection/', '$BackendHttpSettingsName')]"
+
+        if($Protocol -eq "Https")
+        {
+            $BackendHttpSettings.properties.trustedRootCertificates += @{
+                id = "[concat($ApplicationGatewayResourceId, '/trustedRootCertificates/', '$TrustedRootCertificateName')]"
+            }
+        }
 
         $ApplicationGateway.properties.backendHttpSettingsCollection += $BackendHttpSettings
 
