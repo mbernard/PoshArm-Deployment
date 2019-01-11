@@ -5,7 +5,7 @@ function New-ArmStorageResource {
     [OutputType("StorageAccount")]
     Param(
         [Parameter(Mandatory, ValueFromPipeline)]
-        [ValidatePattern('^[a-zA-Z0-9]*$')]
+        [ValidatePattern('^(\[.*\]|[a-zA-Z0-9]*)$')]
         [string]
         $Name,
         [string]
