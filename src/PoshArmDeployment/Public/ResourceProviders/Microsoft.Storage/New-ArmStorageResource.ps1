@@ -21,10 +21,11 @@ function New-ArmStorageResource {
         [string]
         [ValidateSet("Hot", "Cool")]
         $AccessTier = "Hot"
-
     )
+
     If ($PSCmdlet.ShouldProcess("Creates a new ArmStorageAccount object")) {
         $storageAccount = [PSCustomObject][ordered]@{
+            _ResourceId = $Name | New-ArmFunctionResourceId -ResourceType Microsoft.Storage/storageAccounts
             PSTypeName = "StorageAccount"
             type       = 'Microsoft.Storage/storageAccounts'
             name       = $Name

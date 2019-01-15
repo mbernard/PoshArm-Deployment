@@ -46,10 +46,30 @@
     {
         "resourceType": "Microsoft.ManagedIdentity/userAssignedIdentities",
         "shortName": "uaid"
-    }
-    ,
+    },
     {
         "resourceType": "microsoft.insights/components",
         "shortName": "ai"
+    },
+    {
+        "resourceType": "Microsoft.ServiceBus/namespaces",
+        "shortName": "sb"
+    },
+    {
+        "resourceType": "Microsoft.ServiceBus/namespaces/queues",
+        "shortName": "sbq"
+    },
+    {
+        "resourceType": "Microsoft.ServiceBus/namespaces/topics",
+        "shortName": "sbt"
+    },
+    {
+        "resourceType": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
+        "shortName": "sbts"
+    }
+    ,
+    {
+        "resourceType": "Microsoft.ServiceBus/namespaces/topics/subscriptions/rules",
+        "shortName": "sbtsr"
     }
 ]
