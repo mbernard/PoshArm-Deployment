@@ -16,12 +16,12 @@ function New-ArmApplicationGatewayResource {
         $Subnet,
         [ValidateSet("Prevention", "Detection")]
         [string]
-        $FirewallMode = "Prevention"
-        [bool]
-        $RequestBodyCheck = $false,
+        $FirewallMode = "Prevention",
+        [switch]
+        $EnableRequestBodyCheck,
         [ValidateRange(8, 128)]
         [int]
-        $MaxRequestBodySize = 128
+        $MaxRequestBodySizeInKb = 128
     )
 
     If ($PSCmdlet.ShouldProcess("Creates a new Arm application gateway resource")) {
@@ -67,8 +67,8 @@ function New-ArmApplicationGatewayResource {
                     ruleSetType        = "OWASP"
                     ruleSetVersion     = "3.0"
                     disabledRuleGroups = @()
-                    requestBodyCheck = $RequestBodyCheck,
-                    maxRequestBodySize = $MaxRequestBodySize
+                    requestBodyCheck = $EnableRequestBodyCheck.ToBool()
+                    maxRequestBodySizeInKb = $MaxRequestBodySizeInKb
                 }
                 enableHttp2                         = $true
                 autoscaleConfiguration              = @{
