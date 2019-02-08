@@ -1,75 +1,82 @@
 [
-    {
-        "resourceType": "Microsoft.Storage/storageAccounts",
-        "shortName": "sa"
-    },
-    {
-        "resourceType": "Microsoft.KeyVault/vaults",
-        "shortName": "kv"
-    },
-    {
-        "resourceType": "Microsoft.Network/virtualNetworks",
-        "shortName": "vnet"
-    },
-    {
-        "resourceType": "Microsoft.Compute/virtualMachineScaleSets",
-        "shortName": "vmss"
-    },
-    {
-        "resourceType": "Microsoft.Network/virtualNetworks/subnets",
-        "shortName": "snet"
-    },
-    {
-        "resourceType": "Microsoft.ServiceFabric/clusters",
-        "shortName": "sfc"
-    },
-    {
-        "resourceType": "Microsoft.KeyVault/vaults/secrets",
-        "shortName": "kvs"
-    },
-    {
-        "resourceType": "Microsoft.Network/publicIPAddresses",
-        "shortName": "ip"
-    },
-    {
-        "resourceType": "Microsoft.Network/loadBalancers",
-        "shortName": "lb"
-    },
-    {
-        "resourceType": "Microsoft.Network/applicationGateways",
-        "shortName": "ag"
-    },
-    {
-        "resourceType": "Microsoft.Network/networkSecurityGroups",
-        "shortName": "nsg"
-    },
-    {
-        "resourceType": "Microsoft.ManagedIdentity/userAssignedIdentities",
-        "shortName": "uaid"
-    },
-    {
-        "resourceType": "microsoft.insights/components",
-        "shortName": "ai"
-    },
-    {
-        "resourceType": "Microsoft.ServiceBus/namespaces",
-        "shortName": "sb"
-    },
-    {
-        "resourceType": "Microsoft.ServiceBus/namespaces/queues",
-        "shortName": "sbq"
-    },
-    {
-        "resourceType": "Microsoft.ServiceBus/namespaces/topics",
-        "shortName": "sbt"
-    },
-    {
-        "resourceType": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
-        "shortName": "sbts"
-    }
-    ,
-    {
-        "resourceType": "Microsoft.ServiceBus/namespaces/topics/subscriptions/rules",
-        "shortName": "sbtsr"
-    }
+  {
+    "resourceType": "Microsoft.Storage/storageAccounts",
+    "shortName": "sa"
+  },
+  {
+    "resourceType": "Microsoft.KeyVault/vaults",
+    "shortName": "kv"
+  },
+  {
+    "resourceType": "Microsoft.Network/virtualNetworks",
+    "shortName": "vnet"
+  },
+  {
+    "resourceType": "Microsoft.Compute/virtualMachineScaleSets",
+    "shortName": "vmss"
+  },
+  {
+    "resourceType": "Microsoft.Network/virtualNetworks/subnets",
+    "shortName": "snet"
+  },
+  {
+    "resourceType": "Microsoft.ServiceFabric/clusters",
+    "shortName": "sfc"
+  },
+  {
+    "resourceType": "Microsoft.KeyVault/vaults/secrets",
+    "shortName": "kvs"
+  },
+  {
+    "resourceType": "Microsoft.Network/publicIPAddresses",
+    "shortName": "ip"
+  },
+  {
+    "resourceType": "Microsoft.Network/loadBalancers",
+    "shortName": "lb"
+  },
+  {
+    "resourceType": "Microsoft.Network/applicationGateways",
+    "shortName": "ag"
+  },
+  {
+    "resourceType": "Microsoft.Network/networkSecurityGroups",
+    "shortName": "nsg"
+  },
+  {
+    "resourceType": "Microsoft.Network/dnszones",
+    "shortName": "dnsz"
+  },
+  {
+    "resourceType": "Microsoft.Network/dnszones/a",
+    "shortName": "dnsa"
+  },
+  {
+    "resourceType": "Microsoft.ManagedIdentity/userAssignedIdentities",
+    "shortName": "uaid"
+  },
+  {
+    "resourceType": "microsoft.insights/components",
+    "shortName": "ai"
+  },
+  {
+    "resourceType": "Microsoft.ServiceBus/namespaces",
+    "shortName": "sb"
+  },
+  {
+    "resourceType": "Microsoft.ServiceBus/namespaces/queues",
+    "shortName": "sbq"
+  },
+  {
+    "resourceType": "Microsoft.ServiceBus/namespaces/topics",
+    "shortName": "sbt"
+  },
+  {
+    "resourceType": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
+    "shortName": "sbts"
+  },
+  {
+    "resourceType": "Microsoft.ServiceBus/namespaces/topics/subscriptions/rules",
+    "shortName": "sbtsr"
+  }
 ]
