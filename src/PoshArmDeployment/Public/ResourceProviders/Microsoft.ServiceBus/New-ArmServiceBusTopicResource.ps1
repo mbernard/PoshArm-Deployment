@@ -3,7 +3,6 @@ function New-ArmServiceBusTopicResource {
     [OutputType("ServiceBusTopic")]
     Param(
         [Parameter(Mandatory)]
-        [ValidatePattern('^(\[.*\]|[a-zA-Z0-9]*)$')]
         [string]
         $Name,
         [string]
