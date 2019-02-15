@@ -57,7 +57,7 @@ function New-ArmServiceBusQueueResource {
                 status                              = "Active"
                 autoDeleteOnIdle                    = "P10675199DT2H48M5.4775807S"
                 enablePartitioning                  = -not $DisablePartitioning.ToBool()
-                enableExpress                       = $EnableExpress
+                enableExpress                       = $EnableExpress.ToBool()
             }
             resources   = @()
             dependsOn   = @()
