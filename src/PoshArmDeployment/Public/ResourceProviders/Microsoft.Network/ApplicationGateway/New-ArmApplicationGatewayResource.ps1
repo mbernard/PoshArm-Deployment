@@ -42,7 +42,7 @@ function New-ArmApplicationGatewayResource {
                 gatewayIPConfigurations             = @(
                     @{
                         name       = "appGatewayIpConfig"
-                        type = "Microsoft.Network/applicationGateways/gatewayIPConfigurations"
+                        type       = "Microsoft.Network/applicationGateways/gatewayIPConfigurations"
                         properties = @{
                             subnet = @{
                                 id = $Subnet._ResourceId
@@ -62,12 +62,13 @@ function New-ArmApplicationGatewayResource {
                 probes                              = @()
                 redirectConfigurations              = @()
                 webApplicationFirewallConfiguration = @{
-                    enabled            = $true
-                    firewallMode       = $FirewallMode
-                    ruleSetType        = "OWASP"
-                    ruleSetVersion     = "3.0"
-                    disabledRuleGroups = @()
-                    requestBodyCheck = $EnableRequestBodyCheck.ToBool()
+                    enabled                = $true
+                    firewallMode           = $FirewallMode
+                    ruleSetType            = "OWASP"
+                    ruleSetVersion         = "3.0"
+                    disabledRuleGroups     = @()
+                    exclusions             = @()
+                    requestBodyCheck       = $EnableRequestBodyCheck.ToBool()
                     maxRequestBodySizeInKb = $MaxRequestBodySizeInKb
                 }
                 enableHttp2                         = $true
