@@ -18,10 +18,10 @@ function Add-ArmApplicationGatewayRedirectRule {
         $TargetListenerName,
         [string]
         $TargetUrl,
-        [bool]
-        $IncludePath = $True,
-        [bool]
-        $IncludeQueryString = $True
+        [switch]
+        $ExcludePath,
+        [switch]
+        $ExcludeQueryString
     )
 
     If ($PSCmdlet.ShouldProcess("Adding redirect rule")) {
@@ -46,8 +46,8 @@ function Add-ArmApplicationGatewayRedirectRule {
             name       = $Name
             properties = @{
                 redirectType        = $RedirectType
-                includePath         = $IncludePath
-                includeQueryString  = $IncludeQueryString
+                includePath         = -not $ExcludePath.toBool()
+                includeQueryString  = -not $ExcludeQueryString.toBool()
                 requestRoutingRules = @(@{
                         id = "[concat($ApplicationGatewayResourceId, '/requestRoutingRules/', '$Name')]"
                     })
