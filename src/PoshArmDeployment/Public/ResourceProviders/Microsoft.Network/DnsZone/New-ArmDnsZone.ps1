@@ -26,6 +26,7 @@ function New-ArmDnsZone {
                 registrationVirtualNetworks = @()
                 resolutionVirtualNetworks   = @()
             }
+            dependsOn   = @()
         }
 
         $dnsZone.PSTypeNames.Add("ArmResource")
