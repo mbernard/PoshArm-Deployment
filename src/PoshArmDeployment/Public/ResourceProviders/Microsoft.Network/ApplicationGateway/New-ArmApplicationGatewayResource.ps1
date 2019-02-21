@@ -76,7 +76,7 @@ function New-ArmApplicationGatewayResource {
             )
         }
 
-        if (!$DisableFirewall) {
+        if (!$DisableFirewall.ToBool()) {
             $WebApplicationFirewallConfiguration = @{
                 enabled                = $true
                 firewallMode           = $FirewallMode
