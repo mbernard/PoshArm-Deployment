@@ -11,9 +11,16 @@ function New-ArmApplicationGatewayResource {
         [string]
         $Location = $script:location,
         [string]
-        $Sku = "WAF_v2",
+        $SkuName = "WAF_v2",
+        [string]
+        $SkuTier = "WAF_v2",
+        [ValidateRange(1, 32)]
+        [int]
+        $Capacity = 2,
         [PsTypeName("Subnet")]
         $Subnet,
+        [switch]
+        $DisableFirewall,
         [ValidateSet("Prevention", "Detection")]
         [string]
         $FirewallMode = "Prevention",
@@ -35,11 +42,11 @@ function New-ArmApplicationGatewayResource {
             apiVersion  = $ApiVersion
             location    = $Location
             properties  = @{
-                sku                                 = @{
-                    name = $Sku
-                    tier = $Sku
+                sku                           = @{
+                    name = $SkuName
+                    tier = $SkuTier
                 }
-                gatewayIPConfigurations             = @(
+                gatewayIPConfigurations       = @(
                     @{
                         name       = "appGatewayIpConfig"
                         type       = "Microsoft.Network/applicationGateways/gatewayIPConfigurations"
@@ -50,36 +57,47 @@ function New-ArmApplicationGatewayResource {
                         }
                     }
                 )
-                sslCertificates                     = @()
-                trustedRootCertificates             = @()
-                frontendIPConfigurations            = @()
-                frontendPorts                       = @()
-                backendAddressPools                 = @()
-                backendHttpSettingsCollection       = @()
-                httpListeners                       = @()
-                urlPathMaps                         = @()
-                requestRoutingRules                 = @()
-                probes                              = @()
-                redirectConfigurations              = @()
-                webApplicationFirewallConfiguration = @{
-                    enabled                = $true
-                    firewallMode           = $FirewallMode
-                    ruleSetType            = "OWASP"
-                    ruleSetVersion         = "3.0"
-                    disabledRuleGroups     = @()
-                    exclusions             = @()
-                    requestBodyCheck       = $EnableRequestBodyCheck.ToBool()
-                    maxRequestBodySizeInKb = $MaxRequestBodySizeInKb
-                }
-                enableHttp2                         = $true
-                autoscaleConfiguration              = @{
-                    minCapacity = 2
-                }
+                sslCertificates               = @()
+                trustedRootCertificates       = @()
+                frontendIPConfigurations      = @()
+                frontendPorts                 = @()
+                backendAddressPools           = @()
+                backendHttpSettingsCollection = @()
+                httpListeners                 = @()
+                urlPathMaps                   = @()
+                requestRoutingRules           = @()
+                probes                        = @()
+                redirectConfigurations        = @()
+                enableHttp2                   = $true
             }
             resources   = @()
             dependsOn   = @(
                 "$VnetResourceId"
             )
+        }
+
+        if (!$DisableFirewall.ToBool()) {
+            $WebApplicationFirewallConfiguration = @{
+                enabled                = $true
+                firewallMode           = $FirewallMode
+                ruleSetType            = "OWASP"
+                ruleSetVersion         = "3.0"
+                disabledRuleGroups     = @()
+                exclusions             = @()
+                requestBodyCheck       = $EnableRequestBodyCheck.ToBool()
+                maxRequestBodySizeInKb = $MaxRequestBodySizeInKb
+            }
+            $ApplicationGateway.properties.Add('webApplicationFirewallConfiguration', $WebApplicationFirewallConfiguration)
+        }
+
+        if ($SkuTier.endswith("_v2")) {
+            $AutoScaleConfiguration = @{
+                minCapacity = $Capacity
+            }
+            $ApplicationGateway.properties.Add('autoscaleConfiguration', $AutoScaleConfiguration)
+        }
+        else {
+            $ApplicationGateway.properties.sku.Add('capacity', $Capacity)
         }
 
         $ApplicationGateway.PSTypeNames.Add("ArmResource")
