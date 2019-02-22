@@ -36,7 +36,7 @@ function New-ArmPublicIpResource {
                 tier = "Regional"
             }
             properties  = @{
-                publicIPAllocationMethod = "Static"
+                publicIPAllocationMethod = $PublicIPAllocationMethod
                 dnsSettings              = @{
                     domainNameLabel = $DomainNameLabel
                 }

@@ -11,8 +11,8 @@ function New-ArmServiceBusTopicSubscriptionResource {
         [string]
         $Location = $script:Location,
         [Parameter(Mandatory, ValueFromPipeline)]
-        [String]
-        $TopicName,
+        [PSTypeName("ServiceBusTopic")]
+        $Topic,
         [string]
         $LockDuration ="PT30S",
         [Switch]
@@ -30,6 +30,7 @@ function New-ArmServiceBusTopicSubscriptionResource {
     )
 
     If ($PSCmdlet.ShouldProcess("Creates a new Arm ServiceBus topic subscription object")) {
+        $TopicName = $Topic.Name
         $ServiceBusTopicSubscription = [PSCustomObject][ordered]@{
             _ResourceId = New-ArmFunctionResourceId -ResourceType Microsoft.ServiceBus/namespaces/topics/subscriptions -ResourceName1 $TopicName -ResourceName2 $Name
             PSTypeName  = "ServiceBusTopicSubscription"
