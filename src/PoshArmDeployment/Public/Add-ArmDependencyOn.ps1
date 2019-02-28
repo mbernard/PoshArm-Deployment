@@ -8,13 +8,13 @@ function Add-ArmDependencyOn {
         [PSTypeName('ArmResource')]
         $Dependency,
         [switch]
-        $PassThru = $True
+        $PassThru
     )
 
     $DependencyResourceId = $Dependency._ResourceId
     $Resource.dependsOn += "$DependencyResourceId"
 
-    if ($PassThru.ToBool()) {
+    if ($PassThru.IsPresent) {
         return $Resource
     }
 }

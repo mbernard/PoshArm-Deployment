@@ -34,7 +34,7 @@ function Add-ArmLogAnalyticsWorkspaceStorageInsightConfiguration {
         }
 
         $StorageInsightConfiguration.PSTypeNames.Add("ArmResource")
-        $StorageInsightConfiguration | Add-ArmDependencyOn -Dependency $LogAnalyticsWorkspace -PassThru:$False
+        $StorageInsightConfiguration | Add-ArmDependencyOn -Dependency $LogAnalyticsWorkspace
         $LogAnalyticsWorkspace.resources += $StorageInsightConfiguration
 
         return $LogAnalyticsWorkspace
