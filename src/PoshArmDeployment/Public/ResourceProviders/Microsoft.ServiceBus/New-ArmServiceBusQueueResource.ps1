@@ -3,6 +3,7 @@ function New-ArmServiceBusQueueResource {
     [OutputType("ServiceBusQueue")]
     Param(
         [Parameter(Mandatory)]
+        [ValidatePattern('^(\[.*\]|[A-Za-z0-9]|[A-Za-z0-9][\w-\.\/\~]*[A-Za-z0-9])$')]
         [string]
         $Name,
         [string]
@@ -13,9 +14,10 @@ function New-ArmServiceBusQueueResource {
         [String]
         $ServiceBusName,
         [string]
-        $LockDuration ="PT30S",
+        $LockDuration = "PT30S",
         [int]
-        $MaxSizeInMegabytes = 16384,
+        [ValidateSet(1024, 2048, 3072, 4096, 5120)]
+        $MaxSizeInMegabytes = 1024,
         [Switch]
         $EnableDuplicateDetection,
         [Switch]
