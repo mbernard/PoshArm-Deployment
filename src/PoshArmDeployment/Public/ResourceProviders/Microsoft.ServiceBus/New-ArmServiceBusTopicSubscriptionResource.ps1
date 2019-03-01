@@ -3,7 +3,7 @@ function New-ArmServiceBusTopicSubscriptionResource {
     [OutputType("ServiceBusTopicSubscription")]
     Param(
         [Parameter(Mandatory)]
-        [ValidatePattern('^(\[.*\]|[a-zA-Z0-9]*)$')]
+        [ValidatePattern('^(\[.*\]|[A-Za-z0-9]|[A-Za-z0-9][\w-\.\/\~]*[A-Za-z0-9])$')]
         [string]
         $Name,
         [string]
@@ -14,7 +14,7 @@ function New-ArmServiceBusTopicSubscriptionResource {
         [PSTypeName("ServiceBusTopic")]
         $Topic,
         [string]
-        $LockDuration ="PT30S",
+        $LockDuration = "PT30S",
         [Switch]
         $EnableSession,
         [string]
@@ -39,15 +39,15 @@ function New-ArmServiceBusTopicSubscriptionResource {
             apiVersion  = $ApiVersion
             location    = $Location
             properties  = @{
-                lockDuration                        = $LockDuration
-                requiresSession                     = $EnableSession.ToBool()
-                defaultMessageTimeToLive            = $MessageTimeToLive
-                deadLetteringOnMessageExpiration    = -not $DisableDeadLetteringOnMessageExpiration.ToBool()
-                deadLetteringOnFilterEvaluationExceptions  = -not $DeadLetteringOnFilterEvaluationExceptions.ToBool()
-                maxDeliveryCount                    = $MaxRetryCount
-                status                              = "Active"
-                enableBatchedOperations             = -not $DisableBatchedOperations.ToBool()
-                autoDeleteOnIdle                    = "P10675199DT2H48M5.4775807S"
+                lockDuration                              = $LockDuration
+                requiresSession                           = $EnableSession.ToBool()
+                defaultMessageTimeToLive                  = $MessageTimeToLive
+                deadLetteringOnMessageExpiration          = -not $DisableDeadLetteringOnMessageExpiration.ToBool()
+                deadLetteringOnFilterEvaluationExceptions = -not $DeadLetteringOnFilterEvaluationExceptions.ToBool()
+                maxDeliveryCount                          = $MaxRetryCount
+                status                                    = "Active"
+                enableBatchedOperations                   = -not $DisableBatchedOperations.ToBool()
+                autoDeleteOnIdle                          = "P10675199DT2H48M5.4775807S"
             }
             resources   = @()
             dependsOn   = @()
