@@ -17,8 +17,7 @@ function Add-ArmNetworkSecurityGroupToSubnet {
             id = "$NsgResourceId"
         }
 
-        $vnet = $vnet | Add-ArmDependencyOn -Dependency $NSG
-
+        $vnet | Add-ArmDependencyOn -Dependency $NSG
         return $NSG
     }
 }

@@ -78,5 +78,9 @@
   {
     "resourceType": "Microsoft.ServiceBus/namespaces/topics/subscriptions/rules",
     "shortName": "sbtsr"
+  },
+  {
+    "resourceType": "Microsoft.OperationalInsights/workspaces",
+    "shortName": "law"
   }
 ]

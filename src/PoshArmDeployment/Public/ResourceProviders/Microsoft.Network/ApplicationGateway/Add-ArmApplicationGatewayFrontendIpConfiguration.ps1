@@ -14,7 +14,7 @@ function Add-ArmApplicationGatewayFrontendIpConfiguration {
 
     If ($PSCmdlet.ShouldProcess("Adding front end ip configuration")) {
         $FrontEndIpconfiguration = [PSCustomObject][Ordered]@{
-            _PublicIp = $PublicIp
+            _PublicIp  = $PublicIp
             name       = $Name
             properties = @{
                 publicIPAddress = @{
@@ -24,6 +24,6 @@ function Add-ArmApplicationGatewayFrontendIpConfiguration {
         }
 
         $ApplicationGateway.properties.frontendIPConfigurations += $FrontEndIpconfiguration
-        return $ApplicationGateway | Add-ArmDependencyOn -Dependency $PublicIp
+        return $ApplicationGateway | Add-ArmDependencyOn -Dependency $PublicIp -PassThru
     }
 }

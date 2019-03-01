@@ -32,5 +32,5 @@ function Add-ArmApplicationGateway {
         }
     }
 
-    return $VirtualMachineScaleSet | Add-ArmDependencyOn -Dependency $ApplicationGateway
+    return $VirtualMachineScaleSet | Add-ArmDependencyOn -Dependency $ApplicationGateway -PassThru
 }
