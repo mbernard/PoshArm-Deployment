@@ -43,5 +43,5 @@ function Add-ArmLoadBalancer {
         }
     }
 
-    return $VirtualMachineScaleSet | Add-ArmDependencyOn -Dependency $LoadBalancer
+    return $VirtualMachineScaleSet | Add-ArmDependencyOn -Dependency $LoadBalancer -PassThru
 }

@@ -17,6 +17,21 @@ function Add-ArmServiceFabricNodeType {
         [Parameter(Mandatory)]
         [PsTypeName("VirtualMachineScaleSet")]
         $Vmss,
+        [string]
+        [Parameter(Mandatory)]
+        $ApplicationDiagnosticsStorageAccountName,
+        [string]
+        [Parameter(Mandatory)]
+        $ApplicationDiagnosticsStorageAccountResourceId,
+        [string]
+        [Parameter(Mandatory)]
+        $SupportLogStorageAccountResourceId,
+        [string]
+        [Parameter(Mandatory)]
+        $ApplicationInsightsKey,
+        [string]
+        [Parameter(Mandatory)]
+        $LogWorkspaceResourceId,
         [Switch]
         $IsPrimary
     )
@@ -41,7 +56,14 @@ function Add-ArmServiceFabricNodeType {
             _vmss                        = $vmss
         }
 
-        $vmss = $vmss | Add-ArmServiceFabricExtension -NodeType $nodeType -CertificateThumbprint $ServiceFabricCluster.properties.certificate.thumbprint
+        $vmss = $vmss | Add-ArmServiceFabricExtension -NodeType $nodeType `
+            -CertificateThumbprint $ServiceFabricCluster.properties.certificate.thumbprint `
+            -SupportLogStorageAccountResourceId $SupportLogStorageAccountResourceId `
+            | Add-ArmMonitoringExtension -Name "OMSVmExt_$Name" -LogWorkspaceResourceId $LogWorkspaceResourceId `
+            | Add-ArmServiceFabricDiagnosticsExtension -NodeType $nodeType `
+            -ApplicationDiagnosticsStorageAccountName $ApplicationDiagnosticsStorageAccountName `
+            -ApplicationDiagnosticsStorageAccountResourceId $ApplicationDiagnosticsStorageAccountResourceId `
+            -ApplicationInsightsKey $ApplicationInsightsKey
         $ServiceFabricCluster.properties.nodeTypes += $nodeType
 
         return $ServiceFabricCluster

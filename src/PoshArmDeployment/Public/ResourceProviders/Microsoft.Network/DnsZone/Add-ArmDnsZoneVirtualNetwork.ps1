@@ -25,6 +25,6 @@ function Add-ArmDnsZoneVirtualNetwork {
             $DNSZ.properties.registrationVirtualNetworks += $networkEntry
         }
 
-        return $DNSZ | Add-ArmDependencyOn -Dependency $VirtualNetwork
+        return $DNSZ | Add-ArmDependencyOn -Dependency $VirtualNetwork -PassThru
     }
 }
