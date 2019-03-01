@@ -4,19 +4,18 @@ function Add-ArmMonitoringExtension {
         [PSTypeName("VirtualMachineScaleSet")]
         [Parameter(Mandatory, ValueFromPipeline)]
         $VirtualMachineScaleSet,
-        [PSTypeName("ServiceFabricNodeType")]
+        [string]
         [Parameter(Mandatory)]
-        $NodeType,
+        $Name,
         [string]
         [Parameter(Mandatory)]
         $LogWorkspaceResourceId
     )
 
     Process {
-        $nodeName = $NodeType.Name
         If ($PSCmdlet.ShouldProcess("Adding monitoring extension to a virtual machine scale set")) {
             $monitoringExtension = @{
-                name       = "OMSVmExt_$nodeName"
+                name       = $Name
                 properties = @{
                     publisher               = "Microsoft.EnterpriseCloud.Monitoring"
                     type                    = "MicrosoftMonitoringAgent"

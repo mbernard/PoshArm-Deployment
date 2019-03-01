@@ -59,7 +59,7 @@ function Add-ArmServiceFabricNodeType {
         $vmss = $vmss | Add-ArmServiceFabricExtension -NodeType $nodeType `
             -CertificateThumbprint $ServiceFabricCluster.properties.certificate.thumbprint `
             -SupportLogStorageAccountResourceId $SupportLogStorageAccountResourceId `
-            | Add-ArmMonitoringExtension -NodeType $nodeType -LogWorkspaceResourceId $LogWorkspaceResourceId `
+            | Add-ArmMonitoringExtension -Name "OMSVmExt_$Name" -LogWorkspaceResourceId $LogWorkspaceResourceId `
             | Add-ArmServiceFabricDiagnosticsExtension -NodeType $nodeType `
             -ApplicationDiagnosticsStorageAccountName $ApplicationDiagnosticsStorageAccountName `
             -ApplicationDiagnosticsStorageAccountResourceId $ApplicationDiagnosticsStorageAccountResourceId `
