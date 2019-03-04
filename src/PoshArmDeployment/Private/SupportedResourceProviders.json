@@ -60,6 +60,10 @@
     "shortName": "ai"
   },
   {
+    "resourceType": "microsoft.insights/webtests",
+    "shortName": "aiwt"
+  },
+  {
     "resourceType": "Microsoft.ServiceBus/namespaces",
     "shortName": "sb"
   },
