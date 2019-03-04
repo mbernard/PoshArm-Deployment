@@ -11,26 +11,26 @@ function New-ArmApplicationInsightsWebTest {
         $ApplicationInsights,
         [int]
         [ValidateSet(300, 600, 900)]
-        $Frequency = 300,
+        $FrequencyInSeconds = 300,
         [int]
         [ValidateSet(30, 60, 90, 120)]
-        $Timeout = 30,
+        $TimeoutInSeconds = 30,
         [string]
         [ValidateSet("ping")]
         $Kind = "ping",
-        [bool]
-        $RetryEnabled = $True,
+        [switch]
+        $DisableRetry,
         [string[]]
         [Parameter(Mandatory)]
         [ValidateSet("emea-nl-ams-azr", "us-ca-sjc-azr", "emea-ru-msa-edge", "emea-se-sto-edge", "apac-sg-sin-azr", "us-tx-sn1-azr", "us-il-ch1-azr", "emea-gb-db3-azr", "apac-jp-kaw-edge", "emea-ch-zrh-edge", "emea-fr-pra-edge", "us-va-ash-azr", "apac-hk-hkn-azr", "us-fl-mia-edge", "latam-br-gru-edge", "emea-au-syd-edge")]
-        $Locations,
+        $LocationIds,
         [string]
         [Parameter(Mandatory)]
         $Url,
-        [bool]
-        $ParseDependentRequests = $False,
-        [bool]
-        $FollowRedirects = $True,
+        [switch]
+        $ParseDependentRequests,
+        [switch]
+        $DisableFollowRedirects,
         [int]
         [ValidateRange(200, 500)]
         $ExpectedHttpStatusCode = 200,
@@ -58,10 +58,10 @@ function New-ArmApplicationInsightsWebTest {
                 SyntheticMonitorId = "[concat('$Name', '-', $ApplicationInsightsName)]"
                 Name               = $Name
                 Enabled            = $true
-                Frequency          = $Frequency
-                Timeout            = $Timeout
+                Frequency          = $FrequencyInSeconds
+                Timeout            = $TimeoutInSeconds
                 Kind               = $Kind
-                RetryEnabled       = $RetryEnabled
+                RetryEnabled       = -not $DisableRetry.ToBool()
                 Locations          = @()
                 Configuration      = @{
                     WebTest = $Null
@@ -71,12 +71,14 @@ function New-ArmApplicationInsightsWebTest {
             dependsOn   = @()
         }
 
+        $ParseDependentRequestsValue = $ParseDependentRequests.ToBool()
+        $FollowRedirectsValue = -not $DisableFollowRedirects.ToBool()
         $WebTestConfiguration = "<WebTest Name=\""$Name\""
                                     Id=\""$WebTestId\""
                                     Enabled=\""True\""
                                     CssProjectStructure=\""\""
                                     CssIteration=\""\""
-                                    Timeout=\""$Timeout\""
+                                    Timeout=\""$TimeoutInSeconds\""
                                     WorkItemIds=\""\""
                                     xmlns=\""http://microsoft.com/schemas/VisualStudio/TeamTest/2010\""
                                     Description=\""\""
@@ -93,9 +95,9 @@ function New-ArmApplicationInsightsWebTest {
                                             Version=\""1.1\""
                                             Url=\""$Url\""
                                             ThinkTime=\""0\""
-                                            Timeout=\""$Timeout\""
-                                            ParseDependentRequests=\""$ParseDependentRequests\""
-                                            FollowRedirects=\""$FollowRedirects\""
+                                            Timeout=\""$TimeoutInSeconds\""
+                                            ParseDependentRequests=\""$ParseDependentRequestsValue\""
+                                            FollowRedirects=\""$FollowRedirectsValue\""
                                             RecordResult=\""True\""
                                             Cache=\""False\""
                                             ResponseTimeGoal=\""0\""
@@ -110,7 +112,7 @@ function New-ArmApplicationInsightsWebTest {
         $WebTestConfiguration = $WebTestConfiguration.Replace("`r", "").Replace("`n", "")
         $ApplicationInsightsWebTest.properties.Configuration.WebTest = $WebTestConfiguration
 
-        foreach ($location in $Locations) {
+        foreach ($location in $LocationIds) {
             $ApplicationInsightsWebTest.properties.Locations += @{
                 Id = $location
             }
