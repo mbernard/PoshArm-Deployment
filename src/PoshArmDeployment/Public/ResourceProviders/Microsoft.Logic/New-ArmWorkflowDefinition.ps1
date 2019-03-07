@@ -24,7 +24,6 @@ function New-ArmWorkflowDefinition {
             $Triggers.manual = $HttpTrigger
         }
 
-
         $WorkflowDefinition = [PSCustomObject][ordered]@{
             '$schema'      = 'https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#'
             PSTypeName     = 'WorkflowDefinition'
@@ -34,7 +33,6 @@ function New-ArmWorkflowDefinition {
             actions        = @{}
             outputs        = @{}
         }
-
 
         return $WorkflowDefinition
     }
