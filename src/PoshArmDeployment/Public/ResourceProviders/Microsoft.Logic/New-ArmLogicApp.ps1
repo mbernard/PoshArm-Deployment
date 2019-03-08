@@ -6,7 +6,7 @@ function New-ArmLogicApp {
         [ValidatePattern('^(\[.*\]|[a-zA-Z0-9-]*)$')]
         [string]
         $Name,
-        [PSTypeName("WorkflowDefinition")]
+        [PSCustomObject]
         $WorkflowDefinition = @{},
         [string]
         $ApiVersion = '2017-07-01',
