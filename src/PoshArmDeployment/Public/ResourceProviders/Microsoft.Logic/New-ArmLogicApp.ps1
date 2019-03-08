@@ -12,6 +12,7 @@ function New-ArmLogicApp {
         $ApiVersion = '2017-07-01',
         [string]
         $Location = $script:Location,
+        [ValidateSet('NotSpecified', 'Completed', 'Enabled', 'Disabled', 'Deleted', 'Suspended')]
         [string]
         $State = 'Enabled'
     )
