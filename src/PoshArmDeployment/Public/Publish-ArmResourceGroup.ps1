@@ -20,7 +20,7 @@ function Publish-ArmResourceGroup {
 
     Process {
         $Configuration = Initialize-Configuration -Environment $EnvironmentCode -ConfigurationPath $ConfigurationPath
-        $script:ArmParameters= @{}
+        $script:ArmParameters = @{}
 
         # 1. Generate ARM Template
         New-ArmTemplate
@@ -28,14 +28,7 @@ function Publish-ArmResourceGroup {
 
         # 2. Create/Update deployment template file
         if (!$ResourceGroupName) {
-            $resourceGroupNameParts = @(
-                $script:ProjectName
-                $script:EnvironmentCode
-                $script:Context
-                $script:Location
-            ) | Where-Object {$_}
-            $resourceGroupName = [string]::Join('-', $resourceGroupNameParts)
-            $resourceGroupName = $resourceGroupName.ToLowerInvariant()
+            $resourceGroupName = New-ArmResourceGroupName -Context $script:Context
         }
 
         $templateFilePath = Join-Path $ConfigurationPath "GENERATED-ArmTemplate-$resourceGroupName.json"
