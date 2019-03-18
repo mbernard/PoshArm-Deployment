@@ -1,15 +1,21 @@
 function New-ArmResourceGroupName {
+    [CmdletBinding()]
     param(
-        [Parameter(Mandatory)]
         [string]
-        $Context
+        $ProjectName = $script.projectName,
+        [string]
+        $EnvironmentCode = $script.environmentCode,
+        [string]
+        $Context = $script.context,
+        [string]
+        $Location = $script.location
     )
 
     $ResourceGroupNameParts = @(
-        $script.projectName
-        $script.environmentCode
+        $ProjectName
+        $EnvironmentCode
         $Context
-        $script.location
+        $Location
     ) | Where-Object {$_}
     $ResourceGroupName = [string]::Join('-', $ResourceGroupNameParts)
     $ResourceGroupName = $ResourceGroupName.ToLowerInvariant()
