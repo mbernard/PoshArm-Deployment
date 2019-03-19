@@ -2,6 +2,7 @@ function New-ArmResourceGroupName {
     [CmdletBinding()]
     param(
         [string]
+<<<<<<< HEAD
         $ProjectName = $script:projectName,
         [string]
         $EnvironmentCode = $script:environmentCode,
@@ -9,6 +10,15 @@ function New-ArmResourceGroupName {
         $Context = $script:context,
         [string]
         $Location = $script:location
+=======
+        $ProjectName = $script.projectName,
+        [string]
+        $EnvironmentCode = $script.environmentCode,
+        [string]
+        $Context = $script.context,
+        [string]
+        $Location = $script.location
+>>>>>>> upstream/develop
     )
 
     $ResourceGroupNameParts = @(
