@@ -28,7 +28,7 @@ function Publish-ArmResourceGroup {
 
         # 2. Create/Update deployment template file
         if (!$ResourceGroupName) {
-            $resourceGroupName = New-ArmResourceGroupName -Context $script:Context
+            $resourceGroupName = New-ArmResourceGroupName
         }
 
         $templateFilePath = Join-Path $ConfigurationPath "GENERATED-ArmTemplate-$resourceGroupName.json"
