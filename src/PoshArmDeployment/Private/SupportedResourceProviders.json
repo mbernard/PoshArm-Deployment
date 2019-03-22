@@ -90,5 +90,9 @@
   {
     "resourceType": "Microsoft.Logic/workflows",
     "shortName": "lawf"
+  },
+  {
+    "resourceType": "Microsoft.SignalRService/SignalR",
+    "shortName": "sgnlr"
   }
 ]
