@@ -60,6 +60,10 @@
     "shortName": "ai"
   },
   {
+    "resourceType": "microsoft.insights/alertrules",
+    "shortName": "aiar"
+  },
+  {
     "resourceType": "microsoft.insights/webtests",
     "shortName": "aiwt"
   },

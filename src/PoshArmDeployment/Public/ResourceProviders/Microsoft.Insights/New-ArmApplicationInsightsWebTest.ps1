@@ -43,11 +43,12 @@ function New-ArmApplicationInsightsWebTest {
         $ApplicationInsightsName = $ApplicationInsights.name
         $WebTestId = [GUID]::NewGuid().ToString()
         $WebRequestId = [GUID]::NewGuid().ToString()
+        $ResourceName = "[concat('$Name', '-', $ApplicationInsightsName)]"
         $ApplicationInsightsWebTest = [PSCustomObject][ordered]@{
-            _ResourceId = $Name | New-ArmFunctionResourceId -ResourceType 'microsoft.insights/webtests'
+            _ResourceId = $ResourceName | New-ArmFunctionResourceId -ResourceType 'microsoft.insights/webtests'
             PSTypeName  = "ApplicationInsightsWebTest"
             type        = 'microsoft.insights/webtests'
-            name        = "[concat('$Name', '-', $ApplicationInsightsName)]"
+            name        = $ResourceName
             apiVersion  = $ApplicationInsights.apiVersion
             location    = $ApplicationInsights.location
             kind        = "other"
@@ -55,7 +56,7 @@ function New-ArmApplicationInsightsWebTest {
                 "[concat('hidden-link:', $ApplicationInsightsResourceId)]" = "Resource"
             }
             properties  = @{
-                SyntheticMonitorId = "[concat('$Name', '-', $ApplicationInsightsName)]"
+                SyntheticMonitorId = $ResourceName
                 Name               = $Name
                 Enabled            = $true
                 Frequency          = $FrequencyInSeconds
