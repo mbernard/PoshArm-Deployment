@@ -14,7 +14,7 @@ function New-ArmApplicationInsightsAlertRule {
         [string]
         $Description = "",
         [switch]
-        $Disable,
+        $Disabled,
         [ValidateSet(
             "GreaterThan",
             "GreaterThanOrEqual",
@@ -32,22 +32,33 @@ function New-ArmApplicationInsightsAlertRule {
             "Last")]
         [string]
         $TimeAggregation,
+        [ValidateRange(1, [int]::MaxValue)]
         [int]
         $FailedLocationCount,
-        [string]
-        $WindowSize = "PT5M",
+        [ValidateRange(5, 1440)]
+        [int]
+        $WindowSizeInMinutes = 5,
         [ValidateSet(
             "RuleCondition",
-            "Microsoft.Azure.Management.Insights.Models.ThresholdRuleCondition",
-            "Microsoft.Azure.Management.Insights.Models.LocationThresholdRuleCondition",
-            "Microsoft.Azure.Management.Insights.Models.ManagementEventRuleCondition")]
+            "ThresholdRule",
+            "LocationThresholdRule",
+            "ManagementEventRule")]
         [string]
-        $ConditionOdataType,
+        $Condition,
         [PSCustomObject]
         $DataSource = @{}
     )
 
     If ($PSCmdlet.ShouldProcess("Creates a new Arm Application Insights alert rule")) {
+        $conditionOdataType = switch ($Condition) {
+            'RuleCondition' { 'RuleCondition' }
+            'ThresholdRule' { 'Microsoft.Azure.Management.Insights.Models.ThresholdRuleCondition' }
+            'LocationThresholdRule' { 'Microsoft.Azure.Management.Insights.Models.LocationThresholdRuleCondition' }
+            'ManagementEventRule' { 'Microsoft.Azure.Management.Insights.Models.ManagementEventRuleCondition' }
+        }
+
+        $windowSize = "PT$WindowSizeInMinutes" + "M"
+
         $ApplicationInsightsAlertRule = [PSCustomObject][ordered]@{
             _ResourceId = $Name | New-ArmFunctionResourceId -ResourceType 'microsoft.insights/alertrules'
             PSTypeName  = "ApplicationInsightsAlertRule"
@@ -58,11 +69,11 @@ function New-ArmApplicationInsightsAlertRule {
             properties  = @{
                 name        = $Name
                 description = $Description
-                isEnabled   = -not $Disable.ToBool()
+                isEnabled   = -not $Disabled.ToBool()
                 condition   = @{
-                    "odata.type"        = $ConditionOdataType
+                    "odata.type"        = $conditionOdataType
                     dataSource          = $DataSource
-                    windowSize          = $WindowSize
+                    windowSize          = $windowSize
                     failedLocationCount = $FailedLocationCount
                     operator            = $Operator
                     threshold           = $Threshold

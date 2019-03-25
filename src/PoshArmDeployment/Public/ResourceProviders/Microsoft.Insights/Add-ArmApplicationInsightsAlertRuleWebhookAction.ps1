@@ -7,7 +7,7 @@ function Add-ArmApplicationInsightsAlertRuleWebhookAction {
         $ApplicationInsightsAlertRule,
         [Parameter(Mandatory)]
         [string]
-        $ServiceUri,
+        $Webhook,
         [PSCustomObject]
         $Properties
     )
@@ -15,7 +15,7 @@ function Add-ArmApplicationInsightsAlertRuleWebhookAction {
     If ($PSCmdlet.ShouldProcess("Adding alert rule webhook action")) {
         $alertRuleEmailAction = @{
             "odata.type" = "Microsoft.Azure.Management.Insights.Models.RuleWebhookAction"
-            serviceUri   = $ServiceUri
+            serviceUri   = $Webhook
             properties   = $Properties
         }
 
