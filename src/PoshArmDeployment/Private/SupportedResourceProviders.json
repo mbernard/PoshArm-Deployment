@@ -60,6 +60,10 @@
     "shortName": "ai"
   },
   {
+    "resourceType": "microsoft.insights/alertrules",
+    "shortName": "aiar"
+  },
+  {
     "resourceType": "microsoft.insights/webtests",
     "shortName": "aiwt"
   },
@@ -90,5 +94,9 @@
   {
     "resourceType": "Microsoft.Logic/workflows",
     "shortName": "lawf"
+  },
+  {
+    "resourceType": "Microsoft.SignalRService/SignalR",
+    "shortName": "sgnlr"
   }
 ]
