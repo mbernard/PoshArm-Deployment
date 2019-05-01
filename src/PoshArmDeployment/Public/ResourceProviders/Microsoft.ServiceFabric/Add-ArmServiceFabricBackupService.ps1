@@ -17,6 +17,10 @@ function Add-ArmServiceFabricBackupService {
                     @{
                         name  = "SecretEncryptionCertThumbprint"
                         value = $EncryptionCertificateThumbprint
+                    },
+                    @{
+                        name  = "SecretEncryptionCertX509StoreName"
+                        value = "My"
                     }
                 )
                 name       = "BackupRestoreService"
