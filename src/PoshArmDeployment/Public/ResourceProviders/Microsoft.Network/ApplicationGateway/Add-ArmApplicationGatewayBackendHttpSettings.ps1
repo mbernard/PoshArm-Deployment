@@ -23,7 +23,9 @@ function Add-ArmApplicationGatewayBackendHttpSettings {
         [int]
         $RequestTimeoutInSec = 30,
         [string]
-        $TrustedRootCertificateName
+        $TrustedRootCertificateName,
+        [PSCustomObject]
+        $Probe
     )
 
     if (!$TrustedRootCertificateName) {
@@ -39,16 +41,16 @@ function Add-ArmApplicationGatewayBackendHttpSettings {
             properties = @{
                 port                           = $Port
                 protocol                       = $Protocol
-                cookieBasedAffinity            = if ($CookieBasedAffinity) { "Enabled"} else {"Disabled"}
+                cookieBasedAffinity            = if ($CookieBasedAffinity) { "Enabled" } else { "Disabled" }
                 pickHostNameFromBackendAddress = $PickHostNameFromBackendAddress.ToBool()
                 path                           = $Path
                 requestTimeout                 = $RequestTimeoutInSec
                 trustedRootCertificates        = @()
+                probe                          = $Probe
             }
         }
 
-        if($Protocol -eq "Https")
-        {
+        if ($Protocol -eq "Https") {
             $BackendHttpSettings.properties.trustedRootCertificates += @{
                 id = "[concat($ApplicationGatewayResourceId, '/trustedRootCertificates/', '$TrustedRootCertificateName')]"
             }
