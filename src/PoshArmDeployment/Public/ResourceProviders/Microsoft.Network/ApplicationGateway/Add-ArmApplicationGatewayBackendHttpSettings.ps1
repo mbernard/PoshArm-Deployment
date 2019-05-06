@@ -24,8 +24,8 @@ function Add-ArmApplicationGatewayBackendHttpSettings {
         $RequestTimeoutInSec = 30,
         [string]
         $TrustedRootCertificateName,
-        [PSCustomObject]
-        $Probe
+        [string]
+        $ProbeName
     )
 
     if (!$TrustedRootCertificateName) {
@@ -46,7 +46,13 @@ function Add-ArmApplicationGatewayBackendHttpSettings {
                 path                           = $Path
                 requestTimeout                 = $RequestTimeoutInSec
                 trustedRootCertificates        = @()
-                probe                          = $Probe
+                probe                          = $null
+            }
+        }
+
+        if ($ProbeName -ne $null) {
+            $BackendHttpSettings.properties.probe = @{
+                id = "[concat($ApplicationGatewayResourceId, '/probes/$ProbeName')]"
             }
         }
 

@@ -1,5 +1,5 @@
 function Add-ArmApplicationGatewayHealthProbe {
-    [CmdletBinding(SupportsShouldProcess = $true)]
+    [CmdletBinding(SupportsShouldProcess = $true, DefaultParametersetName = 'None')]
     [OutputType("ApplicationGateway")]
     Param(
         [PSTypeName("ApplicationGateway")]
@@ -10,9 +10,7 @@ function Add-ArmApplicationGatewayHealthProbe {
         $Name = "default",
         [string]
         [ValidateSet("Http", "Https")]
-        $Protocol = "Http",
-        [string]
-        $HostName,
+        $Protocol = "Https",
         [string]
         $Path = "/",
         [int]
@@ -21,10 +19,14 @@ function Add-ArmApplicationGatewayHealthProbe {
         $TimeoutInSeconds = 30,
         [int]
         $UnhealthyThreshold = 3,
-        [switch]
-        $PickHostNameFromBackendHttpSettings,
         [int]
-        $MinServers = 0,
+        $MinimumNumberOfServersMarkedAsHealthy = 0,
+        [Parameter(ParameterSetName = 'CustomHostName')]
+        [switch]
+        $DoNotPickHostNameFromBackendHttpSettings,
+        [Parameter(ParameterSetName = 'CustomHostName', Mandatory)]
+        [string]
+        $HostName,
         [PSCustomObject]
         $Match = @{ }
     )
@@ -36,8 +38,8 @@ function Add-ArmApplicationGatewayHealthProbe {
             interval                            = $IntervalInSeconds
             timeout                             = $TimeoutInSeconds
             unhealthyThreshold                  = $UnhealthyThreshold
-            pickHostNameFromBackendHttpSettings = $PickHostNameFromBackendHttpSettings.ToBool()
-            minServers                          = $MinServers
+            pickHostNameFromBackendHttpSettings = -not $DoNotPickHostNameFromBackendHttpSettings.ToBool()
+            minServers                          = $MinimumNumberOfServersMarkedAsHealthy
             match                               = $Match
             host                                = $Hostname
         }
