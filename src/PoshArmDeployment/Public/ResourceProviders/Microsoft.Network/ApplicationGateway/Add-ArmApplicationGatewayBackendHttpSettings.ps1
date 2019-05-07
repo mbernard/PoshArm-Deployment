@@ -50,7 +50,7 @@ function Add-ArmApplicationGatewayBackendHttpSettings {
             }
         }
 
-        if ($ProbeName -ne $null) {
+        if ($ProbeName) {
             $BackendHttpSettings.properties.probe = @{
                 id = "[concat($ApplicationGatewayResourceId, '/probes/$ProbeName')]"
             }
