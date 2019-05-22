@@ -101,10 +101,10 @@
   },
   {
     "resourceType": "Microsoft.DocumentDb/databaseAccounts",
-    "shortName": "ddba"
+    "shortName": "cdb"
   },
   {
-    "resourceType": "Microsoft.DocumentDB/databaseAccounts/apis/databases",
-    "shortName": "ddbdb"
+    "resourceType": "Microsoft.DocumentDb/databaseAccounts/apis/databases",
+    "shortName": "cdbd"
   }
 ]

@@ -1,14 +1,14 @@
-function New-ArmDocumentDbDatabase {
+function New-ArmCosmosDbDatabase {
     [CmdletBinding(SupportsShouldProcess = $true)]
-    [OutputType("DocumentDbDatabase")]
+    [OutputType("CosmosDbDatabase")]
     Param(
         [Parameter(Mandatory, ValueFromPipeline)]
         [ValidatePattern('^(\[.*\]|[a-zA-Z0-9-]{3,50})$')]
         [string]
         $Name,
         [Parameter(Mandatory)]
-        [PSTypeName("DocumentDbAccount")]
-        $DocumentDbAccount,
+        [PSTypeName("CosmosDbAccount")]
+        $CosmosDbAccount,
         [string]
         $ApiVersion = '2016-03-31',
         [ValidateRange(400, 1000000)]
@@ -16,12 +16,12 @@ function New-ArmDocumentDbDatabase {
         $Throughput = 400
     )
 
-    If ($PSCmdlet.ShouldProcess("Creates a new Arm Document DB database account")) {
-        $AccountName = $DocumentDbAccount.Name
+    If ($PSCmdlet.ShouldProcess("Creates a new Arm CosmosDb database")) {
+        $AccountName = $CosmosDbAccount.Name
         $Database = [PSCustomObject][ordered]@{
-            _ResourceId = $Name | New-ArmFunctionResourceId -ResourceType 'Microsoft.DocumentDB/databaseAccounts/apis/databases'
-            PSTypeName  = "DocumentDbDatabase"
-            type        = 'Microsoft.DocumentDB/databaseAccounts/apis/databases'
+            _ResourceId = $Name | New-ArmFunctionResourceId -ResourceType 'Microsoft.DocumentDb/databaseAccounts/apis/databases'
+            PSTypeName  = "CosmosDbDatabase"
+            type        = 'Microsoft.DocumentDb/databaseAccounts/apis/databases'
             name        = "[concat($AccountName, '/sql/', '$Name')]"
             apiVersion  = $ApiVersion
             properties  = @{
@@ -36,7 +36,7 @@ function New-ArmDocumentDbDatabase {
         }
 
         $Database.PSTypeNames.Add("ArmResource")
-        $Database | Add-ArmDependencyOn -Dependency $DocumentDbAccount
+        $Database | Add-ArmDependencyOn -Dependency $CosmosDbAccount
         return $Database
     }
 }
