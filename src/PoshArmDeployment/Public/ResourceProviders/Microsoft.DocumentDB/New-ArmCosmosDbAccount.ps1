@@ -1,6 +1,6 @@
-function New-ArmDocumentDbAccount {
+function New-ArmCosmosDbAccount {
     [CmdletBinding(SupportsShouldProcess = $true)]
-    [OutputType("DocumentDbAccount")]
+    [OutputType("CosmosDbAccount")]
     Param(
         [Parameter(Mandatory, ValueFromPipeline)]
         [ValidatePattern('^(\[.*\]|[a-zA-Z0-9-]{3,50})$')]
@@ -27,10 +27,10 @@ function New-ArmDocumentDbAccount {
         $LocationName = $script:LocationName
     )
 
-    If ($PSCmdlet.ShouldProcess("Creates a new Arm Document DB account")) {
-        $DocumentDBAccount = [PSCustomObject][ordered]@{
+    If ($PSCmdlet.ShouldProcess("Creates a new Arm CosmosDb account")) {
+        $CosmosDbAccount = [PSCustomObject][ordered]@{
             _ResourceId = $Name | New-ArmFunctionResourceId -ResourceType 'Microsoft.DocumentDb/databaseAccounts'
-            PSTypeName  = "DocumentDbAccount"
+            PSTypeName  = "CosmosDbAccount"
             type        = 'Microsoft.DocumentDb/databaseAccounts'
             name        = $Name
             kind        = $Kind
@@ -53,7 +53,7 @@ function New-ArmDocumentDbAccount {
             dependsOn   = @()
         }
 
-        $DocumentDBAccount.PSTypeNames.Add("ArmResource")
-        return $DocumentDBAccount
+        $CosmosDbAccount.PSTypeNames.Add("ArmResource")
+        return $CosmosDbAccount
     }
 }
