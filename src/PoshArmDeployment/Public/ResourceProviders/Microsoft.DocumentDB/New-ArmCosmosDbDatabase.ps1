@@ -9,11 +9,14 @@ function New-ArmCosmosDbDatabase {
         [Parameter(Mandatory)]
         [PSTypeName("CosmosDbAccount")]
         $CosmosDbAccount,
+        [ValidateSet('sql', 'gremlin', 'mongodb')]
+        [string]
+        $DatabaseType = 'sql',
         [string]
         $ApiVersion = '2016-03-31',
         [ValidateRange(400, 1000000)]
         [string]
-        $Throughput = 400
+        $ThroughputInRU = 400
     )
 
     If ($PSCmdlet.ShouldProcess("Creates a new Arm CosmosDb database")) {
@@ -22,14 +25,14 @@ function New-ArmCosmosDbDatabase {
             _ResourceId = $Name | New-ArmFunctionResourceId -ResourceType 'Microsoft.DocumentDb/databaseAccounts/apis/databases'
             PSTypeName  = "CosmosDbDatabase"
             type        = 'Microsoft.DocumentDb/databaseAccounts/apis/databases'
-            name        = "[concat($AccountName, '/sql/', '$Name')]"
+            name        = "[concat($AccountName, '/$DatabaseType/', '$Name')]"
             apiVersion  = $ApiVersion
             properties  = @{
                 resource = @{
                     id = $Name
                 }
                 options  = @{
-                    throughput = $Throughput
+                    throughput = $ThroughputInRU
                 }
             }
             dependsOn   = @()
