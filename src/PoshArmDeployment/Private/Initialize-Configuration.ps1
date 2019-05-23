@@ -10,7 +10,7 @@ function Initialize-Configuration {
         $ConfigurationPath = $MyInvocation.PSScriptRoot
     )
 
-    Process{
+    Process {
         $ErrorActionPreference = 'Stop'
 
         # 1. Load json configuration files
@@ -21,6 +21,7 @@ function Initialize-Configuration {
         # 2. Load configuration values in script scope
         $script:ProjectName = Test-ConfigurationParameter $configuration projectName
         $script:Location = Test-ConfigurationParameter $configuration location
+        $script:LocationName = Test-ConfigurationParameter $configuration locationName -DefaultValue ""
         $script:EnvironmentCode = Test-ConfigurationParameter $configuration environmentCode
         $script:Context = Test-ConfigurationParameter $configuration context -DefaultValue ""
         $script:Version = $configuration | Test-ConfigurationParameter -ConfigurationParameterName version -DefaultValue "1.0"

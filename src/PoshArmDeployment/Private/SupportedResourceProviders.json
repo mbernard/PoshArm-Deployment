@@ -98,5 +98,13 @@
   {
     "resourceType": "Microsoft.SignalRService/SignalR",
     "shortName": "sgnlr"
+  },
+  {
+    "resourceType": "Microsoft.DocumentDb/databaseAccounts",
+    "shortName": "cdb"
+  },
+  {
+    "resourceType": "Microsoft.DocumentDb/databaseAccounts/apis/databases",
+    "shortName": "cdbd"
   }
 ]
