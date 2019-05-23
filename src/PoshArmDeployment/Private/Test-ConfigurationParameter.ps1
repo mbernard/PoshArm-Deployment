@@ -13,7 +13,7 @@ function Test-ConfigurationParameter {
     if ($Configuration."$ConfigurationParameterName") {
         return $Configuration."$ConfigurationParameterName"
     }
-    elseif ($DefaultValue) {
+    elseif ($PSBoundParameters.ContainsKey('DefaultValue')) {
         return $DefaultValue
     }
     else {
