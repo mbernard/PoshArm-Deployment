@@ -7,7 +7,7 @@ function New-ArmApplicationGatewayResource {
         [string]
         $Name,
         [string]
-        $ApiVersion = "2018-08-01",
+        $ApiVersion = "2019-02-01",
         [string]
         $Location = $script:location,
         [string]

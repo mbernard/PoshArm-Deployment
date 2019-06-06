@@ -49,9 +49,13 @@ function New-ArmCosmosDbAccount {
                 isVirtualNetworkFilterEnabled = $VirtualNetworkFilterEnabled.ToBool()
                 ipRangeFilter                 = $IpRangeFilter
                 virtualNetworkRules           = @()
-                capabilities                  = @($Capability | Select-Object -Property @{ Name = 'name'; Expression = { $_ } })
             }
             dependsOn   = @()
+        }
+
+        if ($Capability) {
+            $Capabilities = @($Capability | Select-Object -Property @{ Name = 'name'; Expression = { $_ } })
+            $CosmosDbAccount.properties.capabilities = $Capabilities
         }
 
         $CosmosDbAccount.PSTypeNames.Add("ArmResource")
