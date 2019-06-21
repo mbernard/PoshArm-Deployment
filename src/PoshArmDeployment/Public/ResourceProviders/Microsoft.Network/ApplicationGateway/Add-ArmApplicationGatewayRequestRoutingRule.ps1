@@ -9,10 +9,12 @@ function Add-ArmApplicationGatewayRequestRoutingRule {
         [string]
         $Name = "default",
         [string]
-        [ValidateSet("Basic")]
+        [ValidateSet("Basic", "PathBasedRouting")]
         $RuleType = "Basic",
         [string]
         $HttpListenerName,
+        [string]
+        $UrlPathMapName = 'default',
         [string]
         $BackendAddressPoolName,
         [string]
@@ -23,14 +25,6 @@ function Add-ArmApplicationGatewayRequestRoutingRule {
         $HttpListenerName = $ApplicationGateway.properties.httpListeners[0].Name
     }
 
-    if (!$BackendAddressPoolName) {
-        $BackendAddressPoolName = $ApplicationGateway.properties.backendAddressPools[0].Name
-    }
-
-    if (!$BackendHttpSettingsName) {
-        $BackendHttpSettingsName = $ApplicationGateway.properties.backendHttpSettingsCollection[0].Name
-    }
-
     If ($PSCmdlet.ShouldProcess("Adding backend http settings")) {
         $ApplicationGatewayResourceId = $ApplicationGateway._ResourceId
 
@@ -38,21 +32,37 @@ function Add-ArmApplicationGatewayRequestRoutingRule {
             type       = 'Microsoft.Network/applicationGateways/requestRoutingRules'
             name       = $Name
             properties = @{
-                ruleType            = $RuleType
-                httpListener        = @{
+                ruleType     = $RuleType
+                httpListener = @{
                     id = "[concat($ApplicationGatewayResourceId, '/httpListeners/', '$HttpListenerName')]"
-                }
-                backendAddressPool  = @{
-                    id = "[concat($ApplicationGatewayResourceId, '/backendAddressPools/', '$BackendAddressPoolName')]"
-                }
-                backendHttpSettings = @{
-                    id = "[concat($ApplicationGatewayResourceId, '/backendHttpSettingsCollection/', '$BackendHttpSettingsName')]"
                 }
             }
         }
 
-        $ApplicationGateway.properties.requestRoutingRules += $RequestRoutingRule
+        if ($RuleType -eq 'Basic') {
+            if (!$BackendAddressPoolName) {
+                $BackendAddressPoolName = $ApplicationGateway.properties.backendAddressPools[0].Name
+            }
+        
+            if (!$BackendHttpSettingsName) {
+                $BackendHttpSettingsName = $ApplicationGateway.properties.backendHttpSettingsCollection[0].Name
+            }
 
-        return $ApplicationGateway
+            $RequestRoutingRule.Properties.backendAddressPool = @{
+                id = "[concat($ApplicationGatewayResourceId, '/backendAddressPools/', '$BackendAddressPoolName')]"
+            }
+            $RequestRoutingRule.Properties.backendHttpSettings = @{
+                id = "[concat($ApplicationGatewayResourceId, '/backendHttpSettingsCollection/', '$BackendHttpSettingsName')]"
+            }
+        }
+        elseif ($RuleType -eq 'PathBasedRouting') {
+            $RequestRoutingRule.Properties.urlPathMap = @{
+                id = "[concat($ApplicationGatewayResourceId, '/urlPathMaps/', '$UrlPathMapName')]"
+            }
+        }
     }
+
+    $ApplicationGateway.properties.requestRoutingRules += $RequestRoutingRule
+    
+    return $ApplicationGateway
 }
