@@ -14,8 +14,6 @@ function Add-ArmApplicationGatewayPathBasedRequestRoutingRule {
         $UrlPathMapName = 'default'
     )
 
-    $RuleType = 'PathBasedRouting'
-
     if (!$HttpListenerName) {
         $HttpListenerName = $ApplicationGateway.properties.httpListeners[0].Name
     }
@@ -27,7 +25,7 @@ function Add-ArmApplicationGatewayPathBasedRequestRoutingRule {
             type       = 'Microsoft.Network/applicationGateways/requestRoutingRules'
             name       = $Name
             properties = @{
-                ruleType     = $RuleType
+                ruleType     = 'PathBasedRouting'
                 httpListener = @{
                     id = "[concat($ApplicationGatewayResourceId, '/httpListeners/', '$HttpListenerName')]"
                 }

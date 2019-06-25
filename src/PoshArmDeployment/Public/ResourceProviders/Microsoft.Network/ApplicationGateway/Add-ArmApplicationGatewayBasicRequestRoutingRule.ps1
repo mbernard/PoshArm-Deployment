@@ -16,8 +16,6 @@ function Add-ArmApplicationGatewayBasicRequestRoutingRule {
         $BackendHttpSettingsName
     )
 
-    $RuleType = 'basic'
-
     if (!$HttpListenerName) {
         $HttpListenerName = $ApplicationGateway.properties.httpListeners[0].Name
     }
@@ -29,7 +27,7 @@ function Add-ArmApplicationGatewayBasicRequestRoutingRule {
             type       = 'Microsoft.Network/applicationGateways/requestRoutingRules'
             name       = $Name
             properties = @{
-                ruleType     = $RuleType
+                ruleType     = 'basic'
                 httpListener = @{
                     id = "[concat($ApplicationGatewayResourceId, '/httpListeners/', '$HttpListenerName')]"
                 }
