@@ -10,21 +10,26 @@ function Add-ArmApplicationGatewayUrlMapPath {
         [Parameter(Mandatory)]
         $Name,
         [Parameter(Mandatory)]
-        [string]
-        $BackendAddressPoolName,
-        [Parameter(Mandatory)]
-        [string]
-        $BackendHttpSettingsName,
-        [Parameter(Mandatory)]
         [string[]]
         $Paths,
         [string]
         [Parameter(Mandatory)]
-        $MapName
+        $UrlMapName,
+        [string]
+        $BackendAddressPoolName,
+        [string]
+        $BackendHttpSettingsName
     )
 
     If ($PSCmdlet.ShouldProcess("Adding new Url path to map")) {
+        if (!$BackendAddressPoolName) {
+            $BackendAddressPoolName = $ApplicationGateway.properties.backendAddressPools[0].Name
+        }
+        if (!$BackendHttpSettingsName) {
+            $BackendHttpSettingsName = $ApplicationGateway.properties.backendHttpSettingsCollection[0].Name
+        }
         $ApplicationGatewayResourceId = $ApplicationGateway._ResourceId
+
         $PathRule = @{
             name       = $Name
             properties = @{
@@ -38,7 +43,7 @@ function Add-ArmApplicationGatewayUrlMapPath {
             }
         }
 
-        $Map = $ApplicationGateway.properties.urlPathMaps | Where-Object { $_.name -Match $MapName }
+        $Map = $ApplicationGateway.properties.urlPathMaps | Where-Object { $_.name -Match $UrlMapName }
         $Map[0].properties.pathRules += $PathRule
         
         return $ApplicationGateway
