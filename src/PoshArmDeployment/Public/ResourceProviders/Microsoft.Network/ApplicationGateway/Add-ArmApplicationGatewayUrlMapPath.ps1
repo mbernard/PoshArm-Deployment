@@ -13,8 +13,7 @@ function Add-ArmApplicationGatewayUrlMapPath {
         [string[]]
         $Paths,
         [string]
-        [Parameter(Mandatory)]
-        $UrlMapName,
+        $UrlMapName = 'default',
         [string]
         $BackendAddressPoolName,
         [string]
