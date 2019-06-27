@@ -14,11 +14,10 @@ function Add-ArmApplicationGatewayPathBasedRequestRoutingRule {
         $UrlPathMapName = 'default'
     )
 
-    if (!$HttpListenerName) {
-        $HttpListenerName = $ApplicationGateway.properties.httpListeners[0].Name
-    }
-
     If ($PSCmdlet.ShouldProcess("Adding path-based routing rule")) {
+        if (!$HttpListenerName) {
+            $HttpListenerName = $ApplicationGateway.properties.httpListeners[0].Name
+        }
         $ApplicationGatewayResourceId = $ApplicationGateway._ResourceId
 
         $RequestRoutingRule = [PSCustomObject][ordered]@{
@@ -29,15 +28,13 @@ function Add-ArmApplicationGatewayPathBasedRequestRoutingRule {
                 httpListener = @{
                     id = "[concat($ApplicationGatewayResourceId, '/httpListeners/', '$HttpListenerName')]"
                 }
+                urlPathMap   = @{
+                    id = "[concat($ApplicationGatewayResourceId, '/urlPathMaps/', '$UrlPathMapName')]"
+                }
             }
         }
-
-        $RequestRoutingRule.Properties.urlPathMap = @{
-            id = "[concat($ApplicationGatewayResourceId, '/urlPathMaps/', '$UrlPathMapName')]"
-        }
+        $ApplicationGateway.properties.requestRoutingRules += $RequestRoutingRule
+        
+        return $ApplicationGateway
     }
-
-    $ApplicationGateway.properties.requestRoutingRules += $RequestRoutingRule
-    
-    return $ApplicationGateway
 }

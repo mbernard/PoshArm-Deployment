@@ -1,4 +1,4 @@
-function Add-ArmApplicationGatewayBasicRequestRoutingRule {
+function Add-ArmApplicationGatewayUrlMap {
     [CmdletBinding(SupportsShouldProcess = $true)]
     [OutputType("ApplicationGateway")]
     Param(
@@ -9,17 +9,12 @@ function Add-ArmApplicationGatewayBasicRequestRoutingRule {
         [string]
         $Name = "default",
         [string]
-        $HttpListenerName,
-        [string]
         $BackendAddressPoolName,
         [string]
         $BackendHttpSettingsName
     )
 
-    If ($PSCmdlet.ShouldProcess("Adding basic routing rule")) {
-        if (!$HttpListenerName) {
-            $HttpListenerName = $ApplicationGateway.properties.httpListeners[0].Name
-        }
+    If ($PSCmdlet.ShouldProcess("Creating new Url map")) {
         if (!$BackendAddressPoolName) {
             $BackendAddressPoolName = $ApplicationGateway.properties.backendAddressPools[0].Name
         }
@@ -28,25 +23,22 @@ function Add-ArmApplicationGatewayBasicRequestRoutingRule {
         }
         $ApplicationGatewayResourceId = $ApplicationGateway._ResourceId
 
-        $RequestRoutingRule = [PSCustomObject][ordered]@{
-            type       = 'Microsoft.Network/applicationGateways/requestRoutingRules'
+        $UrlPathMap = [PSCustomObject][ordered]@{
+            type       = 'Microsoft.Network/applicationGateways/urlPathMaps'
             name       = $Name
             properties = @{
-                ruleType            = 'basic'
-                httpListener        = @{
-                    id = "[concat($ApplicationGatewayResourceId, '/httpListeners/', '$HttpListenerName')]"
-                }
-                backendAddressPool  = @{
+                defaultBackendAddressPool  = @{
                     id = "[concat($ApplicationGatewayResourceId, '/backendAddressPools/', '$BackendAddressPoolName')]"
                 }
-                backendHttpSettings = @{
+                defaultBackendHttpSettings = @{
                     id = "[concat($ApplicationGatewayResourceId, '/backendHttpSettingsCollection/', '$BackendHttpSettingsName')]"
                 }
+                pathRules                  = @()
             }
         }
+
+        $ApplicationGateway.properties.urlPathMaps += $UrlPathMap
         
-        $ApplicationGateway.properties.requestRoutingRules += $RequestRoutingRule
-            
         return $ApplicationGateway
     }
 }
