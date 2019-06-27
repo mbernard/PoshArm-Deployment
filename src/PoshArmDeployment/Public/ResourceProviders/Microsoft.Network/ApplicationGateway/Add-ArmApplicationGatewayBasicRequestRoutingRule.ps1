@@ -1,4 +1,4 @@
-function Add-ArmApplicationGatewayRequestRoutingRule {
+function Add-ArmApplicationGatewayBasicRequestRoutingRule {
     [CmdletBinding(SupportsShouldProcess = $true)]
     [OutputType("ApplicationGateway")]
     Param(
@@ -9,9 +9,6 @@ function Add-ArmApplicationGatewayRequestRoutingRule {
         [string]
         $Name = "default",
         [string]
-        [ValidateSet("Basic")]
-        $RuleType = "Basic",
-        [string]
         $HttpListenerName,
         [string]
         $BackendAddressPoolName,
@@ -19,26 +16,23 @@ function Add-ArmApplicationGatewayRequestRoutingRule {
         $BackendHttpSettingsName
     )
 
-    if (!$HttpListenerName) {
-        $HttpListenerName = $ApplicationGateway.properties.httpListeners[0].Name
-    }
-
-    if (!$BackendAddressPoolName) {
-        $BackendAddressPoolName = $ApplicationGateway.properties.backendAddressPools[0].Name
-    }
-
-    if (!$BackendHttpSettingsName) {
-        $BackendHttpSettingsName = $ApplicationGateway.properties.backendHttpSettingsCollection[0].Name
-    }
-
-    If ($PSCmdlet.ShouldProcess("Adding backend http settings")) {
+    If ($PSCmdlet.ShouldProcess("Adding basic routing rule")) {
+        if (!$HttpListenerName) {
+            $HttpListenerName = $ApplicationGateway.properties.httpListeners[0].Name
+        }
+        if (!$BackendAddressPoolName) {
+            $BackendAddressPoolName = $ApplicationGateway.properties.backendAddressPools[0].Name
+        }
+        if (!$BackendHttpSettingsName) {
+            $BackendHttpSettingsName = $ApplicationGateway.properties.backendHttpSettingsCollection[0].Name
+        }
         $ApplicationGatewayResourceId = $ApplicationGateway._ResourceId
 
         $RequestRoutingRule = [PSCustomObject][ordered]@{
             type       = 'Microsoft.Network/applicationGateways/requestRoutingRules'
             name       = $Name
             properties = @{
-                ruleType            = $RuleType
+                ruleType            = 'basic'
                 httpListener        = @{
                     id = "[concat($ApplicationGatewayResourceId, '/httpListeners/', '$HttpListenerName')]"
                 }
@@ -50,9 +44,9 @@ function Add-ArmApplicationGatewayRequestRoutingRule {
                 }
             }
         }
-
+        
         $ApplicationGateway.properties.requestRoutingRules += $RequestRoutingRule
-
+            
         return $ApplicationGateway
     }
 }
