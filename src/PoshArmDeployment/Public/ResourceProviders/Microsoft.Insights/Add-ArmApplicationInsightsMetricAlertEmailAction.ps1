@@ -1,25 +1,25 @@
-function Add-ArmApplicationInsightsAlertRuleEmailAction {
+function Add-ArmApplicationInsightsMetricAlertEmailAction {
     [CmdletBinding(SupportsShouldProcess = $true)]
-    [OutputType("ApplicationInsightsAlertRule")]
+    [OutputType("ApplicationInsightsMetricAlert")]
     Param(
-        [PSTypeName("ApplicationInsightsAlertRule")]
+        [PSTypeName("ApplicationInsightsMetricAlert")]
         [Parameter(Mandatory, ValueFromPipeline)]
-        $ApplicationInsightsAlertRule,
+        $ApplicationInsightsMetricAlert,
         [switch]
         $SendToServiceOwners,
         [string[]]
         $CustomEmails = @()
     )
 
-    If ($PSCmdlet.ShouldProcess("Adding alert rule email action")) {
+    If ($PSCmdlet.ShouldProcess("Adding metric alert email action")) {
         $alertRuleEmailAction = @{
             "odata.type"        = "Microsoft.Azure.Management.Insights.Models.RuleEmailAction"
             sendToServiceOwners = $SendToServiceOwners.ToBool()
             customEmails        = $CustomEmails
         }
 
-        $ApplicationInsightsAlertRule.properties.actions += $alertRuleEmailAction
+        $ApplicationInsightsMetricAlert.properties.actions += $alertRuleEmailAction
 
-        return $ApplicationInsightsAlertRule
+        return $ApplicationInsightsMetricAlert
     }
 }

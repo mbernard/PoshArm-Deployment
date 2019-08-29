@@ -1,10 +1,10 @@
-function Add-ArmApplicationInsightsAlertRuleWebhookAction {
+function Add-ArmApplicationInsightsMetricAlertWebhookAction {
     [CmdletBinding(SupportsShouldProcess = $true)]
-    [OutputType("ApplicationInsightsAlertRule")]
+    [OutputType("ApplicationInsightsMetricAlert")]
     Param(
-        [PSTypeName("ApplicationInsightsAlertRule")]
+        [PSTypeName("ApplicationInsightsMetricAlert")]
         [Parameter(Mandatory, ValueFromPipeline)]
-        $ApplicationInsightsAlertRule,
+        $ApplicationInsightsMetricAlert,
         [Parameter(Mandatory)]
         [string]
         $Webhook,
@@ -13,14 +13,14 @@ function Add-ArmApplicationInsightsAlertRuleWebhookAction {
     )
 
     If ($PSCmdlet.ShouldProcess("Adding alert rule webhook action")) {
-        $alertRuleEmailAction = @{
+        $metricAlertEmailAction = @{
             "odata.type" = "Microsoft.Azure.Management.Insights.Models.RuleWebhookAction"
             serviceUri   = $Webhook
             properties   = $Properties
         }
 
-        $ApplicationInsightsAlertRule.properties.actions += $alertRuleEmailAction
+        $ApplicationInsightsMetricAlert.properties.actions += $metricAlertEmailAction
 
-        return $ApplicationInsightsAlertRule
+        return $ApplicationInsightsMetricAlert
     }
 }

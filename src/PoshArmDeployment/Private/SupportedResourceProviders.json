@@ -68,6 +68,10 @@
     "shortName": "aiwt"
   },
   {
+    "resourceType": "Microsoft.Insights/metricAlerts",
+    "shortName": "aima"
+  },
+  {
     "resourceType": "Microsoft.ServiceBus/namespaces",
     "shortName": "sb"
   },
@@ -90,6 +94,10 @@
   {
     "resourceType": "Microsoft.OperationalInsights/workspaces",
     "shortName": "law"
+  },
+  {
+    "resourceType": "microsoft.insights/actionGroups",
+    "shortName": "ag"
   },
   {
     "resourceType": "Microsoft.Logic/workflows",
