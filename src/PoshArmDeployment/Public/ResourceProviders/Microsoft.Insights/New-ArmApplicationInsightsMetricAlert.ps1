@@ -43,7 +43,6 @@ function New-ArmApplicationInsightsMetricAlert {
     If ($PSCmdlet.ShouldProcess("Creates a new Arm Application Insights metric alert")) {
         $windowSize = "PT$WindowSizeInMinutes" + "M"
         $evaluationFrequency = "PT$EvaluationFrequencyInMinutes" + "M"
-        Write-Host $evaluationFrequency
 
         $ApplicationInsightsMetricAlert = [PSCustomObject][ordered]@{
             _ResourceId = $Name | New-ArmFunctionResourceId -ResourceType 'Microsoft.Insights/metricAlerts'
@@ -56,16 +55,21 @@ function New-ArmApplicationInsightsMetricAlert {
                 description         = $Description
                 severity            = $Severity
                 enabled             = -not $Disabled.ToBool()
-                scopes              = @("/subscriptions/bb92196e-c69f-4dbc-87aa-62733759d9df/resourceGroups/connect-sacharjee-security-eastus2/providers/Microsoft.KeyVault/vaults/kv-womt6jhfp3ccq")
+                scopes              = @("/subscriptions/bb92196e-c69f-4dbc-87aa-62733759d9df/resourceGroups/connect-sacharjee-monitoring-eastus2/providers/microsoft.insights/webtests/Connect-ai-qhcsuuhafghss",
+                    "/subscriptions/bb92196e-c69f-4dbc-87aa-62733759d9df/resourceGroups/connect-sacharjee-monitoring-eastus2/providers/microsoft.insights/components/ai-qhcsuuhafghss"
+                )
                 evaluationFrequency = $evaluationFrequency
                 windowSize          = $windowSize
                 criteria            = @{
-                    "odata.type" = "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
-
+                    "odata.type" = "Microsoft.Azure.Monitor.WebtestLocationAvailabilityCriteria"
                 }
-                actions             = @($ActionGroupId)
+                actions             = @([PSCustomObject]@{
+                        actionGroupId = "/subscriptions/bb92196e-c69f-4dbc-87aa-62733759d9df/resourceGroups/connect-sacharjee-monitoring-eastus2/providers/microsoft.insights/actionGroups/MyNewActionGroup-u7ecdugsjteju"
+                    })
             }
-            dependsOn   = @()
+            dependsOn   = @("/subscriptions/bb92196e-c69f-4dbc-87aa-62733759d9df/resourceGroups/connect-sacharjee-monitoring-eastus2/providers/microsoft.insights/webtests/Connect-ai-qhcsuuhafghss",
+                "/subscriptions/bb92196e-c69f-4dbc-87aa-62733759d9df/resourceGroups/connect-sacharjee-monitoring-eastus2/providers/microsoft.insights/components/ai-qhcsuuhafghss",
+                "/subscriptions/bb92196e-c69f-4dbc-87aa-62733759d9df/resourceGroups/connect-sacharjee-monitoring-eastus2/providers/microsoft.insights/actionGroups/MyNewActionGroup-u7ecdugsjteju")
         }
 
         $ApplicationInsightsMetricAlert.PSTypeNames.Add("ArmResource")
