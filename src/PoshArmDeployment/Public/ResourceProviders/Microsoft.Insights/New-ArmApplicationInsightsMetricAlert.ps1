@@ -51,25 +51,29 @@ function New-ArmApplicationInsightsMetricAlert {
             name        = $Name
             apiVersion  = $ApiVersion
             location    = 'global'
-            properties  = [ordered]@{
+            properties  = @{
                 description         = $Description
                 severity            = $Severity
                 enabled             = -not $Disabled.ToBool()
-                scopes              = @("/subscriptions/bb92196e-c69f-4dbc-87aa-62733759d9df/resourceGroups/connect-sacharjee-monitoring-eastus2/providers/microsoft.insights/webtests/Connect-ai-qhcsuuhafghss",
-                    "/subscriptions/bb92196e-c69f-4dbc-87aa-62733759d9df/resourceGroups/connect-sacharjee-monitoring-eastus2/providers/microsoft.insights/components/ai-qhcsuuhafghss"
+                scopes              = @("/subscriptions/11f14ab1-a50f-462f-8c65-13584eb3a544/resourceGroups/connect-dhorodniczy-monitoring-eastus2/providers/microsoft.insights/webtests/Connect-ai-bumt3j5t63e7c",
+                                        "/subscriptions/11f14ab1-a50f-462f-8c65-13584eb3a544/resourceGroups/connect-dhorodniczy-monitoring-eastus2/providers/microsoft.insights/components/ai-bumt3j5t63e7c"
                 )
                 evaluationFrequency = $evaluationFrequency
                 windowSize          = $windowSize
-                criteria            = @{
+                criteria            = [PSCustomObject]@{
                     "odata.type" = "Microsoft.Azure.Monitor.WebtestLocationAvailabilityCriteria"
+                    webTestId = "/subscriptions/11f14ab1-a50f-462f-8c65-13584eb3a544/resourceGroups/connect-dhorodniczy-monitoring-eastus2/providers/microsoft.insights/webtests/Connect-ai-bumt3j5t63e7c"
+                    componentId = "/subscriptions/11f14ab1-a50f-462f-8c65-13584eb3a544/resourceGroups/connect-dhorodniczy-monitoring-eastus2/providers/microsoft.insights/components/ai-bumt3j5t63e7c"
+                    failedLocationCount = 3
+
                 }
                 actions             = @([PSCustomObject]@{
-                        actionGroupId = "/subscriptions/bb92196e-c69f-4dbc-87aa-62733759d9df/resourceGroups/connect-sacharjee-monitoring-eastus2/providers/microsoft.insights/actionGroups/MyNewActionGroup-u7ecdugsjteju"
+                        actionGroupId = "/subscriptions/11f14ab1-a50f-462f-8c65-13584eb3a544/resourceGroups/connect-dhorodniczy-monitoring-eastus2/providers/microsoft.insights/actionGroups/MyNewActionGroup-4f4o7ga7r6uzy"
                     })
             }
-            dependsOn   = @("/subscriptions/bb92196e-c69f-4dbc-87aa-62733759d9df/resourceGroups/connect-sacharjee-monitoring-eastus2/providers/microsoft.insights/webtests/Connect-ai-qhcsuuhafghss",
-                "/subscriptions/bb92196e-c69f-4dbc-87aa-62733759d9df/resourceGroups/connect-sacharjee-monitoring-eastus2/providers/microsoft.insights/components/ai-qhcsuuhafghss",
-                "/subscriptions/bb92196e-c69f-4dbc-87aa-62733759d9df/resourceGroups/connect-sacharjee-monitoring-eastus2/providers/microsoft.insights/actionGroups/MyNewActionGroup-u7ecdugsjteju")
+            dependsOn   = @("/subscriptions/11f14ab1-a50f-462f-8c65-13584eb3a544/resourceGroups/connect-dhorodniczy-monitoring-eastus2/providers/microsoft.insights/webtests/Connect-ai-bumt3j5t63e7c",
+                "/subscriptions/11f14ab1-a50f-462f-8c65-13584eb3a544/resourceGroups/connect-dhorodniczy-monitoring-eastus2/providers/microsoft.insights/components/ai-bumt3j5t63e7c",
+                "/subscriptions/11f14ab1-a50f-462f-8c65-13584eb3a544/resourceGroups/connect-dhorodniczy-monitoring-eastus2/providers/microsoft.insights/actionGroups/MyNewActionGroup-4f4o7ga7r6uzy")
         }
 
         $ApplicationInsightsMetricAlert.PSTypeNames.Add("ArmResource")
