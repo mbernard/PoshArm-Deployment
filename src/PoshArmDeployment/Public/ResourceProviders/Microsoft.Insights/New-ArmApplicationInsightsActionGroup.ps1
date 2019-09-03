@@ -5,10 +5,13 @@ function New-ArmApplicationInsightsActionGroup {
         [Parameter(Mandatory, ValueFromPipeline)]
         [string]
         $Name,
+        [Parameter(Mandatory)]
         [string]
         $GroupShortName,
+        [Parameter(Mandatory)]
         [string]
         $WebHookServiceUri,
+        [Parameter(Mandatory)]
         [string]
         $WebHookName,
         [switch]

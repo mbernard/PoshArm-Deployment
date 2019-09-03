@@ -56,15 +56,15 @@
     "shortName": "uaid"
   },
   {
-    "resourceType": "microsoft.insights/components",
+    "resourceType": "Microsoft.Insights/components",
     "shortName": "ai"
   },
   {
-    "resourceType": "microsoft.insights/alertrules",
+    "resourceType": "Microsoft.Insights/alertRules",
     "shortName": "aiar"
   },
   {
-    "resourceType": "microsoft.insights/webtests",
+    "resourceType": "Microsoft.Insights/webtests",
     "shortName": "aiwt"
   },
   {
@@ -96,7 +96,7 @@
     "shortName": "law"
   },
   {
-    "resourceType": "microsoft.insights/actionGroups",
+    "resourceType": "Microsoft.Insights/actionGroups",
     "shortName": "ag"
   },
   {
@@ -114,5 +114,9 @@
   {
     "resourceType": "Microsoft.DocumentDb/databaseAccounts/apis/databases",
     "shortName": "cdbd"
+  },
+  {
+    "resourceType": "Microsoft.AlertsManagement/smartDetectorAlertRules",
+    "shortName": "sdar"
   }
 ]
