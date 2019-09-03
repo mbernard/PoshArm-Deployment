@@ -6,9 +6,6 @@ function New-ArmApplicationInsightsMetricAlert {
         [ValidatePattern('^(\[.*\]|[a-zA-Z0-9-]*)$')]
         [string]
         $Name,
-        [Parameter(Mandatory)]
-        [PSTypeName("ApplicationInsights")]
-        $ApplicationInsights,
         [string]
         $ApiVersion = '2018-03-01',
         [string]
@@ -34,9 +31,7 @@ function New-ArmApplicationInsightsMetricAlert {
         $Severity = 0,
         [ValidateRange(1, 60)]
         [int]
-        $EvaluationFrequencyInMinutes = 1,
-        [string]
-        $ActionGroupId = ""
+        $EvaluationFrequencyInMinutes = 1
 
     )
 
@@ -55,25 +50,25 @@ function New-ArmApplicationInsightsMetricAlert {
                 description         = $Description
                 severity            = $Severity
                 enabled             = -not $Disabled.ToBool()
-                scopes              = @("/subscriptions/11f14ab1-a50f-462f-8c65-13584eb3a544/resourceGroups/connect-dhorodniczy-monitoring-eastus2/providers/microsoft.insights/webtests/Connect-ai-bumt3j5t63e7c",
-                                        "/subscriptions/11f14ab1-a50f-462f-8c65-13584eb3a544/resourceGroups/connect-dhorodniczy-monitoring-eastus2/providers/microsoft.insights/components/ai-bumt3j5t63e7c"
+                scopes              = @($DataSource.WebTestResourceId.ToString(),
+                    $DataSource.ApplicationInsightsResourceId.ToString()
                 )
                 evaluationFrequency = $evaluationFrequency
                 windowSize          = $windowSize
                 criteria            = [PSCustomObject]@{
-                    "odata.type" = "Microsoft.Azure.Monitor.WebtestLocationAvailabilityCriteria"
-                    webTestId = "/subscriptions/11f14ab1-a50f-462f-8c65-13584eb3a544/resourceGroups/connect-dhorodniczy-monitoring-eastus2/providers/microsoft.insights/webtests/Connect-ai-bumt3j5t63e7c"
-                    componentId = "/subscriptions/11f14ab1-a50f-462f-8c65-13584eb3a544/resourceGroups/connect-dhorodniczy-monitoring-eastus2/providers/microsoft.insights/components/ai-bumt3j5t63e7c"
+                    "odata.type"        = "Microsoft.Azure.Monitor.WebtestLocationAvailabilityCriteria"
+                    webTestId           = $DataSource.WebTestResourceId.ToString()
+                    componentId         = $DataSource.ApplicationInsightsResourceId.ToString()
                     failedLocationCount = 3
 
                 }
                 actions             = @([PSCustomObject]@{
-                        actionGroupId = "/subscriptions/11f14ab1-a50f-462f-8c65-13584eb3a544/resourceGroups/connect-dhorodniczy-monitoring-eastus2/providers/microsoft.insights/actionGroups/MyNewActionGroup-4f4o7ga7r6uzy"
+                        actionGroupId = $DataSource.ActionGroupResourceId
                     })
             }
-            dependsOn   = @("/subscriptions/11f14ab1-a50f-462f-8c65-13584eb3a544/resourceGroups/connect-dhorodniczy-monitoring-eastus2/providers/microsoft.insights/webtests/Connect-ai-bumt3j5t63e7c",
-                "/subscriptions/11f14ab1-a50f-462f-8c65-13584eb3a544/resourceGroups/connect-dhorodniczy-monitoring-eastus2/providers/microsoft.insights/components/ai-bumt3j5t63e7c",
-                "/subscriptions/11f14ab1-a50f-462f-8c65-13584eb3a544/resourceGroups/connect-dhorodniczy-monitoring-eastus2/providers/microsoft.insights/actionGroups/MyNewActionGroup-4f4o7ga7r6uzy")
+            dependsOn   = @($DataSource.WebTestResourceId.ToString(),
+                $DataSource.ApplicationInsightsResourceId.ToString(),
+                $DataSource.ActionGroupResourceId.ToString())
         }
 
         $ApplicationInsightsMetricAlert.PSTypeNames.Add("ArmResource")

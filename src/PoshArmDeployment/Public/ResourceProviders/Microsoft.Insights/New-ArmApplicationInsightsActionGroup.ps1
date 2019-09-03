@@ -2,10 +2,7 @@ function New-ArmApplicationInsightsActionGroup {
     [CmdletBinding(SupportsShouldProcess = $true)]
     [OutputType("ApplicationInsightsActionGroup")]
     Param(
-        # [Parameter(Mandatory, ValueFromPipeline)]
-        # [PSTypeName("ApplicationInsightsActionGroup")]
-        # $ApplicationInsightsActionGroup,
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipeline)]
         [string]
         $Name,
         [string]
@@ -16,7 +13,6 @@ function New-ArmApplicationInsightsActionGroup {
         $WebHookName,
         [switch]
         $Disabled
-     
     )
     If ($PSCmdlet.ShouldProcess("Creates a new Arm Application Insights resource")) {
         $ApplicationInsightsActionGroup = [PSCustomObject][ordered]@{
