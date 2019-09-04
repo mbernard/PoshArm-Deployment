@@ -69,7 +69,7 @@ function New-ArmApplicationInsightsWebTest {
                 }
             }
             resources   = @()
-            dependsOn   = @()
+            dependsOn   = @($ApplicationInsights._ResourceId.ToString())
         }
 
         $ParseDependentRequestsValue = $ParseDependentRequests.ToBool()

@@ -28,7 +28,7 @@ function New-ArmApplicationInsightsMetricAlert {
         $DataSource = @{ },
         [ValidateRange(0, 4)]
         [int]
-        $Severity = 0,
+        $Severity = 3,
         [ValidateRange(1, 60)]
         [int]
         $EvaluationFrequencyInMinutes = 1
