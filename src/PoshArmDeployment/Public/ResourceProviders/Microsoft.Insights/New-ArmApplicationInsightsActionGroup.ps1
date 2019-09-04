@@ -5,32 +5,29 @@ function New-ArmApplicationInsightsActionGroup {
         [Parameter(Mandatory, ValueFromPipeline)]
         [string]
         $Name,
-        [Parameter(Mandatory)]
-        [string]
-        $GroupShortName,
-        [Parameter(Mandatory)]
-        [string]
-        $WebHookServiceUri,
-        [Parameter(Mandatory)]
-        [string]
-        $WebHookName,
         [switch]
-        $Disabled
+        $Disabled,
+        [Parameter(Mandatory)]
+        [PSCustomObject]
+        $DataSource = @{ }
     )
     If ($PSCmdlet.ShouldProcess("Creates a new Arm Application Insights resource")) {
+        
+        Set-Variable ResourceType -option Constant -value "Microsoft.Insights/actionGroups"
+
         $ApplicationInsightsActionGroup = [PSCustomObject][ordered]@{
-            _ResourceId = $Name | New-ArmFunctionResourceId -ResourceType 'microsoft.insights/actionGroups'
+            _ResourceId = $Name | New-ArmFunctionResourceId -ResourceType $ResourceType
             PSTypeName  = "ApplicationInsights"
-            type        = 'microsoft.insights/actionGroups'
+            type        = $ResourceType
             name        = $Name
             apiVersion  = '2019-03-01'
             location    = 'global'
             properties  = @{
-                groupShortName   = $GroupShortName
+                groupShortName   = $DataSource.ActionGroupShortName.ToString()
                 enabled          = -not $Disabled.ToBool()
                 webHookReceivers = @([PSCustomObject]@{
-                        name                 = $WebHookName
-                        serviceUri           = $WebHookServiceUri
+                        name                 = $DataSource.WebHookName.ToString()
+                        serviceUri           = $DataSource.WebHookServiceUri.ToString()
                         useCommonAlertSchema = $true
                     })
             }

@@ -36,13 +36,16 @@ function New-ArmApplicationInsightsMetricAlert {
     )
 
     If ($PSCmdlet.ShouldProcess("Creates a new Arm Application Insights metric alert")) {
+
+        Set-Variable ResourceType -option Constant -value "Microsoft.Insights/metricAlerts"
+
         $windowSize = "PT$WindowSizeInMinutes" + "M"
         $evaluationFrequency = "PT$EvaluationFrequencyInMinutes" + "M"
 
         $ApplicationInsightsMetricAlert = [PSCustomObject][ordered]@{
-            _ResourceId = $Name | New-ArmFunctionResourceId -ResourceType 'Microsoft.Insights/metricAlerts'
+            _ResourceId = $Name | New-ArmFunctionResourceId -ResourceType $ResourceType
             PSTypeName  = "ApplicationInsightsMetricAlert"
-            type        = 'Microsoft.Insights/metricAlerts'
+            type        = $ResourceType
             name        = $Name
             apiVersion  = $ApiVersion
             location    = 'global'
