@@ -120,6 +120,7 @@ function New-ArmApplicationInsightsWebTest {
         }
 
         $ApplicationInsightsWebTest.PSTypeNames.Add("ArmResource")
+        $ApplicationInsightsWebTest | Add-ArmDependencyOn -Dependency $ApplicationInsights
         return $ApplicationInsightsWebTest
     }
 }
