@@ -97,7 +97,7 @@
   },
   {
     "resourceType": "Microsoft.Insights/actionGroups",
-    "shortName": "ag"
+    "shortName": "aiag"
   },
   {
     "resourceType": "Microsoft.Logic/workflows",
