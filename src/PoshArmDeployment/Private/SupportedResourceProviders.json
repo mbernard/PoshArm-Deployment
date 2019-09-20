@@ -116,6 +116,10 @@
     "shortName": "cdbd"
   },
   {
+    "resourceType": "Microsoft.DocumentDB/databaseAccounts/apis/databases/settings",
+    "shortName": "cdbds"
+  },
+  {
     "resourceType": "Microsoft.AlertsManagement/smartDetectorAlertRules",
     "shortName": "sdar"
   }

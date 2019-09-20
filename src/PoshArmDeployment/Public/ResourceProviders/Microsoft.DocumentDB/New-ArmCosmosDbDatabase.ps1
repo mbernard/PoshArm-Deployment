@@ -13,10 +13,7 @@ function New-ArmCosmosDbDatabase {
         [string]
         $DatabaseType = 'sql',
         [string]
-        $ApiVersion = '2016-03-31',
-        [ValidateRange(400, 1000000)]
-        [string]
-        $ThroughputInRU = 400
+        $ApiVersion = '2016-03-31'
     )
 
     If ($PSCmdlet.ShouldProcess("Creates a new Arm CosmosDb database")) {
@@ -30,9 +27,6 @@ function New-ArmCosmosDbDatabase {
             properties  = @{
                 resource = @{
                     id = $Name
-                }
-                options  = @{
-                    throughput = $ThroughputInRU
                 }
             }
             dependsOn   = @()
