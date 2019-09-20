@@ -19,7 +19,10 @@ function New-ArmCosmosDbDatabase {
     If ($PSCmdlet.ShouldProcess("Creates a new Arm CosmosDb database")) {
         $AccountName = $CosmosDbAccount.Name
         $Database = [PSCustomObject][ordered]@{
-            _ResourceId = $Name | New-ArmFunctionResourceId -ResourceType 'Microsoft.DocumentDb/databaseAccounts/apis/databases'
+            _ComosDbAccount = $CosmosDbAccount
+            _DatabaseType = $DatabaseType
+            _ResourceId = $AccountName | New-ArmFunctionResourceId -ResourceType 'Microsoft.DocumentDb/databaseAccounts/apis/databases' `
+                            -ResourceName2 "$DatabaseType','$Name"
             PSTypeName  = "CosmosDbDatabase"
             type        = 'Microsoft.DocumentDb/databaseAccounts/apis/databases'
             name        = "[concat($AccountName, '/$DatabaseType/', '$Name')]"
