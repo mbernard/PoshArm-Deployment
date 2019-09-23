@@ -27,6 +27,29 @@ $Output = Publish-ArmResourceGroup -EnvironmentCode $EnvironmentCode -ArmResourc
     }
 ```
 
+### Configuration file
+`ScriptConfiguration.json`
+```json
+{
+  "projectName": "project",
+  "location": "eastus2",
+  "environmentCode": "",
+  "context": "context",
+  "version": "1.0",
+  "properties": {
+    }
+  }
+}
+```
+
+`ScriptConfiguration.local.json`
+```json
+{
+  "environmentCode": "local",
+  "properties": {}
+}
+```
+
 Generates
 ```json
 {
@@ -41,7 +64,7 @@ Generates
   "resources": [
     {
       "type": "Microsoft.Storage/storageAccounts",
-      "name": "[concat('sa0', uniqueString('project','mig','context','eastus2','sa','sa','1.0'))]",
+      "name": "[concat('sa0', uniqueString('project','local','context','eastus2','sa','sa','1.0'))]",
       "apiVersion": "2018-07-01",
       "location": "eastus2",
       "sku": {
