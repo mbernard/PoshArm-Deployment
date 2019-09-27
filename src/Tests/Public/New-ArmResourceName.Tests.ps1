@@ -8,6 +8,6 @@ Describe "New-ArmResourceName" {
         param($Name, $Expected)
 
         $name = New-ArmResourceName -ResourceName $Name -ResourceType "Microsoft.Storage/storageAccounts"
-        $name | Should -Be $Expected
+        $name | Should Be $Expected
     }
 }

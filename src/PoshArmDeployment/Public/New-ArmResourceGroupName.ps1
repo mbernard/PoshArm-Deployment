@@ -8,17 +8,23 @@ function New-ArmResourceGroupName {
         [string]
         $Context = $script:context,
         [string]
-        $Location = $script:location
+        $Location = $script:location,
+        [string]
+        $Delimiter = "-",
+        [string]
+        $NamingConvention = $script:resourceGroupNamingConvention
     )
 
-    $ResourceGroupNameParts = @(
-        $ProjectName
-        $EnvironmentCode
-        $Context
-        $Location
-    ) | Where-Object {$_}
-    $ResourceGroupName = [string]::Join('-', $ResourceGroupNameParts)
-    $ResourceGroupName = $ResourceGroupName.ToLowerInvariant()
+    if (!$NamingConvention) {
+        $NamingConvention = "{projectname}{delimiter}{environmentcode}{delimiter}{context}{delimiter}{location}"
+    }
 
-    return $ResourceGroupName
+    $ResourceGroupName = $NamingConvention.ToLowerInvariant()
+    $ResourceGroupName = $ResourceGroupName.Replace("{delimiter}", $Delimiter)
+    $ResourceGroupName = $ResourceGroupName.Replace("{projectname}", $ProjectName)
+    $ResourceGroupName = $ResourceGroupName.Replace("{environmentcode}", $EnvironmentCode)
+    $ResourceGroupName = $ResourceGroupName.Replace("{context}", $Context)
+    $ResourceGroupName = $ResourceGroupName.Replace("{location}", $Location)
+
+    return $ResourceGroupName.ToLowerInvariant()
 }
