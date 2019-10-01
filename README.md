@@ -1,4 +1,4 @@
-[![Build status](https://sybersphere.visualstudio.com/PoshArmDeployment/_apis/build/status/PoshArmDeployment-CI)](https://sybersphere.visualstudio.com/PoshArmDeployment/_build/latest?definitionId=5)
+[![Build status](https://sybersphere.visualstudio.com/PoshArmDeployment/_apis/build/status/PoshArmDeployment-CI)](https://dev.azure.com/sybersphere/PoshArmDeployment/_apis/build/status/PoshArmDeployment-CI?branchName=master)
 
 PoshArm-Deployment is a perfect hybrid between ARM Templates and Azure PowerShell. It leverage those 2 technologies to deliver a powerful development experience.
 
