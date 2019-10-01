@@ -19,16 +19,25 @@ function New-ArmResourceName {
         $Version = $script:version,
         [Parameter(ParameterSetName = "IgnoreVersion")]
         [switch]
-        $IgnoreVersionInHash
+        $IgnoreVersionInHash,
+        [string]
+        $NamingConvention = $script:ResourceNamingConvention
     )
     DynamicParam {
         Add-ResourceTypeDynamicParameter
     }
     Begin {
         $ResourceProvider = Get-SupportedResourceProvider | Where-Object resourceType -eq $PSBoundParameters['ResourceType']
-    }
-    Process {
-        $delimiter = switch ($ResourceProvider.resourceType) {
+
+        if (!$NamingConvention) {
+            $NamingConvention = "{resourcename}{delimiter}{hash}"
+        }
+
+        if(!$ResourceName){
+            $ResourceName = $ResourceProvider.shortName
+        }
+
+        $Delimiter = switch ($ResourceProvider.resourceType) {
             'Microsoft.Storage/storageAccounts' {
                 '0'
             }
@@ -36,11 +45,8 @@ function New-ArmResourceName {
                 '-'
             }
         }
-
-        if(!$ResourceName){
-            $ResourceName = $ResourceProvider.shortName
-        }
-
+    }
+    Process {
         $hashParts = @(
             $ProjectName
             $EnvironmentCode
@@ -60,7 +66,17 @@ function New-ArmResourceName {
         $hashParts = [string]::Join(''',''', $hashParts)
 
         If ($PSCmdlet.ShouldProcess("Generating arm expression representig the resource name")) {
-            return "[concat('$ResourceName$delimiter', uniqueString('$hashParts'))]"
+            $Name = $NamingConvention.ToLowerInvariant()
+            $Name = "[concat('$Name')]" 
+            $Name = $Name.Replace("{delimiter}", $Delimiter)
+            $Name = $Name.Replace("{projectname}", $ProjectName)
+            $Name = $Name.Replace("{environmentcode}", $EnvironmentCode)
+            $Name = $Name.Replace("{context}", $Context)
+            $Name = $Name.Replace("{location}", $Location)
+            $Name = $Name.Replace("{resourcename}", $ResourceName)
+            $Name = $Name.Replace("{hash}", "', uniqueString('$hashParts'),'")
+
+            return $Name
         }
     }
 }
