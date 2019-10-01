@@ -30,7 +30,7 @@ function New-ArmResourceName {
         $ResourceProvider = Get-SupportedResourceProvider | Where-Object resourceType -eq $PSBoundParameters['ResourceType']
 
         if (!$NamingConvention) {
-            $NamingConvention = "{resourcename}{delimiter}{hash}"
+            $NamingConvention = "{environmentcode}{delimiter}{resourcename}{delimiter}{hash}"
         }
 
         if(!$ResourceName){
@@ -62,7 +62,7 @@ function New-ArmResourceName {
         }
 
         # Remove any empty values
-        $hashParts = $hashParts | Where-Object {$_}
+        $hashParts = $hashParts | Where-Object {$_.ToLowerInvariant()}
         $hashParts = [string]::Join(''',''', $hashParts)
 
         If ($PSCmdlet.ShouldProcess("Generating arm expression representig the resource name")) {
@@ -76,7 +76,7 @@ function New-ArmResourceName {
             $Name = $Name.Replace("{resourcename}", $ResourceName)
             $Name = $Name.Replace("{hash}", "', uniqueString('$hashParts'),'")
 
-            return $Name
+            return $Name.ToLowerInvariant()
         }
     }
 }
