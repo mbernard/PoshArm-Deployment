@@ -1,0 +1,9 @@
+{
+    "projectName": "posharm",
+    "location": "eastus2",
+    "environmentCode": "test",
+    "context": "test",
+    "version": "1.0",
+    "properties": {
+    }
+}
