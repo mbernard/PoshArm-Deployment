@@ -33,12 +33,10 @@ InModuleScope PoshArmDeployment {
             ($actual | ConvertTo-Json -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
                 | Should -Be ($Expected | ConvertTo-Json -Compress| ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
         }
-    }
 
-    Describe "Sample" {
-        It "Simple" -Test {
+        It "Integration Simple Sample" -Test {
             
-            Publish-ArmResourceGroup -ResourceGroupName "posharm-test2" -Test -ArmResourcesScriptBlock `
+            Publish-ArmResourceGroup -ResourceGroupName "posharm-test" -Test -ArmResourcesScriptBlock `
             {
                 New-ArmResourceName Microsoft.KeyVault/vaults `
                 | New-ArmKeyVaultResource -EnabledForDeployment -EnabledForTemplateDeployment -EnableSoftDelete `
