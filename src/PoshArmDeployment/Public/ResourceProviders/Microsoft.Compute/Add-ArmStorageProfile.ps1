@@ -14,8 +14,8 @@ function Add-ArmStorageProfile {
         if (!$ImageReference) {
             $ImageReference = @{
                 publisher = "MicrosoftWindowsServer"
-                offer     = "WindowsServer"
-                sku       = "2016-Datacenter-with-Containers"
+                offer     = "WindowsServerSemiAnnual"
+                sku       = "Datacenter-Core-1803-with-Containers-smalldisk"
                 version   = "latest"
             }
         }

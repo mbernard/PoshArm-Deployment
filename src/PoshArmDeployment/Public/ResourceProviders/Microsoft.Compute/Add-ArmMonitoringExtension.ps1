@@ -13,6 +13,8 @@ function Add-ArmMonitoringExtension {
     )
 
     Process {
+        $LogWorkspaceResourceId = $LogWorkspaceResourceId | ConvertTo-ValueInTemplateExpression
+
         If ($PSCmdlet.ShouldProcess("Adding monitoring extension to a virtual machine scale set")) {
             $monitoringExtension = @{
                 name       = $Name
@@ -22,10 +24,10 @@ function Add-ArmMonitoringExtension {
                     typeHandlerVersion      = "1.0"
                     autoUpgradeMinorVersion = $true
                     settings                = @{
-                        workspaceId = "[reference('$LogWorkspaceResourceId', '2015-11-01-preview').customerId]"
+                        workspaceId = "[reference($LogWorkspaceResourceId, '2015-11-01-preview').customerId]"
                     }
                     protectedSettings       = @{
-                        workspacekey = "[listKeys('$LogWorkspaceResourceId', '2015-11-01-preview').primarySharedKey]"
+                        workspacekey = "[listKeys($LogWorkspaceResourceId, '2015-11-01-preview').primarySharedKey]"
                     }
                 }
             }

@@ -19,6 +19,8 @@ function Add-ArmServiceFabricExtension {
         $nodeName = $NodeType.Name
         $sfClusterId = $NodeType._ServiceFabricCluster._ResourceId
         If ($PSCmdlet.ShouldProcess("Adding service fabric extension to a virtual machine scale set")) {
+            $SupportLogStorageAccountResourceId = $SupportLogStorageAccountResourceId | ConvertTo-ValueInTemplateExpression
+            
             $sfExtension = @{
                 name       = "ServiceFabricNodeVmExt_$nodeName"
                 properties = @{
@@ -26,8 +28,8 @@ function Add-ArmServiceFabricExtension {
                     autoUpgradeMinorVersion = $true
                     publisher               = "Microsoft.Azure.ServiceFabric"
                     protectedSettings       = @{
-                        StorageAccountKey1 = "[listKeys('$SupportLogStorageAccountResourceId', '2015-05-01-preview').key1]"
-                        StorageAccountKey2 = "[listKeys('$SupportLogStorageAccountResourceId', '2015-05-01-preview').key2]"
+                        StorageAccountKey1 = "[listKeys($SupportLogStorageAccountResourceId, '2015-05-01-preview').key1]"
+                        StorageAccountKey2 = "[listKeys($SupportLogStorageAccountResourceId, '2015-05-01-preview').key2]"
                     }
                     settings                = @{
                         clusterEndpoint    = "[reference($sfClusterId).clusterEndpoint]"
@@ -41,7 +43,7 @@ function Add-ArmServiceFabricExtension {
                             x509StoreName = "My"
                         }
                     }
-                    typeHandlerVersion      = "1.0"
+                    typeHandlerVersion      = "1.1"
                 }
             }
 

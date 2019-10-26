@@ -13,8 +13,10 @@ function New-ArmApplicationInsightsResource {
     )
 
     If ($PSCmdlet.ShouldProcess("Creates a new Arm Application Insights resource")) {
+        $ApplicationInsightsResourceId = $Name | New-ArmFunctionResourceId -ResourceType 'microsoft.insights/components'
         $ApplicationInsights = [PSCustomObject][ordered]@{
-            _ResourceId = $Name | New-ArmFunctionResourceId -ResourceType 'microsoft.insights/components'
+            _ResourceId = $ApplicationInsightsResourceId
+            _InstrumentationKey = "[reference($ApplicationInsightsResourceId).InstrumentationKey]"
             PSTypeName  = "ApplicationInsights"
             type        = 'microsoft.insights/components'
             name        = $Name

@@ -17,6 +17,7 @@ function Add-ArmLogAnalyticsWorkspaceStorageInsightConfiguration {
     If ($PSCmdlet.ShouldProcess("Adding Storage Account to Log Analytics Workspace")) {
         $StorageAccountName = $StorageAccount.name
         $StorageAccountResourceId = $StorageAccount._ResourceId
+        $StorageAccountResourceIdExpression = $StorageAccountResourceId | ConvertTo-ValueInTemplateExpression
         $LogAnalyticsWorkspaceName = $LogAnalyticsWorkspace.name
         $StorageInsightConfiguration = @{
             apiVersion = $LogAnalyticsWorkspace.apiVersion
@@ -27,7 +28,7 @@ function Add-ArmLogAnalyticsWorkspaceStorageInsightConfiguration {
                 tables         = $Tables
                 storageAccount = @{
                     id  = $StorageAccountResourceId
-                    key = "[listKeys($StorageAccountResourceId, '2015-05-01-preview').key1]"
+                    key = "[listKeys($StorageAccountResourceIdExpression, '2015-05-01-preview').key1]"
                 }
             }
             dependsOn  = @()
