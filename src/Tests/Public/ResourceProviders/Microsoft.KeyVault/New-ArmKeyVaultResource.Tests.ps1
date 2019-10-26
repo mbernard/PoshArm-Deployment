@@ -38,7 +38,7 @@ InModuleScope PoshArmDeployment {
     Describe "Sample" {
         It "Simple" -Test {
             
-            Publish-ArmResourceGroup -ResourceGroupName "posharm-test" -Test -ArmResourcesScriptBlock `
+            Publish-ArmResourceGroup -ResourceGroupName "posharm-test2" -Test -ArmResourcesScriptBlock `
             {
                 New-ArmResourceName Microsoft.KeyVault/vaults `
                 | New-ArmKeyVaultResource -EnabledForDeployment -EnabledForTemplateDeployment -EnableSoftDelete `
