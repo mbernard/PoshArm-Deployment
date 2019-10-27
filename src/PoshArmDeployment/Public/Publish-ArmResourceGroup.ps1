@@ -37,7 +37,7 @@ function Publish-ArmResourceGroup {
         New-ArmTemplateFile -TemplateFilePath $templateFilePath
         New-ArmTemplateParameterFile -TemplateParameterFilePath $templateParameterFilePath -ArmTemplateParams $ArmTemplateParams
 
-        $null = New-AzureRmResourceGroup -Name $resourceGroupName -Location $script:Location -Force
+        New-AzureRmResourceGroup -Name $resourceGroupName -Location $script:Location -Force -ErrorAction Stop
 
         # 3. Deploy or test to resource group with template file
         if ($Test) {
@@ -49,7 +49,7 @@ function Publish-ArmResourceGroup {
             } `
                 | ConvertTo-Hash
 
-            return Test-AzureRmResourceGroupDeployment @deployment
+            return Test-AzureRmResourceGroupDeployment @deployment -ErrorAction Stop
         }
         else {
             # 3. Ensure resource group exist
