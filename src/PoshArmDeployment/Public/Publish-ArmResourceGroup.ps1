@@ -49,7 +49,7 @@ function Publish-ArmResourceGroup {
             } `
                 | ConvertTo-Hash
 
-            return (Test-AzureRmResourceGroupDeployment @deployment).details
+            return Test-AzureRmResourceGroupDeployment @deployment
         }
         else {
             # 3. Ensure resource group exist

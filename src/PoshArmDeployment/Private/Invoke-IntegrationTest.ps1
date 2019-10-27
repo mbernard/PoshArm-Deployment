@@ -4,7 +4,7 @@ function Invoke-IntegrationTest {
         $ArmResourcesScriptBlock)
 
     {
-        Publish-ArmResourceGroup -ResourceGroupName "posharm-test2" -Test -ArmResourcesScriptBlock $ArmResourcesScriptBlock `
-        | Should -BeNullOrEmpty
+        $output = Publish-ArmResourceGroup -ResourceGroupName "posharm-test2" -Test -ArmResourcesScriptBlock $ArmResourcesScriptBlock
+        $output | Should -BeNullOrEmpty -Because $output.message
     } | Should -Not -Throw
 }
