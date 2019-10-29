@@ -76,6 +76,11 @@ function New-ArmResourceName {
             $Name = $Name.Replace("{resourcename}", $ResourceName)
             $Name = $Name.Replace("{hash}", "', uniqueString('$hashParts'),'")
 
+            # make sure we don't have 2 delimiter with nothing between them
+            while ($Name.Contains("$Delimiter$Delimiter")){
+                $Name = $Name.Replace("$Delimiter$Delimiter", $Delimiter)
+            }
+
             return $Name.ToLowerInvariant()
         }
     }

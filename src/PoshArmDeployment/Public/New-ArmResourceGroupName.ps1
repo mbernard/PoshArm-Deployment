@@ -26,5 +26,10 @@ function New-ArmResourceGroupName {
     $ResourceGroupName = $ResourceGroupName.Replace("{context}", $Context)
     $ResourceGroupName = $ResourceGroupName.Replace("{location}", $Location)
 
+    # make sure we don't have 2 delimiter with nothing between them
+    while ($ResourceGroupName.Contains("$Delimiter$Delimiter")){
+        $ResourceGroupName = $ResourceGroupName.Replace("$Delimiter$Delimiter", $Delimiter)
+    }
+
     return $ResourceGroupName.ToLowerInvariant()
 }
