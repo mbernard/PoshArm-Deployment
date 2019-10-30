@@ -19,10 +19,12 @@ function New-ArmKeyVaultSecretResource {
     )
 
     If ($PSCmdlet.ShouldProcess("Creates a new Arm KeyVault secret resource")) {
+        $KeyVaultName = $KeyVaultName | ConvertTo-ValueInTemplateExpression
+
         $keyVaultSecret = [PSCustomObject][ordered]@{
             PSTypeName = "KeyVaultSecret"
             type       = 'Microsoft.KeyVault/vaults/secrets'
-            name       = "$KeyVaultName/$Name"
+            name       = "[concat($KeyVaultName, '/$Name')]"
             apiVersion = $ApiVersion
             location   = $Location
             properties = @{

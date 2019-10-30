@@ -5,6 +5,8 @@ $script:Location = [PSCustomObject]@{}
 $script:EnvironmentCode = [PSCustomObject]@{}
 $script:Context = [PSCustomObject]@{}
 $script:Version = [PSCustomObject]@{}
+$script:ResourceGroupNamingConvention = [PSCustomObject]@{}
+$script:ResourceNamingConvention = [PSCustomObject]@{}
 
 #Get public and private function definition files.
 $Public = @( Get-ChildItem -Path $PSScriptRoot\Public\*.ps1 -ErrorAction SilentlyContinue -Recurse)

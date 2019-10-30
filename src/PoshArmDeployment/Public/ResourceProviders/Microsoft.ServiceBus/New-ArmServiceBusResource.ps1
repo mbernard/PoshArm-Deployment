@@ -16,8 +16,11 @@ function New-ArmServiceBusResource {
     )
 
     If ($PSCmdlet.ShouldProcess("Creates a new Arm ServiceBus object")) {
+        $ResourceId = $Name | New-ArmFunctionResourceId -ResourceType Microsoft.ServiceBus/namespaces
+        $ResourceIdExpression = $ResourceId | ConvertTo-ValueInTemplateExpression
         $ServiceBus = [PSCustomObject][ordered]@{
-            _ResourceId = $Name | New-ArmFunctionResourceId -ResourceType Microsoft.ServiceBus/namespaces
+            _ResourceId = $ResourceId
+            _ConnectionString = "[listKeys(concat($ResourceIdExpression, '/authorizationRules/RootManageSharedAccessKey'), '2017-04-01').primaryConnectionString]"
             PSTypeName = "ServiceBus"
             type       = 'Microsoft.ServiceBus/namespaces'
             name       = $Name

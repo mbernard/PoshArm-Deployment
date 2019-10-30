@@ -21,6 +21,7 @@ function Add-ArmServiceFabricDiagnosticsExtension {
     Process {
         $nodeName = $NodeType.Name
         If ($PSCmdlet.ShouldProcess("Adding service fabric diagnostics extension to a virtual machine scale set")) {
+            $ApplicationDiagnosticsStorageAccountResourceId = $ApplicationDiagnosticsStorageAccountResourceId | ConvertTo-ValueInTemplateExpression
             $sfDiagnosticsExtension = @{
                 name       = "VMDiagnosticsVmExt_$nodeName"
                 properties = @{
@@ -28,7 +29,7 @@ function Add-ArmServiceFabricDiagnosticsExtension {
                     autoUpgradeMinorVersion = $true
                     protectedSettings       = @{
                         storageAccountName     = $ApplicationDiagnosticsStorageAccountName
-                        storageAccountKey      = "[listKeys('$ApplicationDiagnosticsStorageAccountResourceId','2015-05-01-preview').key1]"
+                        storageAccountKey      = "[listKeys($ApplicationDiagnosticsStorageAccountResourceId,'2015-05-01-preview').key1]"
                         storageAccountEndPoint = "https://core.windows.net/"
                     }
                     publisher               = "Microsoft.Azure.Diagnostics"

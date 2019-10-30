@@ -25,6 +25,7 @@ function New-ArmServiceFabricCluster {
     )
 
     If ($PSCmdlet.ShouldProcess("Creates a new service fabric cluster object")) {
+        $SupportLogStorageAccountNameExpression = $SupportLogStorageAccountName | ConvertTo-ValueInTemplateExpression
         $serviceFabricCluster = [PSCustomObject][ordered]@{
             _ResourceId = New-ArmFunctionResourceId -ResourceType Microsoft.ServiceFabric/clusters -ResourceName1 $Name
             PSTypeName  = "ServiceFabricCluster"
@@ -61,11 +62,11 @@ function New-ArmServiceFabricCluster {
                 upgradeMode                     = "Automatic"
                 vmImage                         = "Windows"
                 diagnosticsStorageAccountConfig = @{
-                    blobEndpoint            = "[concat('https://','$SupportLogStorageAccountName','.blob.core.windows.net/')]"
+                    blobEndpoint            = "[concat('https://',$SupportLogStorageAccountNameExpression,'.blob.core.windows.net/')]"
                     protectedAccountKeyName = "StorageAccountKey1"
-                    queueEndpoint           = "[concat('https://','$SupportLogStorageAccountName','.queue.core.windows.net/')]"
+                    queueEndpoint           = "[concat('https://',$SupportLogStorageAccountNameExpression,'.queue.core.windows.net/')]"
                     storageAccountName      = $SupportLogStorageAccountName
-                    tableEndpoint           = "[concat('https://','$SupportLogStorageAccountName','.table.core.windows.net/')]"
+                    tableEndpoint           = "[concat('https://',$SupportLogStorageAccountNameExpression,'.table.core.windows.net/')]"
                 }
             }
             resources   = @()
