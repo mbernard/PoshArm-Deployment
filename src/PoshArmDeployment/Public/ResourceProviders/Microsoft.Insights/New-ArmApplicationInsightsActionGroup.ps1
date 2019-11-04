@@ -25,6 +25,7 @@ function New-ArmApplicationInsightsActionGroup {
             properties  = @{
                 groupShortName   = $ShortName
                 enabled          = -not $Disabled.ToBool()
+                emailReceivers = @()
                 webHookReceivers = @()
             }
             resources   = @()

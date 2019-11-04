@@ -1,4 +1,4 @@
-function Add-ArmApplicationInsightsActionGroupWebHookReceiver {
+function Add-ArmApplicationInsightsActionGroupEmailReceiver {
     [CmdletBinding(SupportsShouldProcess = $true)]
     [OutputType("ApplicationInsightsActionGroup")]
     Param(
@@ -9,16 +9,17 @@ function Add-ArmApplicationInsightsActionGroupWebHookReceiver {
         [string]
         $Name,
         [Parameter(Mandatory)]
+        [ValidatePattern("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")]
         [string]
-        $ServiceUri,
+        $EmailAddress,
         [switch]
         $DisableCommonAlertSchema
     )
     
-    If ($PSCmdlet.ShouldProcess("Adding WebHook receiver to Application Insights Action Group")) {
-        $ActionGroup.properties.webHookReceivers += @(@{
+    If ($PSCmdlet.ShouldProcess("Adding email receiver to Application Insights Action Group")) {
+        $ActionGroup.properties.emailReceivers += @(@{
             name                 = $Name
-            serviceUri           = $ServiceUri
+            emailAddress         = $EmailAddress
             useCommonAlertSchema = -not $DisableCommonAlertSchema.ToBool()
         })
     }

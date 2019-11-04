@@ -19,6 +19,8 @@ function New-ArmApplicationInsightsMetricAlert {
         [ValidateRange(1, 60)]
         [int]
         $EvaluationFrequencyInMinutes = 1,
+        [string[]]
+        $Scopes = @(),
         [switch]
         $Disabled
     )
@@ -41,10 +43,12 @@ function New-ArmApplicationInsightsMetricAlert {
                 description         = $Description
                 severity            = $Severity
                 enabled             = -not $Disabled.ToBool()
-                scopes              = @()
+                scopes              = $Scopes
                 evaluationFrequency = $EvaluationFrequency
                 windowSize          = $WindowSize
-                criteria            = @{ }
+                criteria            = @{
+                    allOf               = @()
+                }
                 actions             = @()
             }
             dependsOn   = @()
