@@ -1,4 +1,4 @@
-function Add-ArmApplicationInsightsActionGroupWebHookReceiver {
+function Add-ArmApplicationInsightsActionGroupArmRoleReceiver {
     [CmdletBinding(SupportsShouldProcess = $true)]
     [OutputType("ApplicationInsightsActionGroup")]
     Param(
@@ -10,18 +10,18 @@ function Add-ArmApplicationInsightsActionGroupWebHookReceiver {
         $Name,
         [Parameter(Mandatory)]
         [string]
-        $ServiceUri,
+        $RoleId,
         [switch]
         $DisableCommonAlertSchema
     )
 
-    If ($PSCmdlet.ShouldProcess("Adding webhook receiver to Application Insights Action Group")) {
-        $ActionGroup.properties.webHookReceivers +=
-        @{
-            name                 = $Name
-            serviceUri           = $ServiceUri
-            useCommonAlertSchema = -not $DisableCommonAlertSchema.ToBool()
-        }
+    If ($PSCmdlet.ShouldProcess("Adding ARM role receiver to Application Insights Action Group")) {
+        $ActionGroup.properties.armRoleReceivers +=
+            @{
+                name                 = $Name
+                roleId               = $RoleId
+                useCommonAlertSchema = -not $DisableCommonAlertSchema.ToBool()
+            }
     }
     return $ActionGroup
 }

@@ -3,13 +3,15 @@ function New-ArmApplicationInsightsActionGroup {
     [OutputType("ApplicationInsightsActionGroup")]
     Param(
         [Parameter(Mandatory, ValueFromPipeline)]
+        [ValidatePattern('^(\[.*\]|[a-zA-Z0-9-]*)$')]
         [string]
         $Name,
         [Parameter(Mandatory)]
+        [ValidatePattern('^(\[.*\]|[a-zA-Z0-9-]*)$')]
         [string]
         $ShortName,
         [string]
-        $ApiVersion = '2019-03-01',
+        $ApiVersion = "2019-06-01",
         [switch]
         $Disabled
     )
@@ -21,11 +23,13 @@ function New-ArmApplicationInsightsActionGroup {
             type        = $ResourceType
             name        = $Name
             apiVersion  = $ApiVersion
-            location    = 'global'
+            location    = "global"
             properties  = @{
-                groupShortName   = $ShortName
-                enabled          = -not $Disabled.ToBool()
-                webHookReceivers = @()
+                groupShortName      = $ShortName
+                enabled             = -not $Disabled.ToBool()
+                emailReceivers      = @()
+                webHookReceivers    = @()
+                armRoleReceivers    = @()
             }
             resources   = @()
             dependsOn   = @()

@@ -20,9 +20,9 @@ function New-ArmApplicationInsightsSmartDetectorAlertRule {
         $Severity = 3
     )
 
-    If ($PSCmdlet.ShouldProcess("Creates a new Arm Application Insights resource")) {  
+    If ($PSCmdlet.ShouldProcess("Creates a new Arm Application Insights resource")) {
         $ResourceType = "Microsoft.AlertsManagement/smartDetectorAlertRules"
-        $EvaluationFrequency = "PT${EvaluationFrequencyInMinutes}M" 
+        $EvaluationFrequency = "PT${EvaluationFrequencyInMinutes}M"
 
         if (-not $Disabled.ToBool()) {
             $State = "Enabled"
@@ -32,7 +32,7 @@ function New-ArmApplicationInsightsSmartDetectorAlertRule {
         }
 
         $ApplicationInsightsResourceId = $ApplicationInsights._ResourceId
-        
+
         $ApplicationInsightsSmartDetectionRule = [PSCustomObject][ordered]@{
             _ResourceId = $Name | New-ArmFunctionResourceId -ResourceType $ResourceType
             PSTypeName  = "ApplicationInsightsSmartDetectorAlertRule"

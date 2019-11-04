@@ -38,7 +38,7 @@ function Add-ArmApplicationGatewayUrlMap {
         }
 
         $ApplicationGateway.properties.urlPathMaps += $UrlPathMap
-        
+
         return $ApplicationGateway
     }
 }
