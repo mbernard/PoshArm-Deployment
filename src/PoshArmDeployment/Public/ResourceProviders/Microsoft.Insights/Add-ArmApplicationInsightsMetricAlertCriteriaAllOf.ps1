@@ -1,3 +1,4 @@
+# https://docs.microsoft.com/en-us/azure/azure-monitor/platform/metrics-supported
 function Add-ArmApplicationInsightsMetricAlertCriteriaAllOf {
     [CmdletBinding(SupportsShouldProcess = $true)]
     [OutputType("ApplicationInsightsMetricAlert")]
@@ -14,16 +15,18 @@ function Add-ArmApplicationInsightsMetricAlertCriteriaAllOf {
         [string]
         [Parameter(Mandatory)]
         $MetricNamespace,
+        [PSCustomObject[]]
+        $Dimensions = @(),
         [string]
         [Parameter(Mandatory)]
         [ValidateSet("Equals", "NotEquals", "GreaterThan", "GreaterThanOrEqual", "LessThan", "LessThanOrEqual")]
         $Operator,
-        [string]
+        [int]
         [Parameter(Mandatory)]
         $Threshold,
         [string]
         [Parameter(Mandatory)]
-        [ValidateSet("Average", "Minimum", "Maximum", "Total")]
+        [ValidateSet("Average", "Minimum", "Maximum", "Total", "Count")]
         $TimeAggregation
     )
     
@@ -33,7 +36,7 @@ function Add-ArmApplicationInsightsMetricAlertCriteriaAllOf {
                 name            = $Name
                 metricName      = $MetricName
                 metricNamespace = $MetricNamespace
-                dimensions      = @()
+                dimensions      = $Dimensions
                 operator        = $Operator
                 threshold       = $Threshold
                 timeAggregation = $TimeAggregation

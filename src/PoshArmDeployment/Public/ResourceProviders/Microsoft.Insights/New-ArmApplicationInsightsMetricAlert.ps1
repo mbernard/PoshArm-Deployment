@@ -1,3 +1,5 @@
+
+# https://docs.microsoft.com/en-us/rest/api/monitor/metricalerts/createorupdate
 function New-ArmApplicationInsightsMetricAlert {
     [CmdletBinding(SupportsShouldProcess = $true)]
     [OutputType("ApplicationInsightsMetricAlert")]
@@ -10,7 +12,7 @@ function New-ArmApplicationInsightsMetricAlert {
         $ApiVersion = '2018-03-01',
         [string]
         $Description = "",
-        [ValidateRange(5, 1440)]
+        [ValidateRange(1, 1440)]
         [int]
         $WindowSizeInMinutes = 5,
         [ValidateRange(0, 4)]

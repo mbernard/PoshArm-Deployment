@@ -9,7 +9,7 @@ function New-ArmApplicationInsightsActionGroup {
         [string]
         $ShortName,
         [string]
-        $ApiVersion = '2019-03-01',
+        $ApiVersion = '2019-06-01',
         [switch]
         $Disabled
     )
@@ -23,10 +23,11 @@ function New-ArmApplicationInsightsActionGroup {
             apiVersion  = $ApiVersion
             location    = 'global'
             properties  = @{
-                groupShortName   = $ShortName
-                enabled          = -not $Disabled.ToBool()
-                emailReceivers = @()
-                webHookReceivers = @()
+                groupShortName      = $ShortName
+                enabled             = -not $Disabled.ToBool()
+                emailReceivers      = @()
+                webHookReceivers    = @()
+                armRoleReceivers    = @()
             }
             resources   = @()
             dependsOn   = @()
