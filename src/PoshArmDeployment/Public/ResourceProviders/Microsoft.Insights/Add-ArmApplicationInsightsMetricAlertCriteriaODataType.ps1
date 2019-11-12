@@ -6,6 +6,7 @@ function Add-ArmApplicationInsightsMetricAlertCriteriaODataType {
         [Parameter(Mandatory, ValueFromPipeline)]
         $MetricAlert,
         [string]
+        [ValidatePattern("^(\[.*\]|[a-zA-Z0-9-.]*)$")]
         $ODataType = "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
     )
     
