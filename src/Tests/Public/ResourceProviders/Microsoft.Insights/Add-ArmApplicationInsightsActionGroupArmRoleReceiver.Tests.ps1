@@ -57,13 +57,11 @@ InModuleScope PoshArmDeployment {
             }
 
 
-            $expectedException = "MismatchedPSTypeName"
-            $expectedName = "someName"
-            $expectedRoleId = "someRoleId"
+            $ExpectedException = "MismatchedPSTypeName"
 
             It "Given invalid 'ActionGroup' type, it throws '<Expected>'" -TestCases @(
-                @{ ActionGroup = "ApplicationInsightsActionGroup"; Name = $expectedName; RoleId = $expectedRoleId; Expected = $expectedException }
-                @{ ActionGroup = [PSCustomObject]@{Name = "Value" }; Name = $expectedName; RoleId = $expectedRoleId; ; Expected = $expectedException }
+                @{ ActionGroup = "ApplicationInsightsActionGroup"; Name = $ExpectedName; RoleId = $ExpectedRoleId; Expected = $ExpectedException }
+                @{ ActionGroup = [PSCustomObject]@{Name = "Value" }; Name = $ExpectedName; RoleId = $ExpectedRoleId; ; Expected = $ExpectedException }
             ) { param($ActionGroup, $Name, $RoleId, $Expected)
                 { Add-ArmApplicationInsightsActionGroupArmRoleReceiver -ActionGroup $ActionGroup -Name $Name -RoleId $RoleId } | Should -Throw -ErrorId $Expected
             }
