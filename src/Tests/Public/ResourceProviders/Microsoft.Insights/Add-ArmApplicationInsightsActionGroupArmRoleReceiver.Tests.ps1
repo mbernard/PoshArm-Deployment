@@ -41,7 +41,7 @@ InModuleScope PoshArmDeployment {
                         @{
                             name                 = $ExpectedName
                             roleId               = $ExpectedRoleId
-                            useCommonAlertSchema = $DisableCommonAlertSchema
+                            useCommonAlertSchema = -not $DisableCommonAlertSchema
                         }
                     )
                 }
@@ -58,8 +58,9 @@ InModuleScope PoshArmDeployment {
                     -DisableCommonAlertSchema:$DisableCommonAlertSchema
                 }
 
-                ($actual | ConvertTo-Json -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
-                | Should -BeExactly ($Expected | ConvertTo-Json -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
+                $Depth = 3
+                ($actual | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
+                | Should -BeExactly ($Expected | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
             }
 
             Context "Integration tests" {

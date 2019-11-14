@@ -41,7 +41,7 @@ InModuleScope PoshArmDeployment {
                         @{
                             name                 = $Name
                             serviceUri           = $ServiceUri
-                            useCommonAlertSchema = $DisableCommonAlertSchema
+                            useCommonAlertSchema = -not $DisableCommonAlertSchema
                         }
                     )
                 }
@@ -58,8 +58,9 @@ InModuleScope PoshArmDeployment {
                         -DisableCommonAlertSchema:$DisableCommonAlertSchema
                 }
 
-                ($actual | ConvertTo-Json -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
-                    | Should -BeExactly ($Expected | ConvertTo-Json -Compress| ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
+                $Depth = 3
+                ($actual | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
+                    | Should -BeExactly ($Expected | ConvertTo-Json -Depth $Depth -Compress| ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
             }
         }
 
@@ -73,7 +74,7 @@ InModuleScope PoshArmDeployment {
                     | Add-ArmResource
                 }
             }
-            It "Multiple Groups" -Test {
+            It "Multiple" -Test {
                 Invoke-IntegrationTest -ArmResourcesScriptBlock `
                 {
                     $ActionGroup | Add-ArmApplicationInsightsActionGroupWebHookReceiver `

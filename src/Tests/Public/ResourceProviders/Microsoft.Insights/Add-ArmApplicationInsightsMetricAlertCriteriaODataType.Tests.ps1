@@ -6,6 +6,7 @@ InModuleScope PoshArmDeployment {
         
         $ResourceType = "Microsoft.Insights/metricAlerts"
         $expectedName = "SomeAG"
+        
         BeforeEach {
             $MetricAlert = New-ArmResourceName $ResourceType `
                 | New-ArmApplicationInsightsMetricAlert
@@ -14,7 +15,8 @@ InModuleScope PoshArmDeployment {
         }
 
         Context "Unit tests" {
-            $expectedTypes = @("ApplicationInsightsMetricAlert", "ArmResource")     
+            $Depth = 3
+            $expectedTypes = @("ApplicationInsightsMetricAlert", "ArmResource")
 
             It "Given valid '<MetricAlert>', it returns '<Expected>'" -TestCases @(
                 @{  
@@ -27,8 +29,8 @@ InModuleScope PoshArmDeployment {
 
                 $actual = $MetricAlert | Add-ArmApplicationInsightsMetricAlertCriteriaODataType
 
-                ($actual | ConvertTo-Json -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
-                    | Should -BeExactly ($Expected | ConvertTo-Json -Compress| ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
+                ($actual | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
+                    | Should -BeExactly ($Expected | ConvertTo-Json -Depth $Depth -Compress| ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
 
                 $Types | ForEach-Object { $actual.PSTypeNames | Should -Contain $_ }
             }
@@ -46,8 +48,8 @@ InModuleScope PoshArmDeployment {
 
                 $actual = $MetricAlert | Add-ArmApplicationInsightsMetricAlertCriteriaODataType -ODataType $ODataType
 
-                ($actual | ConvertTo-Json -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
-                    | Should -BeExactly ($Expected | ConvertTo-Json -Compress| ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
+                ($actual | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
+                    | Should -BeExactly ($Expected | ConvertTo-Json -Depth $Depth -Compress| ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
 
                 $Types | ForEach-Object { $actual.PSTypeNames | Should -Contain $_ }
             }

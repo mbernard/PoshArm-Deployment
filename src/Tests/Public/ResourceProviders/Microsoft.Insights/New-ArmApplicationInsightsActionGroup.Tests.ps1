@@ -36,8 +36,9 @@ InModuleScope PoshArmDeployment {
 
                 $actual = $Name | New-ArmApplicationInsightsActionGroup -ShortName $ShortName
 
-                ($actual | ConvertTo-Json -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
-                    | Should -BeExactly ($Expected | ConvertTo-Json -Compress| ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
+                $Depth = 3
+                ($actual | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
+                    | Should -BeExactly ($Expected | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
 
                 $Types | ForEach-Object { $actual.PSTypeNames | Should -Contain $_ }
             }
@@ -72,8 +73,10 @@ InModuleScope PoshArmDeployment {
                     -ShortName $ShortName `
                     -ApiVersion $ApiVersion `
                     -Disabled 
-                ($actual | ConvertTo-Json -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
-                    | Should -BeExactly ($Expected | ConvertTo-Json -Compress| ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
+
+                $Depth = 3
+                ($actual | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
+                    | Should -BeExactly ($Expected | ConvertTo-Json -Depth $Depth -Compress| ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
 
                 $Types | ForEach-Object { $actual.PSTypeNames | Should -Contain $_ }
                 

@@ -35,8 +35,9 @@ InModuleScope PoshArmDeployment {
 
                 $actual = $Name | New-ArmApplicationInsightsMetricAlert
 
-                ($actual | ConvertTo-Json -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
-                    | Should -BeExactly ($Expected | ConvertTo-Json -Compress| ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
+                $Depth = 3
+                ($actual | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
+                    | Should -BeExactly ($Expected | ConvertTo-Json -Depth 10 -Compress| ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
 
                 $Types | ForEach-Object { $actual.PSTypeNames | Should -Contain $_ }
             }
@@ -96,9 +97,11 @@ InModuleScope PoshArmDeployment {
                     -Severity $Severity `
                     -EvaluationFrequencyInMinutes $EvaluationFrequencyInMinutes `
                     -Scopes $Scopes `
-                    -Disabled 
-                ($actual | ConvertTo-Json -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
-                    | Should -BeExactly ($Expected | ConvertTo-Json -Compress| ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
+                    -Disabled
+
+                $Depth = 3
+                ($actual | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
+                    | Should -BeExactly ($Expected | ConvertTo-Json -Depth $Depth -Compress| ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
 
                 $Types | ForEach-Object { $actual.PSTypeNames | Should -Contain $_ }
                 
@@ -114,6 +117,7 @@ InModuleScope PoshArmDeployment {
             	{ New-ArmApplicationInsightsMetricAlert -Name $Name } | Should -Throw -ErrorId $Expected
             }
         }
+
         Context "Integration tests" {
             It "Default" -Test {
                 Invoke-IntegrationTest -ArmResourcesScriptBlock `
