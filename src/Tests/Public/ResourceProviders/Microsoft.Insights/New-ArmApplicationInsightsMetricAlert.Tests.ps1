@@ -7,7 +7,8 @@ InModuleScope PoshArmDeployment {
         Context "Unit tests" {
             $expectedName = "name1"
             $expectedTypes = @("ApplicationInsightsMetricAlert", "ArmResource")
-            It "Given a valid 'Name' parameter, it returns '<Expected>'" -TestCases @(
+
+            It "Given a valid '<Name>' parameter, it returns '<Expected>'" -TestCases @(
                 @{ Name = $expectedName; Types = $expectedTypes; Expected = [PSCustomObject][ordered]@{
                         _ResourceId = $expectedName | New-ArmFunctionResourceId -ResourceType $ResourceType
                         type        = $ResourceType
@@ -77,7 +78,16 @@ InModuleScope PoshArmDeployment {
                     }
                 }
             ) {
-                param($Name, $ApiVersion, $Description, $WindowSizeInMinutes, $Severity, $EvaluationFrequencyInMinutes, $Scopes, $Disabled, $Types, $Expected)
+                param($Name,
+                    $ApiVersion,
+                    $Description,
+                    $WindowSizeInMinutes,
+                    $Severity,
+                    $EvaluationFrequencyInMinutes,
+                    $Scopes,
+                    $Disabled,
+                    $Types,
+                    $Expected)
 
                 $actual = $Name | New-ArmApplicationInsightsMetricAlert `
                     -ApiVersion $ApiVersion `
@@ -103,29 +113,6 @@ InModuleScope PoshArmDeployment {
             ) { param($Name, $Expected)
             	{ New-ArmApplicationInsightsMetricAlert -Name $Name } | Should -Throw -ErrorId $Expected
             }
-            It "Given an invalid 'WindowSizeInMinutes' parameter, it throws '<Expected>'" -TestCases @(
-            	@{ Name = $expectedName; WindowSizeInMinutes = -1; Expected = $ParameterArgumentValidationError },
-            	@{ Name = $expectedName; WindowSizeInMinutes = 0; Expected = $ParameterArgumentValidationError },
-            	@{ Name = $expectedName; WindowSizeInMinutes = 2000; Expected = $ParameterArgumentValidationError }
-            ) { param($Name, $WindowSizeInMinutes, $Expected)
-                { New-ArmApplicationInsightsMetricAlert -Name $Name -WindowSizeInMinutes $WindowSizeInMinutes } `
-                 | Should -Throw -ErrorId $Expected
-            }
-            It "Given an invalid 'Severity' parameter, it throws '<Expected>'" -TestCases @(
-            	@{ Name = $expectedName; Severity = -2; Expected = $ParameterArgumentValidationError },
-            	@{ Name = $expectedName; Severity = 5; Expected = $ParameterArgumentValidationError }
-            ) { param($Name, $Severity, $Expected)
-                { New-ArmApplicationInsightsMetricAlert -Name $Name -Severity $Severity } `
-                 | Should -Throw -ErrorId $Expected
-            }
-            It "Given an invalid 'EvaluationFrequencyInMinutes' parameter, it throws '<Expected>'" -TestCases @(
-            	@{ Name = $expectedName; EvaluationFrequencyInMinutes = -10; Expected = $ParameterArgumentValidationError },
-            	@{ Name = $expectedName; EvaluationFrequencyInMinutes = 0; Expected = $ParameterArgumentValidationError }
-            	@{ Name = $expectedName; EvaluationFrequencyInMinutes = 2000; Expected = $ParameterArgumentValidationError }
-            ) { param($Name, $EvaluationFrequencyInMinutes, $Expected)
-                { New-ArmApplicationInsightsMetricAlert -Name $Name -EvaluationFrequencyInMinutes $EvaluationFrequencyInMinutes } `
-                 | Should -Throw -ErrorId $Expected
-            }
         }
         Context "Integration tests" {
             It "Default" -Test {
@@ -134,6 +121,21 @@ InModuleScope PoshArmDeployment {
                     New-ArmResourceName $ResourceType `
                     | New-ArmApplicationInsightsMetricAlert `
                     | Add-ArmResource
+                }
+            }
+
+            It "Multiple" -Test {
+                Invoke-IntegrationTest -ArmResourcesScriptBlock `
+                {
+                    $MetricAlerts = @()
+                    for ($i = 0; $i -lt 5; $i++) {
+                        $MetricAlerts += @(
+                            New-ArmResourceName -ResourceType $ResourceType `
+                                -ResourceName "$expectedName$i" `
+                            | New-ArmApplicationInsightsMetricAlert
+                        )
+                    }
+                    $MetricAlerts | Add-ArmResource
                 }
             }
         }

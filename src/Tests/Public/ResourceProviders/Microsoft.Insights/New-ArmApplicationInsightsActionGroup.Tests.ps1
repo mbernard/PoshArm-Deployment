@@ -4,12 +4,14 @@ Import-Module "$ScriptDir/../../../../PoshArmDeployment" -Force
 InModuleScope PoshArmDeployment {
     Describe "New-ArmApplicationInsightsActionGroup" {
         $ResourceType = "Microsoft.Insights/actionGroups"
+        $expectedName = "name1"
         $expectedShortName = "n1"
+        
         Context "Unit tests" {
-            $expectedName = "name1"
             $expectedTypes = @("ApplicationInsightsActionGroup", "ArmResource")
             It "Given valid 'Name' and 'ShortName' parameters, it returns '<Expected>'" -TestCases @(
-                @{  Name = $expectedName;
+                @{  
+                    Name = $expectedName;
                     ShortName = $expectedShortName;
                     Types = $expectedTypes;
                     Expected = [PSCustomObject][ordered]@{
@@ -78,7 +80,7 @@ InModuleScope PoshArmDeployment {
             }
 
             $ParameterArgumentValidationError = "ParameterArgumentValidationError"
-            It "Given invalid 'Name' parameter and valid 'ShortName' parameter, it throws '<Expected>'" -TestCases @(
+            It "Given invalid '<Name>' parameter and valid '<ShortName>' parameter, it throws '<Expected>'" -TestCases @(
             	@{ Name = ""; ShortName = $expectedShortName; Expected = $ParameterArgumentValidationError },
             	@{ Name = " "; ShortName = $expectedShortName; Expected = $ParameterArgumentValidationError },
             	@{ Name = $null; ShortName = $expectedShortName; Expected = $ParameterArgumentValidationError }
@@ -86,7 +88,7 @@ InModuleScope PoshArmDeployment {
             	{ New-ArmApplicationInsightsActionGroup -Name $Name -ShortName $ShortName } | Should -Throw -ErrorId $Expected
             }
 
-            It "Given valid 'Name' parameter and invalid 'ShortName' parameter, it throws '<Expected>'" -TestCases @(
+            It "Given valid '<Name>' parameter and invalid '<ShortName>' parameter, it throws '<Expected>'" -TestCases @(
             	@{ Name = $expectedName; ShortName = ""; Expected = $ParameterArgumentValidationError },
             	@{ Name = $expectedName; ShortName = " "; Expected = $ParameterArgumentValidationError },
             	@{ Name = $expectedName; ShortName = $null; Expected = $ParameterArgumentValidationError }
@@ -94,6 +96,7 @@ InModuleScope PoshArmDeployment {
             	{ New-ArmApplicationInsightsActionGroup -Name $Name -ShortName $ShortName } | Should -Throw -ErrorId $Expected
             }
         }
+
         Context "Integration tests" {
             It "Default" -Test {
                 Invoke-IntegrationTest -ArmResourcesScriptBlock `
@@ -101,6 +104,21 @@ InModuleScope PoshArmDeployment {
                     New-ArmResourceName $ResourceType `
                     | New-ArmApplicationInsightsActionGroup -ShortName $expectedShortName `
                     | Add-ArmResource
+                }
+            }
+            
+            It "Multiple" -Test {
+                Invoke-IntegrationTest -ArmResourcesScriptBlock `
+                {
+                    $ActionGroups = @()
+                    for ($i = 0; $i -lt 5; $i++) {
+                        $ActionGroups += @(
+                            New-ArmResourceName -ResourceType $ResourceType `
+                                -ResourceName "$expectedName$i" `
+                            | New-ArmApplicationInsightsActionGroup -ShortName "$expectedShortName$i" `
+                        )
+                    }
+                    $ActionGroups | Add-ArmResource
                 }
             }
         }

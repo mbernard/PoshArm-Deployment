@@ -5,6 +5,7 @@ InModuleScope PoshArmDeployment {
     Describe "New-ArmApplicationInsightsActionGroup" {
         
         $ResourceType = "Microsoft.Insights/metricAlerts"
+        $expectedName = "SomeAG"
         BeforeEach {
             $MetricAlert = New-ArmResourceName $ResourceType `
                 | New-ArmApplicationInsightsMetricAlert
@@ -15,7 +16,7 @@ InModuleScope PoshArmDeployment {
         Context "Unit tests" {
             $expectedTypes = @("ApplicationInsightsMetricAlert", "ArmResource")     
 
-            It "Given valid 'MetricAlert', it returns '<Expected>'" -TestCases @(
+            It "Given valid '<MetricAlert>', it returns '<Expected>'" -TestCases @(
                 @{  
                     Types = $expectedTypes
                 }
@@ -33,7 +34,7 @@ InModuleScope PoshArmDeployment {
             }
             
             $expectedODataType = "Microsoft.Azure.Monitor.MultipleResourceMultipleMetricCriteria"
-            It "Given valid 'MetricAlert' and 'ODataType', it returns '<Expected>'" -TestCases @(
+            It "Given valid '<MetricAlert>' and '<ODataType>', it returns '<Expected>'" -TestCases @(
                 @{  
                     ODataType = $expectedODataType
                     Types = $expectedTypes
@@ -51,32 +52,23 @@ InModuleScope PoshArmDeployment {
                 $Types | ForEach-Object { $actual.PSTypeNames | Should -Contain $_ }
             }
 
-            It "Given valid 'Name' parameter and invalid 'ShortName' parameter, it throws '<Expected>'" -TestCases @(
-            	@{ Name = $expectedName; ShortName = ""; Expected = $ParameterArgumentValidationError },
-            	@{ Name = $expectedName; ShortName = " "; Expected = $ParameterArgumentValidationError },
-            	@{ Name = $expectedName; ShortName = $null; Expected = $ParameterArgumentValidationError }
+            $expectedException = "ParameterArgumentValidationErrorEmptyStringNotAllowed"
+            It "Given valid '<Name>' parameter and invalid '<ShortName>' parameter, it throws '<Expected>'" -TestCases @(
+            	@{ Name = $expectedName; ShortName = ""; Expected = $expectedException }
+            	@{ Name = $expectedName; ShortName = $null; Expected = $expectedException }
             ) { param($Name, $ShortName, $Expected)
-            	{ New-ArmApplicationInsightsActionGroup -Name $Name -ShortName $ShortName } | Should -Throw -ErrorId $Expected
+            	{ New-ArmApplicationInsightsActionGroup -Name $Name -ShortName $ShortName } | Should -Throw -ErrorId $expectedException
             }
 
-
-            $expectedException = "MismatchedPSTypeName"
-            It "Given invalid 'MetricAlert' type, it throws '<Expected>'" -TestCases @(
-                @{ MetricAlert = "ApplicationInsightsMetricAlert"; Expected = $expectedException }
-                @{ MetricAlert = [PSCustomObject]@{Name = "Value" }; Expected = $expectedException }
-            ) { param($MetricAlert, $Expected)
-                { Add-ArmApplicationInsightsMetricAlertCriteriaODataType -MetricAlert $MetricAlert } | Should -Throw -ErrorId $Expected
-            }
-
-            $expectedException = "ParameterArgumentValidationErrorNullNotAllowed"
-            It "Given null 'MetricAlert', it throws '<Expected>'" -TestCases @(
-                @{ MetricAlert = $null; Expected = $expectedException }
-            ) { param($MetricAlert, $Expected)
-                { Add-ArmApplicationInsightsMetricAlertCriteriaODataType -MetricAlert $MetricAlert } | Should -Throw -ErrorId $Expected
+            $expectedException = "ParameterArgumentValidationError"
+            It "Given valid '<Name>' parameter and invalid '<ShortName>' parameter, it throws '<Expected>'" -TestCases @(
+            	@{ Name = $expectedName; ShortName = " "; Expected = $expectedException }
+            ) { param($Name, $ShortName, $Expected)
+            	{ New-ArmApplicationInsightsActionGroup -Name $Name -ShortName $ShortName } | Should -Throw -ErrorId $expectedException
             }
 
             $expectedException = "ParameterArgumentValidationErrorNullNotAllowed"
-            It "Given a valid 'MetricAlert' and invalid, it throws '<Expected>'" -TestCases @(
+            It "Given a valid '<MetricAlert>' and invalid '<ODataType>'', it throws '<Expected>'" -TestCases @(
                 @{ ODataType = "(*&(_&^%$)("; Expected = $expectedException },
                 @{ ODataType = $null; Expected = $expectedException },
                 @{ ODataType = ""; Expected = $expectedException }
@@ -84,7 +76,6 @@ InModuleScope PoshArmDeployment {
             ) { param($MetricAlert, $ODataType, $Expected)
                 { Add-ArmApplicationInsightsMetricAlertCriteriaODataType -MetricAlert $MetricAlert -ODataType $ODataType } | Should -Throw -ErrorId $Expected
             }
-
         }
 
         Context "Integration tests" {
