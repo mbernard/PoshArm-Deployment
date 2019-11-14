@@ -18,7 +18,7 @@ InModuleScope PoshArmDeployment {
 
         Context "Unit tests" {
 
-            It "Given valid 'ActionGroup', Role Id, Name and one or more ArmRoleReceivers it returns '<Expected>'" -TestCases @(
+            It "Given valid 'ActionGroup'(s), Role Id, Name and one or more ArmRoleReceivers it returns '<Expected>'" -TestCases @(
                 @{  
                     Name                     = $ExpectedName
                     RoleId                   = $ExpectedRoleId

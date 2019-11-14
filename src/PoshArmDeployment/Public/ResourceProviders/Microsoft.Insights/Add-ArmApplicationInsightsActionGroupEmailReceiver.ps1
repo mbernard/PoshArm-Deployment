@@ -17,11 +17,12 @@ function Add-ArmApplicationInsightsActionGroupEmailReceiver {
     )
     
     If ($PSCmdlet.ShouldProcess("Adding email receiver to Application Insights Action Group")) {
-        $ActionGroup.properties.emailReceivers += @(@{
+        $ActionGroup.properties.emailReceivers +=
+        @{
             name                 = $Name
             emailAddress         = $EmailAddress
             useCommonAlertSchema = -not $DisableCommonAlertSchema.ToBool()
-        })
+        }
     }
 
     return $ActionGroup

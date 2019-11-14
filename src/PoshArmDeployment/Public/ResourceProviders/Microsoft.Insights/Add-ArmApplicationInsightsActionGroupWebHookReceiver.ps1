@@ -15,13 +15,13 @@ function Add-ArmApplicationInsightsActionGroupWebHookReceiver {
         $DisableCommonAlertSchema
     )
     
-    If ($PSCmdlet.ShouldProcess("Adding WebHook receiver to Application Insights Action Group")) {
-        $ActionGroup.properties.webHookReceivers += @(@{
+    If ($PSCmdlet.ShouldProcess("Adding webhook receiver to Application Insights Action Group")) {
+        $ActionGroup.properties.webHookReceivers += 
+        @{
             name                 = $Name
             serviceUri           = $ServiceUri
             useCommonAlertSchema = -not $DisableCommonAlertSchema.ToBool()
-        })
+        }
     }
-
     return $ActionGroup
 }

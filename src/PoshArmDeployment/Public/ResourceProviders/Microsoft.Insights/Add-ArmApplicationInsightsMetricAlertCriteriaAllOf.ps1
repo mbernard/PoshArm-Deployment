@@ -31,7 +31,7 @@ function Add-ArmApplicationInsightsMetricAlertCriteriaAllOf {
     )
     
     if ($PSCmdlet.ShouldProcess("Adding allOf criteria to Application Insights Metric Alert")) {
-        $MetricAlert.properties.criteria.allOf += @(
+        $MetricAlert.properties.criteria.allOf +=
             @{
                 name            = $Name
                 metricName      = $MetricName
@@ -41,7 +41,6 @@ function Add-ArmApplicationInsightsMetricAlertCriteriaAllOf {
                 threshold       = $Threshold
                 timeAggregation = $TimeAggregation
             }
-        )
     }
     
     return $MetricAlert
