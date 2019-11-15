@@ -9,7 +9,7 @@ function Add-ArmApplicationInsightsMetricAlertCriteriaODataType {
         [ValidatePattern("^(\[.*\]|[a-zA-Z0-9-.]*)$")]
         $ODataType = "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
     )
-    
+
     If ($PSCmdlet.ShouldProcess("Adding OData Type criteria to Application Insights Metric Alert")) {
         $MetricAlert.properties.criteria["odata.type"] = $ODataType
     }

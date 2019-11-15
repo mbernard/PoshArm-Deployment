@@ -3,12 +3,12 @@ Import-Module "$ScriptDir/../../../../PoshArmDeployment" -Force
 
 InModuleScope PoshArmDeployment {
     Describe "Add-ArmApplicationInsightsActionGroupEmailReceiver" {
-        
+
         $ResourceType = "Microsoft.Insights/actionGroups"
         $expectedShortName = "SomeActionGroup"
         $ExpectedName = "Some Name"
         $ExpectedServiceUri = "service.uri.com"
-        
+
         BeforeEach {
             $ActionGroup = New-ArmResourceName $ResourceType `
                 | New-ArmApplicationInsightsActionGroup -ShortName $expectedShortName
@@ -19,23 +19,23 @@ InModuleScope PoshArmDeployment {
         Context "Unit tests" {
 
             It "Given valid '<ActionGroup>', '<Name>', and '<ServiceUri>', it returns '<Expected>'" -TestCases @(
-                @{  
+                @{
                     Name                     = $ExpectedName
                     ServiceUri               = $ExpectedServiceUri
                 }
-                @{  
+                @{
                     Name                     = $ExpectedName
                     ServiceUri               = $ExpectedServiceUri
                     DisableCommonAlertSchema = $true
                 }
-                @{  
+                @{
                     Name                     = $ExpectedName
                     ServiceUri               = $ExpectedServiceUri
                     NumberOfReceivers        = 3
                 }
             ) {
                 param($Name, $ServiceUri, $DisableCommonAlertSchema = $false, $NumberOfReceivers = 1)
-                
+
                 for ($i = 0; $i -lt $NumberOfReceivers; $i++) {
                     $Expected.properties.webHookReceivers += @(
                         @{

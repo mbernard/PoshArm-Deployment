@@ -3,7 +3,7 @@ Import-Module "$ScriptDir/../../../../PoshArmDeployment" -Force
 
 InModuleScope PoshArmDeployment {
     Describe "Add-ArmApplicationInsightsActionGroupEmailReceiver" {
-        
+
         $ResourceType = "Microsoft.Insights/actionGroups"
         $expectedShortName = "SomeActionGroup"
         $ExpectedName = "Some Name"
@@ -18,23 +18,23 @@ InModuleScope PoshArmDeployment {
 
         Context "Unit tests" {
             It "Given valid '<ActionGroup>'(s), '<Name>', and '<Email>', it returns '<Expected>'" -TestCases @(
-                @{  
+                @{
                     Name                     = $ExpectedName
                     Email                    = $ExpectedEmail
                 },
-                @{  
+                @{
                     Name                     = $ExpectedName
                     Email                    = $ExpectedEmail
                     DisableCommonAlertSchema = $true
                 },
-                @{  
+                @{
                     Name                     = $ExpectedName
                     Email                    = $ExpectedEmail
                     NumberOfReceivers        = 3
                 }
             ) {
                 param($Name, $Email, $DisableCommonAlertSchema = $false, $NumberOfReceivers = 1)
-                
+
                 for ($i = 0; $i -lt $NumberOfReceivers; $i++) {
                     $Expected.properties.emailReceivers += @(
                         @{

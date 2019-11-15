@@ -3,10 +3,10 @@ Import-Module "$ScriptDir/../../../../PoshArmDeployment" -Force
 
 InModuleScope PoshArmDeployment {
     Describe "New-ArmApplicationInsightsActionGroup" {
-        
+
         $ResourceType = "Microsoft.Insights/metricAlerts"
         $expectedName = "SomeAG"
-        
+
         BeforeEach {
             $MetricAlert = New-ArmResourceName $ResourceType `
                 | New-ArmApplicationInsightsMetricAlert
@@ -19,7 +19,7 @@ InModuleScope PoshArmDeployment {
             $expectedTypes = @("ApplicationInsightsMetricAlert", "ArmResource")
 
             It "Given valid '<MetricAlert>', it returns '<Expected>'" -TestCases @(
-                @{  
+                @{
                     Types = $expectedTypes
                 }
             ) {
@@ -34,10 +34,10 @@ InModuleScope PoshArmDeployment {
 
                 $Types | ForEach-Object { $actual.PSTypeNames | Should -Contain $_ }
             }
-            
+
             $expectedODataType = "Microsoft.Azure.Monitor.MultipleResourceMultipleMetricCriteria"
             It "Given valid '<MetricAlert>' and '<ODataType>', it returns '<Expected>'" -TestCases @(
-                @{  
+                @{
                     ODataType = $expectedODataType
                     Types = $expectedTypes
                 }

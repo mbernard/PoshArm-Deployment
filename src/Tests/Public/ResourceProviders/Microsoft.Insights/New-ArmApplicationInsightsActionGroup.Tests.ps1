@@ -6,11 +6,11 @@ InModuleScope PoshArmDeployment {
         $ResourceType = "Microsoft.Insights/actionGroups"
         $expectedName = "name1"
         $expectedShortName = "n1"
-        
+
         Context "Unit tests" {
             $expectedTypes = @("ApplicationInsightsActionGroup", "ArmResource")
             It "Given valid 'Name' and 'ShortName' parameters, it returns '<Expected>'" -TestCases @(
-                @{  
+                @{
                     Name = $expectedName;
                     ShortName = $expectedShortName;
                     Types = $expectedTypes;
@@ -72,14 +72,14 @@ InModuleScope PoshArmDeployment {
                 $actual = $Name | New-ArmApplicationInsightsActionGroup `
                     -ShortName $ShortName `
                     -ApiVersion $ApiVersion `
-                    -Disabled 
+                    -Disabled
 
                 $Depth = 3
                 ($actual | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
                     | Should -BeExactly ($Expected | ConvertTo-Json -Depth $Depth -Compress| ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
 
                 $Types | ForEach-Object { $actual.PSTypeNames | Should -Contain $_ }
-                
+
             }
 
             $ParameterArgumentValidationError = "ParameterArgumentValidationError"
@@ -109,7 +109,7 @@ InModuleScope PoshArmDeployment {
                     | Add-ArmResource
                 }
             }
-            
+
             It "Multiple" -Test {
                 Invoke-IntegrationTest -ArmResourcesScriptBlock `
                 {

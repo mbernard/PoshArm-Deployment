@@ -3,7 +3,7 @@ Import-Module "$ScriptDir/../../../../PoshArmDeployment" -Force
 
 InModuleScope PoshArmDeployment {
     Describe "Add-ArmApplicationInsightsActionGroupArmRoleReceiver" {
-        
+
         $ResourceType = "Microsoft.Insights/actionGroups"
         $ExpectedShortName = "SomeActionGroup"
         $ExpectedName = "SomeArmRole"
@@ -19,23 +19,23 @@ InModuleScope PoshArmDeployment {
         Context "Unit tests" {
 
             It "Given valid 'ActionGroup'(s), Role Id, Name and one or more ArmRoleReceivers it returns '<Expected>'" -TestCases @(
-                @{  
+                @{
                     Name                     = $ExpectedName
                     RoleId                   = $ExpectedRoleId
                 },
-                @{  
+                @{
                     Name                     = $ExpectedName
                     RoleId                   = $ExpectedRoleId
                     DisableCommonAlertSchema = $true
                 },
-                @{  
+                @{
                     Name                     = $ExpectedName
                     RoleId                   = $ExpectedRoleId
                     NumberOfReceivers        = 3
                 }
             ) {
                 param($Name, $RoleId, $DisableCommonAlertSchema = $false, $NumberOfReceivers = 1)
-                
+
                 for ($i = 0; $i -lt $NumberOfReceivers; $i++) {
                     $Expected.properties.armRoleReceivers += @(
                         @{

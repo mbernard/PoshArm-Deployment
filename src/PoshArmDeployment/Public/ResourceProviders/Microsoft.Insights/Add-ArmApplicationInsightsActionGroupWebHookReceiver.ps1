@@ -14,9 +14,9 @@ function Add-ArmApplicationInsightsActionGroupWebHookReceiver {
         [switch]
         $DisableCommonAlertSchema
     )
-    
+
     If ($PSCmdlet.ShouldProcess("Adding webhook receiver to Application Insights Action Group")) {
-        $ActionGroup.properties.webHookReceivers += 
+        $ActionGroup.properties.webHookReceivers +=
         @{
             name                 = $Name
             serviceUri           = $ServiceUri

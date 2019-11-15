@@ -3,14 +3,14 @@ Import-Module "$ScriptDir/../../../../PoshArmDeployment" -Force
 
 InModuleScope PoshArmDeployment {
     Describe "Add-ArmApplicationInsightsMetricAlertCriteriaAllOf" {
-        
+
         $ResourceType = "Microsoft.Insights/metricAlerts"
         $ExpectedMetricAlertName = "someMetricAlert"
         BeforeEach {
             $MetricAlert = New-ArmApplicationInsightsMetricAlert -Name $ExpectedMetricAlertName
             $Expected = New-ArmApplicationInsightsMetricAlert -Name $ExpectedMetricAlertName
         }
-    
+
         $ExpectedName = 'SomeName'
         $ExpectedMetricName = 'SomeMetricName'
         $ExpectedMetricNamespace = 'SomeNamespace'
@@ -25,7 +25,7 @@ InModuleScope PoshArmDeployment {
 
         Context "Unit tests" {
             It "Given valid mandatory params it returns '<Expected>'" -TestCases @(
-                @{  
+                @{
                     Name             = $ExpectedName
                     MetricName       = $ExpectedMetricName
                     MetricNamespace  = $ExpectedMetricNamespace
@@ -34,7 +34,7 @@ InModuleScope PoshArmDeployment {
                     Threshold        = $ExpectedThreshold
                     TimeAggregation  = $ExpectedTimeAggregation
                 }
-                @{  
+                @{
                     Name             = $ExpectedName
                     MetricName       = $ExpectedMetricName
                     MetricNamespace  = $ExpectedMetricNamespace
@@ -54,7 +54,7 @@ InModuleScope PoshArmDeployment {
                     $Threshold,
                     $TimeAggregation,
                     $NumberOfCriteria = 1)
-                
+
                 for ($i = 0; $i -lt $NumberOfCriteria; $i++) {
                     $Expected.properties.criteria.allOf += @(
                         @{
@@ -85,7 +85,7 @@ InModuleScope PoshArmDeployment {
                         -Operator $Operator `
                         -Threshold $Threshold `
                         -TimeAggregation $TimeAggregation
-                }    
+                }
 
                 $Depth = 7
                 ($actual | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `

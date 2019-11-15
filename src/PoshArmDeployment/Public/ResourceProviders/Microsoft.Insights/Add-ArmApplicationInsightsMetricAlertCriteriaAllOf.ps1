@@ -29,7 +29,7 @@ function Add-ArmApplicationInsightsMetricAlertCriteriaAllOf {
         [ValidateSet("Average", "Minimum", "Maximum", "Total", "Count")]
         $TimeAggregation
     )
-    
+
     if ($PSCmdlet.ShouldProcess("Adding allOf criteria to Application Insights Metric Alert")) {
         $MetricAlert.properties.criteria.allOf +=
             @{
@@ -42,6 +42,6 @@ function Add-ArmApplicationInsightsMetricAlertCriteriaAllOf {
                 timeAggregation = $TimeAggregation
             }
     }
-    
+
     return $MetricAlert
 }

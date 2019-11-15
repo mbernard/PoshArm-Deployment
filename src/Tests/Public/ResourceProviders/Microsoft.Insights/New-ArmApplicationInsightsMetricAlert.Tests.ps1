@@ -104,7 +104,7 @@ InModuleScope PoshArmDeployment {
                     | Should -BeExactly ($Expected | ConvertTo-Json -Depth $Depth -Compress| ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
 
                 $Types | ForEach-Object { $actual.PSTypeNames | Should -Contain $_ }
-                
+
             }
 
             $ParameterArgumentValidationError = "ParameterArgumentValidationError"

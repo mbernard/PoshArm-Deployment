@@ -14,7 +14,7 @@ function Add-ArmApplicationInsightsActionGroupArmRoleReceiver {
         [switch]
         $DisableCommonAlertSchema
     )
-    
+
     If ($PSCmdlet.ShouldProcess("Adding ARM role receiver to Application Insights Action Group")) {
         $ActionGroup.properties.armRoleReceivers +=
             @{

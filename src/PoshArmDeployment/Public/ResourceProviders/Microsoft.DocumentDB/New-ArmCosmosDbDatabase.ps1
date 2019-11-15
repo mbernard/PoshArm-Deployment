@@ -41,7 +41,7 @@ function New-ArmCosmosDbDatabase {
 
         $Database.PSTypeNames.Add("ArmResource")
         $Database | Add-ArmDependencyOn -Dependency $CosmosDbAccount
-        
+
         return $Database
     }
 }

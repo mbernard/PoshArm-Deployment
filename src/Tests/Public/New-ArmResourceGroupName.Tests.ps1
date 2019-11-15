@@ -7,7 +7,7 @@ Describe "New-ArmResourceGroupName" {
         @{ ProjectName = "pn1"; Environmentcode = "ec2"; Context = "c3"; Location = "l4"; Expected = "pn1-ec2-c3-l4" ; }
         @{ ProjectName = "PN1"; Environmentcode = "EC2"; Context = "C3"; Location = "L4"; Expected = "pn1-ec2-c3-l4" ; }
         @{ ProjectName = ""; Environmentcode = "ec2"; Context = "c3"; Location = "l4"; Expected = "-ec2-c3-l4" ; }
-        @{ ProjectName = ""; Environmentcode = ""; Context = ""; Location = ""; Expected = "-" ; } 
+        @{ ProjectName = ""; Environmentcode = ""; Context = ""; Location = ""; Expected = "-" ; }
     ) {
         param($ProjectName, $EnvironmentCode, $Context, $Location, $Expected)
 
@@ -28,9 +28,9 @@ Describe "New-ArmResourceGroupName" {
     }
 
     It "Given a delimiter '<Delimiter>' then name is equal to '<Expected>'" -TestCases @(
-        @{ Delimiter = "*"; Expected = "*"}   
-        @{ Delimiter = "a"; Expected = "a"}   
-        @{ Delimiter = "abc"; Expected = "abc"}   
+        @{ Delimiter = "*"; Expected = "*"}
+        @{ Delimiter = "a"; Expected = "a"}
+        @{ Delimiter = "abc"; Expected = "abc"}
     ){
         param($Delimiter, $Expected)
         $name = New-ArmResourceGroupName -Delimiter $Delimiter
