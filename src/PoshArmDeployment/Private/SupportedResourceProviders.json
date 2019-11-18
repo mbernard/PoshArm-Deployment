@@ -118,5 +118,9 @@
   {
     "resourceType": "Microsoft.AlertsManagement/smartDetectorAlertRules",
     "shortName": "sdar"
+  },
+  {
+    "resourceType": "Microsoft.Portal/dashboards",
+    "shortName": "pdb"
   }
 ]
