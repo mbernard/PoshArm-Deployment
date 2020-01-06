@@ -3,6 +3,7 @@ Import-Module "$ScriptDir/../../../../PoshArmDeployment" -Force
 
 InModuleScope PoshArmDeployment {
   Describe "New-ArmDashboardsMarkdown" {
+    $Depth = 4
     Context "Unit tests" {
       It "Given a '<Content>', '<Title>', '<Subtitle>' it returns '<Expected>'" -TestCases @(
         @{ 
@@ -31,8 +32,8 @@ InModuleScope PoshArmDeployment {
         param($Content, $Title, $Subtitle, $Expected)
 
         $actual = New-ArmDashboardsMarkdown -Content $Content -Title $Title -Subtitle $Subtitle
-        ($actual | ConvertTo-Json -Depth 4 -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
-        | Should -Be ($Expected | ConvertTo-Json -Depth 4 -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
+        ($actual | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
+        | Should -Be ($Expected | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
       }     
     }
   }

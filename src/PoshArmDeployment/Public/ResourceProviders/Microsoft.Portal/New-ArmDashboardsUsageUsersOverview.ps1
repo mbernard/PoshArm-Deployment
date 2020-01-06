@@ -14,6 +14,7 @@ function New-ArmDashboardsUsageUsersOverview {
   )
 
   If ($PSCmdlet.ShouldProcess("Adding UsageUsersOverviewPart to Dashboards")) {
+    $Now = Get-Date
     $ApplicationInsightsResourceName = $ApplicationInsights.Name
     $UsageUserOverview = [PSCustomObject][ordered]@{
       PSTypeName = "DashboardPart"
@@ -32,7 +33,7 @@ function New-ArmDashboardsUsageUsersOverview {
             value = @{
               durationMs            = 86400000
               endTime               = $null
-              createdTime           = '2018-05-04T01:20:33.345Z'
+              createdTime           = $Now.ToUniversalTime().ToString('O')
               isInitialTime         = $false
               grain                 = 1
               useDashboardTimeRange = $false

@@ -3,7 +3,7 @@ Import-Module "$ScriptDir/../../../../PoshArmDeployment" -Force
 
 InModuleScope PoshArmDeployment {
   Describe "New-ArmDashboardsWebTestsPinned" {
-
+    $Depth = 99
     $ExpectedResourceName = 'SomeApplicationInsight'
     BeforeEach {
       $ApplicationInsights = New-ArmApplicationInsightsResource -Name $ExpectedResourceName
@@ -42,8 +42,8 @@ InModuleScope PoshArmDeployment {
                 value = @{
                   durationMs            = 86400000
                   endTime               = $null
-                  createdTime           = '2018-05-04T01:20:33.345Z'
-                  isInitialTime         = $true
+                  createdTime           = $null
+                  isInitialTime         = $false
                   grain                 = 1
                   useDashboardTimeRange = $false
                 }
@@ -73,8 +73,11 @@ InModuleScope PoshArmDeployment {
           -SubscriptionId $SubscriptionId `
           -ResourceGroupName $ResourceGroupName
 
-        ($actual | ConvertTo-Json -Compress -Depth 99 | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
-        | Should -BeExactly ($Expected | ConvertTo-Json -Compress -Depth 99 | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
+        [datetime]::Parse($actual.metadata.inputs[1].value.createdTime) - (Get-Date) | Should -BeLessThan ([TimeSpan]::FromSeconds(5))
+        $actual.metadata.inputs[1].value.createdTime = $null
+
+        ($actual | ConvertTo-Json -Compress -Depth $Depth | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
+        | Should -BeExactly ($Expected | ConvertTo-Json -Compress -Depth $Depth | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
       }
 
 

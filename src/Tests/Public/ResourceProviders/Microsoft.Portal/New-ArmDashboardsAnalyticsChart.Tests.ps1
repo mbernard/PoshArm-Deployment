@@ -3,13 +3,13 @@ Import-Module "$ScriptDir/../../../../PoshArmDeployment" -Force
 
 InModuleScope PoshArmDeployment {
   Describe "New-ArmDashboardsAnalyticsChart" {
-    $InsightsResourceType = "microsoft.insights/components"
-    $ExpectedLocation = "SomeLocation"
-    $ApplicationInsights = New-ArmResourceName $InsightsResourceType `
-    | New-ArmApplicationInsightsResource -Location $ExpectedLocation
+    $Depth = 6
+    $ApplicationInsights = New-ArmResourceName "microsoft.insights/components" `
+    | New-ArmApplicationInsightsResource -Location "SomeLocation"
 
     Context "Unit tests" {
-      It "Given a '<Source>', '<SubscriptionId>', '<ResourceGroupName>', '<Query>', '<Dimensions>', '<ResourceType>', '<ChartType>', '<Title>', '<SubTitle>' it returns '<Expected>'" -TestCases @(
+      It "Given a '<Source>', '<SubscriptionId>', '<ResourceGroupName>', '<Query>', '<Dimensions>', '<ResourceType>',
+       '<ChartType>', '<Title>', '<SubTitle>' it returns '<Expected>'" -TestCases @(
         @{ 
           Source            = $ApplicationInsights
           SubscriptionId    = 'subscription-id'
@@ -97,8 +97,8 @@ InModuleScope PoshArmDeployment {
 
         $actual = New-ArmDashboardsAnalyticsChart -Source $Source -SubscriptionId $SubscriptionId -ResourceGroupName $ResourceGroupName -Query $Query `
           -Dimensions $Dimensions -ResourceType $ResourceType -ChartType $ChartType -Title $Title -SubTitle $SubTitle
-        ($actual | ConvertTo-Json -Depth 6 -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
-        | Should -Be ($Expected | ConvertTo-Json -Depth 6 -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
+        ($actual | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
+        | Should -Be ($Expected | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
       }     
     }
   }

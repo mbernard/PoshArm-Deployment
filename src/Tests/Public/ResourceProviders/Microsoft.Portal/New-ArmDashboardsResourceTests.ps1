@@ -3,7 +3,7 @@ Import-Module "$ScriptDir/../../../../PoshArmDeployment" -Force
 
 InModuleScope PoshArmDeployment {
   Describe "New-ArmDashboardsResource" {
-
+    $Depth = 99
     $ResourceType = 'microsoft.portal/dashboards'
     BeforeEach {
       $ResourceName = New-ArmResourceName $ResourceType `
@@ -47,8 +47,8 @@ InModuleScope PoshArmDeployment {
         
         $actual = $ResourceName | New-ArmDashboardsResource -ApiVersion $ApiVersion -Location $Location
 
-        ($actual | ConvertTo-Json -Compress -Depth 99 | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
-        | Should -BeExactly ($Expected | ConvertTo-Json -Compress -Depth 99 | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
+        ($actual | ConvertTo-Json -Compress -Depth $Depth | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
+        | Should -BeExactly ($Expected | ConvertTo-Json -Compress -Depth $Depth | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
       }
 
       Context "Integration tests" {

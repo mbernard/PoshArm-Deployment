@@ -2,10 +2,10 @@ function New-ArmDashboardsMonitorChart {
   [CmdletBinding(SupportsShouldProcess = $true)]
   [OutputType("DashboardPart")]
   Param(
-    [PSCustomObject[]]
+    [PSTypeName("ChartMetric")][object[]]
     [Parameter(Mandatory)]
     $Metrics,
-    [PSCustomObject]
+    [PSTypeName("ChartVisualization")]
     [Parameter(Mandatory)]
     $Visualization,
     [string]

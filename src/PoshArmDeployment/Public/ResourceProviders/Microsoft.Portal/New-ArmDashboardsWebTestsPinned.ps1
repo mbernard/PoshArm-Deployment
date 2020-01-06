@@ -14,6 +14,7 @@ function New-ArmDashboardsWebTestsPinned {
   )
 
   If ($PSCmdlet.ShouldProcess("Adding WebTestsPinnedPart to Dashboards")) {
+    $Now = Get-Date
     $ApplicationInsightsResourceName = $ApplicationInsights.Name
     $WebTests = [PSCustomObject][ordered]@{
       PSTypeName = "DashboardPart"
@@ -32,8 +33,8 @@ function New-ArmDashboardsWebTestsPinned {
             value = @{
               durationMs            = 86400000
               endTime               = $null
-              createdTime           = '2018-05-04T01:20:33.345Z'
-              isInitialTime         = $true
+              createdTime           = $Now.ToUniversalTime().ToString('O')
+              isInitialTime         = $false
               grain                 = 1
               useDashboardTimeRange = $false
             }

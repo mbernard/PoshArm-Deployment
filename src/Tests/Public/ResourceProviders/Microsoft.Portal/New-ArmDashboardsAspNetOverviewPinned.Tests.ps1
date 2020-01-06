@@ -3,10 +3,9 @@ Import-Module "$ScriptDir/../../../../PoshArmDeployment" -Force
 
 InModuleScope PoshArmDeployment {
   Describe "New-ArmDashboardsAspNetOverviewPinned" {
-    $InsightsResourceType = "microsoft.insights/components"
-    $ExpectedLocation = "SomeLocation"
-    $ApplicationInsights = New-ArmResourceName $InsightsResourceType `
-    | New-ArmApplicationInsightsResource -Location $ExpectedLocation
+    $Depth = 3
+    $ApplicationInsights = New-ArmResourceName "microsoft.insights/components" `
+    | New-ArmApplicationInsightsResource -Location "SomeLocation"
 
     Context "Unit tests" {
       It "Given a '<ApplicationInsights>' it returns '<Expected>'" -TestCases @(
@@ -36,8 +35,8 @@ InModuleScope PoshArmDeployment {
         param($ApplicationInsights, $Expected)
 
         $actual = New-ArmDashboardsAspNetOverviewPinned -ApplicationInsights $ApplicationInsights 
-        ($actual | ConvertTo-Json -Depth 3 -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
-        | Should -Be ($Expected | ConvertTo-Json -Depth 3 -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
+        ($actual | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
+        | Should -Be ($Expected | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
       }     
     }
   }

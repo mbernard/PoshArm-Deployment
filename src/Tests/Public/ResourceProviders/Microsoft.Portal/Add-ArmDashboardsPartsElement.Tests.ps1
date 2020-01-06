@@ -3,6 +3,7 @@ Import-Module "$ScriptDir/../../../../PoshArmDeployment" -Force
 
 InModuleScope PoshArmDeployment {
     Describe "Add-ArmDashboardsPartsElement" {
+        $Depth = 9
         Context "Unit tests" {
             It "Given a dashboard with no parts and '<Part>', it returns '<Expected>' with one element" -TestCases @(
                 @{ Dashboard = [PSCustomObject][ordered]@{
@@ -23,7 +24,8 @@ InModuleScope PoshArmDeployment {
                         }
                         resources   = @()
                         dependsOn   = @()
-                    }; Part  = [PSCustomObject][ordered]@{
+                    }; 
+                    Part     = [PSCustomObject][ordered]@{
                         PSTypeName = "DashboardPart"
                         position   = @{ }
                         metadata   = @{
@@ -82,8 +84,8 @@ InModuleScope PoshArmDeployment {
                 param($Dashboard, $Part, $Expected)
 
                 $actual = Add-ArmDashboardsPartsElement -Dashboards $Dashboard -Part $Part
-                ($actual | ConvertTo-Json -Depth 9 -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
-                | Should -Be ($Expected | ConvertTo-Json -Depth 9 -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
+                ($actual | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
+                | Should -Be ($Expected | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
             }
             It "Given a dashboard with parts and '<Part>', it returns '<Expected>' with one more part" -TestCases @(
                 @{ Dashboard = [PSCustomObject][ordered]@{
@@ -201,8 +203,8 @@ InModuleScope PoshArmDeployment {
                 param($Dashboard, $Part, $Expected)
 
                 $actual = Add-ArmDashboardsPartsElement -Dashboards $Dashboard -Part $Part
-                ($actual | ConvertTo-Json -Depth 9 -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
-                | Should -Be ($Expected | ConvertTo-Json -Depth 9 -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
+                ($actual | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
+                | Should -Be ($Expected | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
             }
         }
     }

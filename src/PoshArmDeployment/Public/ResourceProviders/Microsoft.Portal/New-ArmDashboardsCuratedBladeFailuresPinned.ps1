@@ -8,6 +8,7 @@ function New-ArmDashboardsCuratedBladeFailuresPinned {
   )
 
   If ($PSCmdlet.ShouldProcess("Adding CuratedBladeFailuresPinnedPart to Dashboards")) {
+    $Now = Get-Date
     $ApplicationInsightsResourceId = $ApplicationInsights._ResourceId
     $CuratedBlade = [PSCustomObject][ordered]@{
       PSTypeName = "DashboardPart"
@@ -24,7 +25,7 @@ function New-ArmDashboardsCuratedBladeFailuresPinned {
               timeContext = @{
                 durationMs            = 86400000
                 endTime               = $null
-                createdTime           = '2018-05-04T01:20:33.345Z'
+                createdTime           = $Now.ToUniversalTime().ToString('O')
                 isInitialTime         = $false
                 grain                 = 1
                 useDashboardTimeRange = $false

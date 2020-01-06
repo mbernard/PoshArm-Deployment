@@ -3,10 +3,9 @@ Import-Module "$ScriptDir/../../../../PoshArmDeployment" -Force
 
 InModuleScope PoshArmDeployment {
   Describe "New-ArmDashboardsCuratedBladePerformancePinned" {
-    $InsightsResourceType = "microsoft.insights/components"
-    $ExpectedLocation = "SomeLocation"
-    $ApplicationInsights = New-ArmResourceName $InsightsResourceType `
-    | New-ArmApplicationInsightsResource -Location $ExpectedLocation
+    $Depth = 5
+    $ApplicationInsights = New-ArmResourceName "microsoft.insights/components" `
+    | New-ArmApplicationInsightsResource -Location "SomeLocation"
 
     Context "Unit tests" {
       It "Given a '<ApplicationInsights>' it returns '<Expected>'" -TestCases @(
@@ -27,7 +26,7 @@ InModuleScope PoshArmDeployment {
                     timeContext = @{
                       durationMs            = 86400000
                       endTime               = $null
-                      createdTime           = '2018-05-04T01:20:33.345Z'
+                      createdTime           = $null
                       isInitialTime         = $false
                       grain                 = 1
                       useDashboardTimeRange = $false
@@ -49,8 +48,10 @@ InModuleScope PoshArmDeployment {
         param($ApplicationInsights, $Expected)
 
         $actual = New-ArmDashboardsCuratedBladePerformancePinned -ApplicationInsights $ApplicationInsights 
-        ($actual | ConvertTo-Json -Depth 5 -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
-        | Should -Be ($Expected | ConvertTo-Json -Depth 5 -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
+        [datetime]::Parse($actual.metadata.inputs[1].value.timeContext.createdTime) - (Get-Date) | Should -BeLessThan ([TimeSpan]::FromSeconds(5))
+        $actual.metadata.inputs[1].value.timeContext.createdTime = $null
+        ($actual | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
+        | Should -Be ($Expected | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
       }     
     }
   }

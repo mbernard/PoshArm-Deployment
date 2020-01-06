@@ -3,7 +3,7 @@ Import-Module "$ScriptDir/../../../../PoshArmDeployment" -Force
 
 InModuleScope PoshArmDeployment {
   Describe "New-ArmDashboardsProactiveDetectionAsync" {
-
+    $Depth = 99
     $ExpectedResourceName = 'SomeApplicationInsight'
     BeforeEach {
       $ApplicationInsights = New-ArmApplicationInsightsResource -Name $ExpectedResourceName
@@ -54,8 +54,8 @@ InModuleScope PoshArmDeployment {
           -SubscriptionId $SubscriptionId `
           -ResourceGroupName $ResourceGroupName
 
-        ($actual | ConvertTo-Json -Compress -Depth 99 | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
-        | Should -BeExactly ($Expected | ConvertTo-Json -Compress -Depth 99 | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
+        ($actual | ConvertTo-Json -Compress -Depth $Depth | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
+        | Should -BeExactly ($Expected | ConvertTo-Json -Compress -Depth $Depth | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
       }
 
 
