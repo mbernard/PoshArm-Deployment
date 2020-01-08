@@ -6,7 +6,7 @@ function New-ArmDnsZoneARecord {
         [Parameter(Mandatory)]
         $DnsZone,
         [string]
-        [ValidatePattern('^(\[.*\]|)|([a-z0-9-_]{1,127})$')]
+        [ValidatePattern('^(\[.*\])|(([*@]\.)?[a-z0-9-\.]{1,127})$')]
         [Parameter(Mandatory, ValueFromPipeline)]
         $Name,
         [int]
@@ -38,6 +38,6 @@ function New-ArmDnsZoneARecord {
         }
 
         $aRecord.PSTypeNames.Add("ArmResource")
-        return $aRecord
+        return $aRecord | Add-ArmDependencyOn -Dependency $PrivateDnsZone -PassThru
     }
 }

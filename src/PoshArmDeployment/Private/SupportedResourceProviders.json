@@ -48,8 +48,20 @@
     "shortName": "dnsz"
   },
   {
+    "resourceType": "Microsoft.Network/privateDnsZones",
+    "shortName": "pdnsz"
+  },
+  {
     "resourceType": "Microsoft.Network/dnszones/a",
     "shortName": "dnsa"
+  },
+  {
+    "resourceType": "Microsoft.Network/privateDnsZones/A",
+    "shortName": "pdnsa"
+  },
+  {
+    "resourceType": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+    "shortName": "pdnszvnl"
   },
   {
     "resourceType": "Microsoft.ManagedIdentity/userAssignedIdentities",

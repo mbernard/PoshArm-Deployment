@@ -3,12 +3,9 @@ function New-ArmDnsZone {
     [OutputType("DNSZ")]
     Param(
         [string]
-        [ValidatePattern('^(\[.*\]|)|(([a-z0-9-_]{1,127}\.)+([a-z]{2,3}))$')]
+        [ValidatePattern('^(\[.*\])|(([a-z0-9-_]{1,127}\.)+([a-z]{2,3}))$')]
         [Parameter(Mandatory, ValueFromPipeline)]
         $Name,
-        [string]
-        [ValidateSet("Public", "Private")]
-        $ZoneType = "Public",
         [string]
         $ApiVersion = "2018-05-01"
     )
@@ -22,7 +19,7 @@ function New-ArmDnsZone {
             apiVersion  = $ApiVersion
             location    = 'global'
             properties  = @{
-                zoneType                    = $ZoneType
+                zoneType                    = "Public"
                 registrationVirtualNetworks = @()
                 resolutionVirtualNetworks   = @()
             }
