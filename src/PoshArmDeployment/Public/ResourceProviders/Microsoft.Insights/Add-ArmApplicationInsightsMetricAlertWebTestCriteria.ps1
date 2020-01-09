@@ -14,7 +14,7 @@ function Add-ArmApplicationInsightsMetricAlertWebTestCriteria {
         [int]
         $FailedLocationCount = 1
     )
-    
+
     If ($PSCmdlet.ShouldProcess("Adding Web Test criteria to Application Insights Metric Alert")) {
         $ApplicationInsightsResourceId = $ApplicationInsights._ResourceId
         $WebTestResourceId = $WebTest._ResourceId
@@ -25,7 +25,7 @@ function Add-ArmApplicationInsightsMetricAlertWebTestCriteria {
             componentId         = $ApplicationInsightsResourceId
             failedLocationCount = $FailedLocationCount
         }
-        
+
         $MetricAlert.properties.scopes += $ApplicationInsightsResourceId
         $MetricAlert.properties.scopes += $WebTestResourceId
 

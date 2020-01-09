@@ -9,10 +9,11 @@ function Add-ArmApplicationInsightsMetricAlertAction {
         [Parameter(Mandatory)]
         $ActionGroup
     )
-    
+
     If ($PSCmdlet.ShouldProcess("Adding action to Application Insights Metric Alert")) {
         $ActionGroupResourceId = $ActionGroup._ResourceId
-        $MetricAlert.properties.actions += [PSCustomObject]@{
+        $MetricAlert.properties.actions +=
+        [PSCustomObject]@{
             actionGroupId = $ActionGroupResourceId
         }
 

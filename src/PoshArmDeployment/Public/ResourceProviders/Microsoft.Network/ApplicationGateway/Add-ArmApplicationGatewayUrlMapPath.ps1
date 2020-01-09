@@ -34,17 +34,17 @@ function Add-ArmApplicationGatewayUrlMapPath {
             properties = @{
                 paths               = $Paths
                 backendAddressPool  = @{
-                    id = "[concat($ApplicationGatewayResourceId, '/backendAddressPools/', '$($BackendAddressPoolName)')]" 
+                    id = "[concat($ApplicationGatewayResourceId, '/backendAddressPools/', '$($BackendAddressPoolName)')]"
                 }
                 backendHttpSettings = @{
-                    id = "[concat($ApplicationGatewayResourceId, '/backendHttpSettingsCollection/', '$($BackendHttpSettingsName)')]" 
+                    id = "[concat($ApplicationGatewayResourceId, '/backendHttpSettingsCollection/', '$($BackendHttpSettingsName)')]"
                 }
             }
         }
 
         $Map = $ApplicationGateway.properties.urlPathMaps | Where-Object { $_.name -Match $UrlMapName }
         $Map[0].properties.pathRules += $PathRule
-        
+
         return $ApplicationGateway
     }
 }

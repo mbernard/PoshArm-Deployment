@@ -67,7 +67,7 @@ function New-ArmResourceName {
 
         If ($PSCmdlet.ShouldProcess("Generating arm expression representig the resource name")) {
             $Name = $NamingConvention.ToLowerInvariant()
-            $Name = "[concat('$Name')]" 
+            $Name = "[concat('$Name')]"
             $Name = $Name.Replace("{delimiter}", $Delimiter)
             $Name = $Name.Replace("{projectname}", $ProjectName)
             $Name = $Name.Replace("{environmentcode}", $EnvironmentCode)

@@ -20,7 +20,7 @@ function Add-ArmServiceFabricExtension {
         $sfClusterId = $NodeType._ServiceFabricCluster._ResourceId
         If ($PSCmdlet.ShouldProcess("Adding service fabric extension to a virtual machine scale set")) {
             $SupportLogStorageAccountResourceId = $SupportLogStorageAccountResourceId | ConvertTo-ValueInTemplateExpression
-            
+
             $sfExtension = @{
                 name       = "ServiceFabricNodeVmExt_$nodeName"
                 properties = @{

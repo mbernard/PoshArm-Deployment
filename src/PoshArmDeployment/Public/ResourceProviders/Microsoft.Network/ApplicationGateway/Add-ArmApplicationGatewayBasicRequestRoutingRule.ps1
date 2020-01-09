@@ -44,9 +44,9 @@ function Add-ArmApplicationGatewayBasicRequestRoutingRule {
                 }
             }
         }
-        
+
         $ApplicationGateway.properties.requestRoutingRules += $RequestRoutingRule
-            
+
         return $ApplicationGateway
     }
 }
