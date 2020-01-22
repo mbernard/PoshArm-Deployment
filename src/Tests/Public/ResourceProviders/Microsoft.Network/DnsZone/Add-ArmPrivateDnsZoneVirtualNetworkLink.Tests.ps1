@@ -2,7 +2,7 @@ $ScriptDir = Split-Path -parent $MyInvocation.MyCommand.Path
 Import-Module "$ScriptDir/../../../../../PoshArmDeployment" -Force
 
 InModuleScope PoshArmDeployment {
-    Describe "New-ArmPrivateDnsZoneVirtualNetworkLink" {
+    Describe "Add-ArmPrivateDnsZoneVirtualNetworkLink" {
         
         $ResourceType = "Microsoft.Network/privateDnsZones/virtualNetworkLinks"
         $ExpectedPrivateDnsZoneName = "contoso.com"
@@ -17,9 +17,9 @@ InModuleScope PoshArmDeployment {
             $expectedTypes = @("PDNSZVirtualNetworkLink", "ArmResource")
 
             It "Given the required parameters, it returns '<Expected>'" -TestCases @(
-                @{  PrivateDnsZone    = $ExpectedPrivateDnsZone
-                    VirtualNetwork    = $ExpectedVirtualNetwork
-                    Expected          = [PSCustomObject][ordered]@{
+                @{  PrivateDnsZone = $ExpectedPrivateDnsZone
+                    VirtualNetwork = $ExpectedVirtualNetwork
+                    Expected       = [PSCustomObject][ordered]@{
                         _ResourceId = New-ArmFunctionResourceId -ResourceType $ResourceType -ResourceName1 $ExpectedPrivateDnsZoneName
                         PSTypeName  = "PDNSZVirtualNetworkLink"
                         type        = $ResourceType
@@ -34,14 +34,18 @@ InModuleScope PoshArmDeployment {
                         }
                         dependsOn   = @($ExpectedVirtualNetwork._ResourceId, $ExpectedPrivateDnsZone._ResourceId)
                     }
-                    Types = $expectedTypes
+                    Types          = $expectedTypes
                 }
             ) {
                 param($PrivateDnsZone, $VirtualNetwork, $Expected, $Types)
 
                 $Expected.PSTypeNames.Add("ArmResource")
 
-                $actual = $PrivateDnsZone | New-ArmPrivateDnsZoneVirtualNetworkLink -VirtualNetwork $VirtualNetwork
+                New-ArmTemplate
+
+                $PrivateDnsZone | Add-ArmPrivateDnsZoneVirtualNetworkLink -VirtualNetwork $VirtualNetwork
+
+                $actual = $ArmTemplate.resources[0]
 
                 ($actual | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
                 | Should -BeExactly ($Expected | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
@@ -57,10 +61,10 @@ InModuleScope PoshArmDeployment {
             It "Default" -Test {
                 Invoke-IntegrationTest -ArmResourcesScriptBlock `
                 {
-                    $ExpectedVNetLink = $ExpectedPrivateDnsZone | New-ArmPrivateDnsZoneVirtualNetworkLink -VirtualNetwork $ExpectedVirtualNetwork
                     
-                    @($ExpectedVirtualNetwork, $ExpectedPrivateDnsZone, $ExpectedVNetLink) `
-                        | Add-ArmResource
+                    $ExpectedVirtualNetwork | Add-ArmResource
+                    $ExpectedPrivateDnsZone | Add-ArmPrivateDnsZoneVirtualNetworkLink -VirtualNetwork $ExpectedVirtualNetwork `
+                    | Add-ArmResource
                 }
             }
         }

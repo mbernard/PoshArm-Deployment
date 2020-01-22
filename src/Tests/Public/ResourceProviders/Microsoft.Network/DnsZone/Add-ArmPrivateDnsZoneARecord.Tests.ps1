@@ -2,7 +2,7 @@ $ScriptDir = Split-Path -parent $MyInvocation.MyCommand.Path
 Import-Module "$ScriptDir/../../../../../PoshArmDeployment" -Force
 
 InModuleScope PoshArmDeployment {
-    Describe "New-ArmPrivateDnsZoneARecord" {
+    Describe "Add-ArmPrivateDnsZoneARecord" {
         
         $ResourceType = "Microsoft.Network/privateDnsZones/A"
         $ZoneName = "contoso.com"
@@ -32,7 +32,7 @@ InModuleScope PoshArmDeployment {
                         }
                         dependsOn   = @($ExpectedPrivateDnsZone._ResourceId)
                     }
-                    Types = $expectedTypes
+                    Types          = $expectedTypes
                 }
             ) {
                 param($Name, $PrivateDnsZone, $IpV4Addresses, $Expected, $Types)
@@ -44,7 +44,11 @@ InModuleScope PoshArmDeployment {
                 }
                 $Expected.PSTypeNames.Add("ArmResource")
 
-                $actual = $PrivateDnsZone | New-ArmPrivateDnsZoneARecord -Name $Name -IpV4Addresses $IpV4Addresses
+                New-ArmTemplate
+
+                $PrivateDnsZone | Add-ArmPrivateDnsZoneARecord -Name $Name -IpV4Addresses $IpV4Addresses
+
+                $actual = $ArmTemplate.resources[0]
 
                 ($actual | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) }) `
                 | Should -BeExactly ($Expected | ConvertTo-Json -Depth $Depth -Compress | ForEach-Object { [System.Text.RegularExpressions.Regex]::Unescape($_) })
@@ -58,8 +62,7 @@ InModuleScope PoshArmDeployment {
                 Invoke-IntegrationTest -ArmResourcesScriptBlock `
                 {
                     $ZoneName | New-ArmPrivateDnsZone `
-                    | Add-ArmResource -PassThru `
-                    | New-ArmPrivateDnsZoneARecord `
+                    | Add-ArmPrivateDnsZoneARecord `
                         -Name $ExpectedARecordName `
                         -IpV4Addresses $IpV4Addresses `
                     | Add-ArmResource
@@ -70,8 +73,7 @@ InModuleScope PoshArmDeployment {
                 Invoke-IntegrationTest -ArmResourcesScriptBlock `
                 {
                     $ZoneName | New-ArmPrivateDnsZone `
-                    | Add-ArmResource -PassThru `
-                    | New-ArmPrivateDnsZoneARecord `
+                    | Add-ArmPrivateDnsZoneARecord `
                         -Name $ExpectedARecordName `
                         -IpV4Addresses $IpV4Addresses `
                         -TTL 400 `
