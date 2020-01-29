@@ -1,6 +1,6 @@
-function New-ArmPrivateDnsZoneVirtualNetworkLink {
+function Add-ArmPrivateDnsZoneVirtualNetworkLink {
     [CmdletBinding(SupportsShouldProcess = $true)]
-    [OutputType("PDNSZVirtualNetworkLink")]
+    [OutputType("PDNSZ")]
     Param(
         [PSTypeName("PDNSZ")]
         [Parameter(Mandatory, ValueFromPipeline)]
@@ -35,7 +35,10 @@ function New-ArmPrivateDnsZoneVirtualNetworkLink {
         }
 
         $VNetLink.PSTypeNames.Add("ArmResource")
-        return $VNetLink | Add-ArmDependencyOn -Dependency $VirtualNetwork -PassThru `
-            | Add-ArmDependencyOn -Dependency $PrivateDnsZone -PassThru
+        $VNetLink | Add-ArmDependencyOn -Dependency $VirtualNetwork -PassThru `
+        | Add-ArmDependencyOn -Dependency $PrivateDnsZone -PassThru `
+        | Add-ArmResource
+
+        return $PrivateDnsZone
     }
 }

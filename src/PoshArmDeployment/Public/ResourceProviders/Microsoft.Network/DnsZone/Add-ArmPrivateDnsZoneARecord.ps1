@@ -1,6 +1,6 @@
-function New-ArmPrivateDnsZoneARecord {
+function Add-ArmPrivateDnsZoneARecord {
     [CmdletBinding(SupportsShouldProcess = $true)]
-    [OutputType("PDNSZARecord")]
+    [OutputType("PDNSZ")]
     Param(   
         [PSTypeName("PDNSZ")]
         [Parameter(Mandatory, ValueFromPipeline)]
@@ -39,6 +39,9 @@ function New-ArmPrivateDnsZoneARecord {
         }
 
         $aRecord.PSTypeNames.Add("ArmResource")
-        return $aRecord | Add-ArmDependencyOn -Dependency $PrivateDnsZone -PassThru
+        $aRecord | Add-ArmDependencyOn -Dependency $PrivateDnsZone -PassThru `
+        | Add-ArmResource
+
+        return $PrivateDnsZone
     }
 }
