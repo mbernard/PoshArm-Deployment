@@ -1,12 +1,12 @@
-function New-ArmDnsZoneARecord {
+function Add-ArmDnsZoneARecord {
     [CmdletBinding(SupportsShouldProcess = $true)]
-    [OutputType("DNSZARecord")]
+    [OutputType("DNSZ")]
     Param(
         [PSTypeName("DNSZ")]
         [Parameter(Mandatory)]
         $DnsZone,
         [string]
-        [ValidatePattern('^(\[.*\]|)|([a-z0-9-_]{1,127})$')]
+        [ValidatePattern('^(\[.*\])|(([*@]\.)?[a-z0-9-\.]{1,127})$')]
         [Parameter(Mandatory, ValueFromPipeline)]
         $Name,
         [int]
@@ -38,6 +38,9 @@ function New-ArmDnsZoneARecord {
         }
 
         $aRecord.PSTypeNames.Add("ArmResource")
-        return $aRecord
+        $aRecord | Add-ArmDependencyOn -Dependency $DnsZone `
+        | Add-ArmResource
+         
+        return $DnsZone
     }
 }
