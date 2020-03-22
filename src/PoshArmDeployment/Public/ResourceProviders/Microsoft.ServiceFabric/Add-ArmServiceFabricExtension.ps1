@@ -12,7 +12,11 @@ function Add-ArmServiceFabricExtension {
         $SupportLogStorageAccountResourceId,
         [string]
         [Parameter(Mandatory)]
-        $CertificateThumbprint
+        $CertificateThumbprint,
+        [Switch]
+        $Linux,
+        [string]
+        $NicPrefixOverride  = "10.0.0.0/24"
     )
 
     Process {
@@ -24,7 +28,7 @@ function Add-ArmServiceFabricExtension {
             $sfExtension = @{
                 name       = "ServiceFabricNodeVmExt_$nodeName"
                 properties = @{
-                    type                    = "ServiceFabricNode"
+                    type                    = if($Linux.ToBool()) { "ServiceFabricLinuxNode" } else { "ServiceFabricNode" }
                     autoUpgradeMinorVersion = $true
                     publisher               = "Microsoft.Azure.ServiceFabric"
                     protectedSettings       = @{
@@ -37,7 +41,7 @@ function Add-ArmServiceFabricExtension {
                         dataPath           = "D:\\\\SvcFab"
                         durabilityLevel    = $DurabilityLevel
                         enableParallelJobs = $true
-                        nicPrefixOverride  = "10.0.0.0/24"
+                        nicPrefixOverride  = $NicPrefixOverride
                         certificate        = @{
                             thumbprint    = $CertificateThumbprint
                             x509StoreName = "My"

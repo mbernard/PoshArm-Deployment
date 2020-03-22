@@ -21,7 +21,9 @@ function New-ArmServiceFabricCluster {
         $ManagementEndpointUrl,
         [Parameter(Mandatory)]
         [string]
-        $SupportLogStorageAccountName
+        $SupportLogStorageAccountName,
+        [Switch]
+        $Linux
     )
 
     If ($PSCmdlet.ShouldProcess("Creates a new service fabric cluster object")) {
@@ -34,9 +36,7 @@ function New-ArmServiceFabricCluster {
             apiVersion  = $ApiVersion
             location    = $Location
             properties  = @{
-                addonFeatures                   = @(
-                    "DnsService"
-                )
+                addonFeatures                   = @()
                 certificate                     = @{
                     thumbprint    = $CertificateThumbprint
                     x509StoreName = "My"
@@ -60,7 +60,7 @@ function New-ArmServiceFabricCluster {
                 provisioningState               = "Default"
                 reliabilityLevel                = $ReliabilityLevel
                 upgradeMode                     = "Automatic"
-                vmImage                         = "Windows"
+                vmImage                         = if($Linux.ToBool()) { "Linux" } else { "Windows" }
                 diagnosticsStorageAccountConfig = @{
                     blobEndpoint            = "[concat('https://',$SupportLogStorageAccountNameExpression,'.blob.core.windows.net/')]"
                     protectedAccountKeyName = "StorageAccountKey1"

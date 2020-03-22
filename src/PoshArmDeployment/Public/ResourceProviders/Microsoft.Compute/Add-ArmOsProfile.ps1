@@ -16,7 +16,9 @@ function Add-ArmOsProfile {
         $AdminUserName,
         [string]
         [Parameter(Mandatory)]
-        $AdminPassword
+        $AdminPassword,
+        [Switch]
+        $Linux
     )
 
     Process {
@@ -25,11 +27,20 @@ function Add-ArmOsProfile {
                 computerNamePrefix   = $Name
                 adminUserName        = $AdminUserName
                 adminPassword        = $AdminPassword
-                windowsConfiguration = @{
+                secrets = @()
+            }
+
+            if($Linux)
+            { 
+                $OsProfile.linuxConfiguration= @{
+                    disablePasswordAuthentication= $false
+                }
+            }
+            else {
+                $OsProfile.windowsConfiguration = @{
                     provisionVMAgent = $true
                     enableAutomaticUpdates = $true
                 }
-                secrets = @()
             }
 
             if ($PSCmdlet.ParameterSetName -eq "vm") {

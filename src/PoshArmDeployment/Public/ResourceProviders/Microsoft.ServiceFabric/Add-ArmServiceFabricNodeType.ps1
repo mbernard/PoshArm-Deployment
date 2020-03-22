@@ -33,7 +33,11 @@ function Add-ArmServiceFabricNodeType {
         [Parameter(Mandatory)]
         $LogWorkspaceResourceId,
         [Switch]
-        $IsPrimary
+        $IsPrimary,
+        [Switch]
+        $Linux,
+        [string]
+        $NicPrefixOverride
     )
     If ($PSCmdlet.ShouldProcess("Creates a new service fabric node type object")) {
         $nodeType = [PSCustomObject][ordered]@{
@@ -58,7 +62,7 @@ function Add-ArmServiceFabricNodeType {
 
         $vmss = $vmss | Add-ArmServiceFabricExtension -NodeType $nodeType `
             -CertificateThumbprint $ServiceFabricCluster.properties.certificate.thumbprint `
-            -SupportLogStorageAccountResourceId $SupportLogStorageAccountResourceId `
+            -SupportLogStorageAccountResourceId $SupportLogStorageAccountResourceId -Linux:$Linux.ToBool() -NicPrefixOverride $NicPrefixOverride `
             | Add-ArmMonitoringExtension -Name "OMSVmExt_$Name" -LogWorkspaceResourceId $LogWorkspaceResourceId `
             | Add-ArmServiceFabricDiagnosticsExtension -NodeType $nodeType `
             -ApplicationDiagnosticsStorageAccountName $ApplicationDiagnosticsStorageAccountName `

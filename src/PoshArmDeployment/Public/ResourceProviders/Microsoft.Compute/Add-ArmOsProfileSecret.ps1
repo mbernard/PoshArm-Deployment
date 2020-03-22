@@ -10,7 +10,9 @@ function Add-ArmOsProfileSecret {
         [string]
         [Parameter(Mandatory)]
         $KeyVaultResourceId,
-        $CertificateUrls = @()
+        $CertificateUrls = @(),
+        [Switch]
+        $Linux
     )
 
     Process {
@@ -24,10 +26,14 @@ function Add-ArmOsProfileSecret {
             }
 
             foreach ($Url in $CertificateUrls) {
-                $secret.vaultCertificates += @{
+                $cert = @{
                     certificateUrl   = $Url
-                    certificateStore = "My"
                 }
+                
+                if(!$Linux.ToBool()){
+                    $cert.certificateStore = "My"
+                }
+                $secret.vaultCertificates += $cert
             }
 
             if ($PSCmdlet.ParameterSetName -eq "vm") {
