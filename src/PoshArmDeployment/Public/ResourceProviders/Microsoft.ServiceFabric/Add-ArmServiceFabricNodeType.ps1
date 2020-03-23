@@ -62,12 +62,23 @@ function Add-ArmServiceFabricNodeType {
 
         $vmss = $vmss | Add-ArmServiceFabricExtension -NodeType $nodeType `
             -CertificateThumbprint $ServiceFabricCluster.properties.certificate.thumbprint `
-            -SupportLogStorageAccountResourceId $SupportLogStorageAccountResourceId -Linux:$Linux.ToBool() -NicPrefixOverride $NicPrefixOverride `
-            | Add-ArmMonitoringExtension -Name "OMSVmExt_$Name" -LogWorkspaceResourceId $LogWorkspaceResourceId `
-            | Add-ArmServiceFabricDiagnosticsExtension -NodeType $nodeType `
-            -ApplicationDiagnosticsStorageAccountName $ApplicationDiagnosticsStorageAccountName `
-            -ApplicationDiagnosticsStorageAccountResourceId $ApplicationDiagnosticsStorageAccountResourceId `
-            -ApplicationInsightsKey $ApplicationInsightsKey
+            -SupportLogStorageAccountResourceId $SupportLogStorageAccountResourceId -Linux:$Linux.ToBool() -NicPrefixOverride $NicPrefixOverride
+            # | Add-ArmMonitoringExtension -Name "OMSVmExt_$Name" -LogWorkspaceResourceId $LogWorkspaceResourceId
+
+        if($Linux.ToBool())
+        {
+            $vmss = $vmss | Add-ArmServiceFabricDiagnosticsExtensionLinux -NodeType $nodeType `
+                -ApplicationDiagnosticsStorageAccountName $ApplicationDiagnosticsStorageAccountName `
+                -ApplicationDiagnosticsStorageAccountResourceId $ApplicationDiagnosticsStorageAccountResourceId `
+        }
+        else
+        {
+            $vmss = $vmss | Add-ArmServiceFabricDiagnosticsExtension -NodeType $nodeType `
+                -ApplicationDiagnosticsStorageAccountName $ApplicationDiagnosticsStorageAccountName `
+                -ApplicationDiagnosticsStorageAccountResourceId $ApplicationDiagnosticsStorageAccountResourceId `
+                -ApplicationInsightsKey $ApplicationInsightsKey
+        }
+            
         $ServiceFabricCluster.properties.nodeTypes += $nodeType
 
         return $ServiceFabricCluster

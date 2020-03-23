@@ -38,7 +38,7 @@ function Add-ArmServiceFabricExtension {
                     settings                = @{
                         clusterEndpoint    = "[reference($sfClusterId).clusterEndpoint]"
                         nodeTypeRef        = $VirtualMachineScaleSet.Name
-                        dataPath           = "D:\\\\SvcFab"
+                        
                         durabilityLevel    = $DurabilityLevel
                         enableParallelJobs = $true
                         nicPrefixOverride  = $NicPrefixOverride
@@ -49,6 +49,11 @@ function Add-ArmServiceFabricExtension {
                     }
                     typeHandlerVersion      = "1.1"
                 }
+            }
+
+            if(!$Linux.ToBool())
+            {
+                $sfExtension.properties.settings.dataPath = "D:\\\\SvcFab"
             }
 
             $VirtualMachineScaleSet.properties.virtualMachineProfile.extensionProfile.extensions += $sfExtension
