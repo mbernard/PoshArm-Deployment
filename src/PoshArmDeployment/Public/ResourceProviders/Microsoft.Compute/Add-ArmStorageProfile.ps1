@@ -27,6 +27,9 @@ function Add-ArmStorageProfile {
                 osDisk         = @{
                     caching      = "ReadOnly"
                     createOption = "FromImage"
+                    managedDisk = @{
+                        storageAccountType = "Standard_LRS"
+                    }
                 }
                 imageReference = $ImageReference
             }

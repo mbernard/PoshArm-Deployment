@@ -7,7 +7,7 @@ function New-ArmServiceFabricCluster {
         [string]
         $Name,
         [string]
-        $ApiVersion = '2018-02-01',
+        $ApiVersion = '2019-06-01-preview',
         [string]
         $Location = $script:location,
         [Parameter(Mandatory)]

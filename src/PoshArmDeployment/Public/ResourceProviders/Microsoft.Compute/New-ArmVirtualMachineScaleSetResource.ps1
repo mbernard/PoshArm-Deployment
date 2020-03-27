@@ -7,7 +7,7 @@ function New-ArmVirtualMachineScaleSetResource {
         [string]
         $Name,
         [string]
-        $ApiVersion = "2017-12-01",
+        $ApiVersion = "2019-07-01",
         [string]
         $Location = $script:Location,
         $Sku = "Standard_D1_v2",

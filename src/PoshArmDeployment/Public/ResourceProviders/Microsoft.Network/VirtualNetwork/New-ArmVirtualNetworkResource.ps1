@@ -7,7 +7,7 @@ function New-ArmVirtualNetworkResource {
         [string]
         $Name,
         [string]
-        $ApiVersion = "2018-08-01",
+        $ApiVersion = "2019-11-01",
         [string]
         $Location = $script:Location,
         [string]

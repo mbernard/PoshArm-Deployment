@@ -7,7 +7,7 @@ function New-ArmLoadBalancerResource {
         [string]
         $Name,
         [string]
-        $ApiVersion = "2018-02-01",
+        $ApiVersion = "2019-11-01",
         [string]
         $Location = $script:location,
         [string]
