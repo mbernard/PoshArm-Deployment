@@ -21,7 +21,7 @@ function Add-ArmLoadBalancerFrontendIpConfiguration {
                 }
             }
         }
-
+        $LoadBalancer._Ip = $PublicIp
         $LoadBalancer.properties.frontEndIpconfigurations += $FrontEndIpconfiguration
         return $LoadBalancer | Add-ArmDependencyOn -Dependency $PublicIp -PassThru
     }

@@ -16,9 +16,7 @@ function Add-ArmOsProfile {
         $AdminUserName,
         [string]
         [Parameter(Mandatory)]
-        $AdminPassword,
-        [Switch]
-        $Linux
+        $AdminPassword
     )
 
     Process {
@@ -30,7 +28,7 @@ function Add-ArmOsProfile {
                 secrets = @()
             }
 
-            if($Linux)
+            if($VirtualMachineScaleSet._IsLinux)
             { 
                 $OsProfile.linuxConfiguration= @{
                     disablePasswordAuthentication= $false

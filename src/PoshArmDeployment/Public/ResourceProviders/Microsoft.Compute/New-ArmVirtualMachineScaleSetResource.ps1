@@ -12,14 +12,17 @@ function New-ArmVirtualMachineScaleSetResource {
         $Location = $script:Location,
         $Sku = "Standard_D1_v2",
         [int]
-        $Capacity = 5,
+        $Capacity = 1,
         [string]
         [ValidateSet("Automatic", "Manual")]
-        $UpgradeMode = "Automatic"
+        $UpgradeMode = "Automatic",
+        [Switch]
+        $Linux
     )
     If ($PSCmdlet.ShouldProcess("Creates a new Arm Virtual Machine Scale Set object")) {
         $vmss = [PSCustomObject][ordered]@{
             _ResourceId = $Name | New-ArmFunctionResourceId -ResourceType Microsoft.Compute/virtualMachineScaleSets
+            _IsLinux    = $Linux.ToBool()
             PSTypeName  = "VirtualMachineScaleSet"
             type        = 'Microsoft.Compute/virtualMachineScaleSets'
             name        = $Name
@@ -34,17 +37,17 @@ function New-ArmVirtualMachineScaleSetResource {
                 type = "SystemAssigned"
             }
             properties  = @{
-                overprovision = $false
+                overprovision         = $false
                 upgradePolicy         = @{
                     mode = $UpgradeMode
                 }
                 virtualMachineProfile = @{
-                    storageProfile     = @{}
-                    osProfile          = @{}
+                    storageProfile     = @{ }
+                    osProfile          = @{ }
                     networkProfile     = @{
                         networkInterfaceConfigurations = @()
                     }
-                    diagnosticsProfile = @{}
+                    diagnosticsProfile = @{ }
                     extensionProfile   = @{
                         extensions = @()
                     }

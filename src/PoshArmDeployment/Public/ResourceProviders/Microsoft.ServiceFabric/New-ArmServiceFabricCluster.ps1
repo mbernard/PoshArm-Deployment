@@ -22,20 +22,23 @@ function New-ArmServiceFabricCluster {
         [Parameter(Mandatory)]
         [string]
         $SupportLogStorageAccountName,
-        [Switch]
-        $Linux
+        [string]
+        [ValidateSet("Windows", "Linux")]
+        $OsType = "Windows"
     )
 
     If ($PSCmdlet.ShouldProcess("Creates a new service fabric cluster object")) {
         $SupportLogStorageAccountNameExpression = $SupportLogStorageAccountName | ConvertTo-ValueInTemplateExpression
+        $ResourceId = New-ArmFunctionResourceId -ResourceType Microsoft.ServiceFabric/clusters -ResourceName1 $Name
         $serviceFabricCluster = [PSCustomObject][ordered]@{
-            _ResourceId = New-ArmFunctionResourceId -ResourceType Microsoft.ServiceFabric/clusters -ResourceName1 $Name
-            PSTypeName  = "ServiceFabricCluster"
-            type        = 'Microsoft.ServiceFabric/clusters'
-            name        = $Name
-            apiVersion  = $ApiVersion
-            location    = $Location
-            properties  = @{
+            _ResourceId      = $ResourceId
+            _ClusterEndpoint = "[reference($ResourceId).clusterEndpoint]"
+            PSTypeName       = "ServiceFabricCluster"
+            type             = 'Microsoft.ServiceFabric/clusters'
+            name             = $Name
+            apiVersion       = $ApiVersion
+            location         = $Location
+            properties       = @{
                 addonFeatures                   = @()
                 certificate                     = @{
                     thumbprint    = $CertificateThumbprint
@@ -60,7 +63,7 @@ function New-ArmServiceFabricCluster {
                 provisioningState               = "Default"
                 reliabilityLevel                = $ReliabilityLevel
                 upgradeMode                     = "Automatic"
-                vmImage                         = if($Linux.ToBool()) { "Linux" } else { "Windows" }
+                vmImage                         = $OsType
                 diagnosticsStorageAccountConfig = @{
                     blobEndpoint            = "[concat('https://',$SupportLogStorageAccountNameExpression,'.blob.core.windows.net/')]"
                     protectedAccountKeyName = "StorageAccountKey1"
@@ -69,8 +72,8 @@ function New-ArmServiceFabricCluster {
                     tableEndpoint           = "[concat('https://',$SupportLogStorageAccountNameExpression,'.table.core.windows.net/')]"
                 }
             }
-            resources   = @()
-            dependsOn   = @()
+            resources        = @()
+            dependsOn        = @()
         }
 
         $serviceFabricCluster.PSTypeNames.Add("ArmResource")

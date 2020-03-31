@@ -10,9 +10,7 @@ function Add-ArmOsProfileSecret {
         [string]
         [Parameter(Mandatory)]
         $KeyVaultResourceId,
-        $CertificateUrls = @(),
-        [Switch]
-        $Linux
+        $CertificateUrls = @()
     )
 
     Process {
@@ -30,7 +28,7 @@ function Add-ArmOsProfileSecret {
                     certificateUrl   = $Url
                 }
                 
-                if(!$Linux.ToBool()){
+                if(!$VirtualMachineScaleSet._IsLinux){
                     $cert.certificateStore = "My"
                 }
                 $secret.vaultCertificates += $cert

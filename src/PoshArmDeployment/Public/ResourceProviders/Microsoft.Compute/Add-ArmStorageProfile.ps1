@@ -12,11 +12,21 @@ function Add-ArmStorageProfile {
 
     Begin {
         if (!$ImageReference) {
-            $ImageReference = @{
-                publisher = "MicrosoftWindowsServer"
-                offer     = "WindowsServerSemiAnnual"
-                sku       = "Datacenter-Core-1803-with-Containers-smalldisk"
-                version   = "latest"
+            if ($VirtualMachineScaleSet._IsLinux) {
+                $ImageReference = @{
+                    publisher = "Canonical"
+                    version   = "latest"
+                    offer     = "UbuntuServer"
+                    sku       = "16.04-LTS"
+                }
+            }
+            else {
+                $ImageReference = @{
+                        publisher = "MicrosoftWindowsServer"
+                        version = "latest"
+                        offer = "WindowsServer"
+                        sku = "2016-Datacenter-with-Containers"
+                      }
             }
         }
     }
@@ -27,7 +37,7 @@ function Add-ArmStorageProfile {
                 osDisk         = @{
                     caching      = "ReadOnly"
                     createOption = "FromImage"
-                    managedDisk = @{
+                    managedDisk  = @{
                         storageAccountType = "Standard_LRS"
                     }
                 }

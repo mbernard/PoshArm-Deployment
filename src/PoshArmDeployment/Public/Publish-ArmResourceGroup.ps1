@@ -37,7 +37,7 @@ function Publish-ArmResourceGroup {
         New-ArmTemplateFile -TemplateFilePath $templateFilePath
         New-ArmTemplateParameterFile -TemplateParameterFilePath $templateParameterFilePath -ArmTemplateParams $ArmTemplateParams
 
-        $null = New-AzureRmResourceGroup -Name $resourceGroupName -Location $script:Location -Force -ErrorAction Stop
+        $null = New-AzResourceGroup -Name $resourceGroupName -Location $script:Location -Force -ErrorAction Stop
 
         # 3. Deploy or test to resource group with template file
         if ($Test) {
@@ -49,7 +49,7 @@ function Publish-ArmResourceGroup {
             } `
                 | ConvertTo-Hash
 
-            return Test-AzureRmResourceGroupDeployment @deployment -ErrorAction Stop
+            return Test-AzResourceGroupDeployment @deployment -ErrorAction Stop
         }
         else {
             # 3. Ensure resource group exist
@@ -65,18 +65,16 @@ function Publish-ArmResourceGroup {
             } `
                 | ConvertTo-Hash
 
-            $deploymentResult = New-AzureRmResourceGroupDeployment @deployment
+            $deploymentResult = New-AzResourceGroupDeployment @deployment
 
             if ($deploymentResult -and $PSCmdlet.MyInvocation.BoundParameters["Debug"]) {
                 Write-Debug 'Fetching deployment operations...'
-                $operations = Get-AzureRmResourceGroupDeploymentOperation `
+                $operations = Get-AzResourceGroupDeploymentOperation `
                     -ResourceGroupName $resourceGroupName `
                     -DeploymentName $deploymentName
 
-                Write-Debug 'Formatted operations:'
-                if ($operations) {
-                    Format-AzureRmDeploymentOperation -Operations $operations
-                }
+                Write-Debug 'Formatted operations:' 
+                Write-Debug $operations
 
                 Write-Warning "Please STRONGLY consider manually deleting deployment '$deploymentName' to avoid sensitive information leaks."
             }

@@ -14,30 +14,8 @@ function Add-ArmServiceFabricNodeType {
         $DurabilityLevel = "Bronze",
         [int]
         $InstanceCount = 5,
-        [Parameter(Mandatory)]
-        [PsTypeName("VirtualMachineScaleSet")]
-        $Vmss,
-        [string]
-        [Parameter(Mandatory)]
-        $ApplicationDiagnosticsStorageAccountName,
-        [string]
-        [Parameter(Mandatory)]
-        $ApplicationDiagnosticsStorageAccountResourceId,
-        [string]
-        [Parameter(Mandatory)]
-        $SupportLogStorageAccountResourceId,
-        [string]
-        [Parameter(Mandatory)]
-        $ApplicationInsightsKey,
-        [string]
-        [Parameter(Mandatory)]
-        $LogWorkspaceResourceId,
         [Switch]
-        $IsPrimary,
-        [Switch]
-        $Linux,
-        [string]
-        $NicPrefixOverride
+        $IsPrimary
     )
     If ($PSCmdlet.ShouldProcess("Creates a new service fabric node type object")) {
         $nodeType = [PSCustomObject][ordered]@{
@@ -57,28 +35,8 @@ function Add-ArmServiceFabricNodeType {
             isPrimary                    = $IsPrimary.ToBool()
             vmInstanceCount              = $InstanceCount
             _ServiceFabricCluster        = $ServiceFabricCluster
-            _vmss                        = $vmss
         }
 
-        $vmss = $vmss | Add-ArmServiceFabricExtension -NodeType $nodeType `
-            -CertificateThumbprint $ServiceFabricCluster.properties.certificate.thumbprint `
-            -SupportLogStorageAccountResourceId $SupportLogStorageAccountResourceId -Linux:$Linux.ToBool() -NicPrefixOverride $NicPrefixOverride
-            # | Add-ArmMonitoringExtension -Name "OMSVmExt_$Name" -LogWorkspaceResourceId $LogWorkspaceResourceId
-
-        if($Linux.ToBool())
-        {
-            $vmss = $vmss | Add-ArmServiceFabricDiagnosticsExtensionLinux -NodeType $nodeType `
-                -ApplicationDiagnosticsStorageAccountName $ApplicationDiagnosticsStorageAccountName `
-                -ApplicationDiagnosticsStorageAccountResourceId $ApplicationDiagnosticsStorageAccountResourceId `
-        }
-        else
-        {
-            $vmss = $vmss | Add-ArmServiceFabricDiagnosticsExtension -NodeType $nodeType `
-                -ApplicationDiagnosticsStorageAccountName $ApplicationDiagnosticsStorageAccountName `
-                -ApplicationDiagnosticsStorageAccountResourceId $ApplicationDiagnosticsStorageAccountResourceId `
-                -ApplicationInsightsKey $ApplicationInsightsKey
-        }
-            
         $ServiceFabricCluster.properties.nodeTypes += $nodeType
 
         return $ServiceFabricCluster

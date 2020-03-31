@@ -28,7 +28,7 @@ function Add-ArmLoadBalancer {
         $NicName = $VirtualMachineScaleSet.properties.virtualMachineProfile.networkProfile.networkInterfaceConfigurations[0].Name
     }
 
-    $Nic = $VirtualMachineScaleSet.properties.virtualMachineProfile.networkProfile.networkInterfaceConfigurations | Where-Object { $_.Name -eq $NicName}
+    $Nic = $VirtualMachineScaleSet.properties.virtualMachineProfile.networkProfile.networkInterfaceConfigurations | Where-Object { $_.Name -eq $NicName }
 
 
     If ($PSCmdlet.ShouldProcess("Adding Nic to load balancer")) {
@@ -38,8 +38,10 @@ function Add-ArmLoadBalancer {
             id = "[concat($LoadBalancerResourceId, '/backendAddressPools/$BackendAddressPoolName')]"
         }
 
-        $Nic.properties.ipConfigurations[0].properties.loadBalancerInboundNatPools += @{
-            id = "[concat($LoadBalancerResourceId, '/inboundNatPools/$InboundNatPoolName')]"
+        if ($InboundNatPoolName) {
+            $Nic.properties.ipConfigurations[0].properties.loadBalancerInboundNatPools += @{
+                id = "[concat($LoadBalancerResourceId, '/inboundNatPools/$InboundNatPoolName')]"
+            }
         }
     }
 

@@ -4,9 +4,6 @@ function Add-ArmServiceFabricDiagnosticsExtension {
         [PSTypeName("VirtualMachineScaleSet")]
         [Parameter(Mandatory, ValueFromPipeline)]
         $VirtualMachineScaleSet,
-        [PSTypeName("ServiceFabricNodeType")]
-        [Parameter(Mandatory)]
-        $NodeType,
         [string]
         [Parameter(Mandatory)]
         $ApplicationDiagnosticsStorageAccountName,
@@ -19,11 +16,10 @@ function Add-ArmServiceFabricDiagnosticsExtension {
     )
 
     Process {
-        $nodeName = $NodeType.Name
         If ($PSCmdlet.ShouldProcess("Adding service fabric diagnostics extension to a virtual machine scale set")) {
             $ApplicationDiagnosticsStorageAccountResourceId = $ApplicationDiagnosticsStorageAccountResourceId | ConvertTo-ValueInTemplateExpression
             $sfDiagnosticsExtension = @{
-                name       = "VMDiagnosticsVmExt_$nodeName"
+                name       = "VMDiagnosticsVmExt"
                 properties = @{
                     type                    = "IaaSDiagnostics"
                     autoUpgradeMinorVersion = $true

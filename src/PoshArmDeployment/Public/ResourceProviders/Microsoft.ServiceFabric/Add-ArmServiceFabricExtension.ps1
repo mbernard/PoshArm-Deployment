@@ -4,31 +4,30 @@ function Add-ArmServiceFabricExtension {
         [PSTypeName("VirtualMachineScaleSet")]
         [Parameter(Mandatory, ValueFromPipeline)]
         $VirtualMachineScaleSet,
-        [PSTypeName("ServiceFabricNodeType")]
+        [PSTypeName("ServiceFabricCluster")]
         [Parameter(Mandatory)]
-        $NodeType,
+        $ServiceFabricCluster,
+        [string]
+        [Parameter(Mandatory)]
+        $NodeTypeName,
         [string]
         [Parameter(Mandatory)]
         $SupportLogStorageAccountResourceId,
+        [ValidateSet("Bronze", "Silver", "Gold")]        
+        [string] 
+        $DurabilityLevel = "Bronze" ,
         [string]
-        [Parameter(Mandatory)]
-        $CertificateThumbprint,
-        [Switch]
-        $Linux,
-        [string]
-        $NicPrefixOverride  = "10.0.0.0/24"
+        $NicPrefixOverride = "10.0.0.0/24"
     )
 
     Process {
-        $nodeName = $NodeType.Name
-        $sfClusterId = $NodeType._ServiceFabricCluster._ResourceId
         If ($PSCmdlet.ShouldProcess("Adding service fabric extension to a virtual machine scale set")) {
             $SupportLogStorageAccountResourceId = $SupportLogStorageAccountResourceId | ConvertTo-ValueInTemplateExpression
             
             $sfExtension = @{
-                name       = "ServiceFabricNodeVmExt_$nodeName"
+                name       = "ServiceFabricNodeVmExt_$NodeTypeName"
                 properties = @{
-                    type                    = if($Linux.ToBool()) { "ServiceFabricLinuxNode" } else { "ServiceFabricNode" }
+                    type                    = if ($VirtualMachineScaleSet._IsLinux) { "ServiceFabricLinuxNode" } else { "ServiceFabricNode" }
                     autoUpgradeMinorVersion = $true
                     publisher               = "Microsoft.Azure.ServiceFabric"
                     protectedSettings       = @{
@@ -36,23 +35,22 @@ function Add-ArmServiceFabricExtension {
                         StorageAccountKey2 = "[listKeys($SupportLogStorageAccountResourceId, '2015-05-01-preview').key2]"
                     }
                     settings                = @{
-                        clusterEndpoint    = "[reference($sfClusterId).clusterEndpoint]"
-                        nodeTypeRef        = $VirtualMachineScaleSet.Name
+                        clusterEndpoint    = $ServiceFabricCluster._ClusterEndpoint
+                        nodeTypeRef        = $NodeTypeName
                         
                         durabilityLevel    = $DurabilityLevel
                         enableParallelJobs = $true
                         nicPrefixOverride  = $NicPrefixOverride
                         certificate        = @{
-                            thumbprint    = $CertificateThumbprint
-                            x509StoreName = "My"
+                            thumbprint    = $ServiceFabricCluster.properties.certificate.thumbprint
+                            x509StoreName = $ServiceFabricCluster.properties.certificate.x509StoreName
                         }
                     }
                     typeHandlerVersion      = "1.1"
                 }
             }
 
-            if(!$Linux.ToBool())
-            {
+            if (!$VirtualMachineScaleSet._IsLinux) {
                 $sfExtension.properties.settings.dataPath = "D:\\\\SvcFab"
             }
 

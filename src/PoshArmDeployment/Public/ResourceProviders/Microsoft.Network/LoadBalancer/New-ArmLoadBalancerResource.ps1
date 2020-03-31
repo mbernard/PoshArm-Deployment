@@ -18,6 +18,7 @@ function New-ArmLoadBalancerResource {
     If ($PSCmdlet.ShouldProcess("Creates a new Arm load balancer resource")) {
         $LoadBalancer = [PSCustomObject][ordered]@{
             _ResourceId = $Name | New-ArmFunctionResourceId -ResourceType Microsoft.Network/loadBalancers
+            _Ip         = @{ }
             PSTypeName  = "LoadBalancer"
             type        = 'Microsoft.Network/loadBalancers'
             name        = $Name
@@ -31,7 +32,7 @@ function New-ArmLoadBalancerResource {
                 frontendIPConfigurations = @()
                 backendAddressPools      = @()
                 inboundNatPools          = @()
-                # inboundNatRules          = @()
+                inboundNatRules          = @()
                 loadBalancingRules       = @()
                 probes                   = @()
             }
