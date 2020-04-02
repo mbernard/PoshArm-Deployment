@@ -32,7 +32,6 @@ function New-ArmLoadBalancerResource {
                 frontendIPConfigurations = @()
                 backendAddressPools      = @()
                 inboundNatPools          = @()
-                inboundNatRules          = @()
                 loadBalancingRules       = @()
                 probes                   = @()
             }
