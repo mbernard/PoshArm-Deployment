@@ -28,7 +28,7 @@ function New-ArmServiceBusTopicSubscriptionResource {
         [switch]
         $DeadLetteringOnFilterEvaluationExceptions,
         [string]
-        $Forward = ""
+        $ForwardTo = ""
     )
 
     If ($PSCmdlet.ShouldProcess("Creates a new Arm ServiceBus topic subscription object")) {
@@ -55,8 +55,8 @@ function New-ArmServiceBusTopicSubscriptionResource {
             dependsOn   = @()
         }
 
-        if ($Forward) {
-            $ServiceBusTopicSubscription.properties.forwardTo = $Forward
+        if ($ForwardTo) {
+            $ServiceBusTopicSubscription.properties.forwardTo = $ForwardTo
         }
 
         $ServiceBusTopicSubscription.PSTypeNames.Add("ArmResource")
