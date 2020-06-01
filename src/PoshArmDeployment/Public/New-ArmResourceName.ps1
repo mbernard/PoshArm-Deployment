@@ -28,6 +28,7 @@ function New-ArmResourceName {
     }
     Begin {
         $ResourceProvider = Get-SupportedResourceProvider | Where-Object resourceType -eq $PSBoundParameters['ResourceType']
+        Set-Variable storageAccountResourceType -option ReadOnly -value 'Microsoft.Storage/storageAccounts'
 
         if (!$NamingConvention) {
             $NamingConvention = "{environmentcode}{delimiter}{resourcename}{delimiter}{hash}"
@@ -38,7 +39,7 @@ function New-ArmResourceName {
         }
 
         $Delimiter = switch ($ResourceProvider.resourceType) {
-            'Microsoft.Storage/storageAccounts' {
+            $storageAccountResourceType {
                 '0'
             }
             default {
@@ -79,6 +80,10 @@ function New-ArmResourceName {
             # make sure we don't have 2 delimiter with nothing between them
             while ($Name.Contains("$Delimiter$Delimiter")){
                 $Name = $Name.Replace("$Delimiter$Delimiter", $Delimiter)
+            }
+
+            if ($ResourceProvider.resourceType -eq $storageAccountResourceType) {
+                $Name = "[if(greater(length($Name), 24), substring($Name, 0, 24), $Name)]"
             }
 
             return $Name.ToLowerInvariant()
