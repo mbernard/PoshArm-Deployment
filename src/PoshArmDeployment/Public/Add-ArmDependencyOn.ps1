@@ -5,7 +5,6 @@ function Add-ArmDependencyOn {
         [PSTypeName('ArmResource')]
         $Resource,
         [Parameter(Mandatory)]
-        [PSTypeName('ArmResource')]
         $Dependency,
         [switch]
         $PassThru
